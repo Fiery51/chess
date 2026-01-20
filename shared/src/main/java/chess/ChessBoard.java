@@ -59,23 +59,23 @@ public class ChessBoard {
         ChessPiece GPawnBlack = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
         ChessPiece HPawnBlack = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
         
-        addPiece(new ChessPosition(0, 1), APawnWhite);
-        addPiece(new ChessPosition(1, 1), BPawnWhite);
-        addPiece(new ChessPosition(2, 1), CPawnWhite);
-        addPiece(new ChessPosition(3, 1), DPawnWhite);
-        addPiece(new ChessPosition(4, 1), EPawnWhite);
-        addPiece(new ChessPosition(5, 1), FPawnWhite);
-        addPiece(new ChessPosition(6, 1), GPawnWhite);
-        addPiece(new ChessPosition(7, 1), HPawnWhite);
+        addPiece(new ChessPosition(2, 1), APawnWhite);
+        addPiece(new ChessPosition(2, 2), BPawnWhite);
+        addPiece(new ChessPosition(2, 3), CPawnWhite);
+        addPiece(new ChessPosition(2, 4), DPawnWhite);
+        addPiece(new ChessPosition(2, 5), EPawnWhite);
+        addPiece(new ChessPosition(2, 6), FPawnWhite);
+        addPiece(new ChessPosition(2, 7), GPawnWhite);
+        addPiece(new ChessPosition(2, 8), HPawnWhite);
 
-        addPiece(new ChessPosition(0, 1), APawnBlack);
-        addPiece(new ChessPosition(1, 1), BPawnBlack);
-        addPiece(new ChessPosition(2, 1), CPawnBlack);
-        addPiece(new ChessPosition(3, 1), DPawnBlack);
-        addPiece(new ChessPosition(4, 1), EPawnBlack);
-        addPiece(new ChessPosition(5, 1), FPawnBlack);
-        addPiece(new ChessPosition(6, 1), GPawnBlack);
-        addPiece(new ChessPosition(7, 1), HPawnBlack);
+        addPiece(new ChessPosition(7, 1), APawnBlack);
+        addPiece(new ChessPosition(7, 2), BPawnBlack);
+        addPiece(new ChessPosition(7, 3), CPawnBlack);
+        addPiece(new ChessPosition(7, 4), DPawnBlack);
+        addPiece(new ChessPosition(7, 5), EPawnBlack);
+        addPiece(new ChessPosition(7, 6), FPawnBlack);
+        addPiece(new ChessPosition(7, 7), GPawnBlack);
+        addPiece(new ChessPosition(7, 8), HPawnBlack);
 
         ChessPiece LeftRookWhite = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
         ChessPiece LeftKnightWhite = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
@@ -95,23 +95,23 @@ public class ChessBoard {
         ChessPiece RightKnightBlack = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
         ChessPiece RightRooBlacke = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
         
-        addPiece(new ChessPosition(0, 2), LeftRookWhite);
+        addPiece(new ChessPosition(1, 1), LeftRookWhite);
         addPiece(new ChessPosition(1, 2), LeftKnightWhite);
-        addPiece(new ChessPosition(2, 2), LeftBishopWhite);
-        addPiece(new ChessPosition(3, 2), QueenWhite);
-        addPiece(new ChessPosition(4, 2), KingWhite);
-        addPiece(new ChessPosition(5, 2), RightBishopWhite);
-        addPiece(new ChessPosition(6, 2), RightKnightWhite);
-        addPiece(new ChessPosition(7, 2), RightRookWhite);
-        
-        addPiece(new ChessPosition(0, 2), LeftRookBlack);
-        addPiece(new ChessPosition(1, 2), LeftKnightBlack);
-        addPiece(new ChessPosition(2, 2), LeftBishopBlack);
-        addPiece(new ChessPosition(3, 2), QueenBlack);
-        addPiece(new ChessPosition(4, 2), KingBlack);
-        addPiece(new ChessPosition(5, 2), RightBishopBlack);
-        addPiece(new ChessPosition(6, 2), RightKnightBlack);
-        addPiece(new ChessPosition(7, 2), RightRooBlacke);
+        addPiece(new ChessPosition(1, 3), LeftBishopWhite);
+        addPiece(new ChessPosition(1, 4), QueenWhite);
+        addPiece(new ChessPosition(1, 5), KingWhite);
+        addPiece(new ChessPosition(1, 6), RightBishopWhite);
+        addPiece(new ChessPosition(1, 7), RightKnightWhite);
+        addPiece(new ChessPosition(1, 8), RightRookWhite);
+
+        addPiece(new ChessPosition(8, 1), LeftRookBlack);
+        addPiece(new ChessPosition(8, 2), LeftKnightBlack);
+        addPiece(new ChessPosition(8, 3), LeftBishopBlack);
+        addPiece(new ChessPosition(8, 4), QueenBlack);
+        addPiece(new ChessPosition(8, 5), KingBlack);
+        addPiece(new ChessPosition(8, 6), RightBishopBlack);
+        addPiece(new ChessPosition(8, 7), RightKnightBlack);
+        addPiece(new ChessPosition(8, 8), RightRooBlacke);
         
     }
 }
