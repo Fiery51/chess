@@ -10,7 +10,7 @@ public class ChessBoard {
     //8x8 grid
     ChessPiece[][] board; 
     public ChessBoard() {
-        board = new ChessPiece[9][9]; 
+        board = new ChessPiece[8][8]; 
     }
 
     /**
@@ -20,7 +20,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        board[position.getRow()][position.getColumn()] = piece; 
+        board[position.getRow() - 1][position.getColumn() - 1] = piece; 
     }
 
     /**
@@ -31,7 +31,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        return board[position.getRow()][position.getColumn()]; 
+        return board[position.getRow()-1][position.getColumn()-1]; 
     }
 
     /**
@@ -40,7 +40,7 @@ public class ChessBoard {
      */
     public void resetBoard() {
         //Create a new board
-        board = new ChessPiece[8][8]; 
+        board = new ChessPiece[9][9]; 
         ChessPiece APawnWhite = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
         ChessPiece BPawnWhite = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
         ChessPiece CPawnWhite = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
