@@ -6,11 +6,14 @@ import java.util.List;
 public class BishopCalculator {
     ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
     ChessPosition initialPosition; 
-
-    public Collection<ChessMove> returnAllMoves(ChessBoard board, ChessPosition myPosition){
+    ChessGame.TeamColor pieceColor;
+    ChessBoard theBoard; 
+    public Collection<ChessMove> returnAllMoves(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color){
         //return List.of(new ChessMove(myPosition, endPositions(myPosition), null));
         initialPosition = myPosition; 
-        endPositions(myPosition);
+        pieceColor = color; 
+        theBoard = board;
+        endPositions(myPosition, board);
         return moves; 
     }
 
@@ -30,13 +33,15 @@ public class BishopCalculator {
 
 
 
-    private ChessPosition endPositions(ChessPosition ChessPosition){
+    private ChessPosition endPositions(ChessPosition ChessPosition, ChessBoard board){
 
-        if( !((ChessPosition.getRow() + 1 <= 8)  && (ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() <= 8) && (ChessPosition.getColumn() >= 1))){
+        if( !((ChessPosition.getRow() + 1 <= 8) && (ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() <= 8) && (ChessPosition.getColumn() >= 1))){
             return ChessPosition; 
         }
 
-
+        
+            
+        
 
         //top right
         if((ChessPosition.getRow() + 1 <= 8) && (ChessPosition.getColumn() + 1 <= 8)){
@@ -44,36 +49,113 @@ public class BishopCalculator {
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null))){
                 return ChessPosition; 
             }
+
+            if((board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1)) != null) && (board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1)).pieceColor == pieceColor)){
+                //STOP don't keep going
+                //moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
+                return ChessPosition;
+            }
+
+            if((board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1)) != null) && (board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1)).pieceColor != pieceColor)){
+                //MOVE ONE MORE BUT STOP THERE
+                moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
+                return ChessPosition;
+            }
+
             moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
             endPositions(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), "NE");
         }
+
+
+
+
+
+
+
+
         //bottom right
         if((ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() + 1 <= 8)){
             //top left
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), null))){
                 return ChessPosition; 
             }
+
+            if((board.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1)) != null) && (board.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1)).pieceColor == pieceColor)){
+                //STOP don't keep going
+                //moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
+                return ChessPosition;
+            }
+
+            if((board.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1)) != null) && (board.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1)).pieceColor != pieceColor)){
+                //MOVE ONE MORE BUT STOP THERE
+                moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), null));
+                return ChessPosition;
+            }
+
             moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), null));
             endPositions(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), "SE");
         }
+
+
+
+
+
+
+
         //top left
         if((ChessPosition.getRow() + 1 <= 8) && (ChessPosition.getColumn() - 1 >= 1)){
             //top left 
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), null))){
                 return ChessPosition; 
             }
+
+            if((board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)) != null) && (board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)).pieceColor == pieceColor)){
+                //STOP don't keep going
+                //moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
+                return ChessPosition;
+            }
+
+            if((board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)) != null) && (board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)).pieceColor != pieceColor)){
+                //MOVE ONE MORE BUT STOP THERE
+                moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), null));
+                return ChessPosition;
+            }
+
             moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), null));
             endPositions(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), "NW");
         }
+
+
+
+
+
         //bottom left
         if((ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() - 1 >= 1)){
             //bottom left
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1), null))){
                 return ChessPosition; 
             }
+
+            if((board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)) != null) && (board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)).pieceColor == pieceColor)){
+                //STOP don't keep going
+                //moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
+                return ChessPosition;
+            }
+
+            if((board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)) != null) && (board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)).pieceColor != pieceColor)){
+                //MOVE ONE MORE BUT STOP THERE
+                moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), null));
+                return ChessPosition;
+            }
+
             moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1), null));
             endPositions(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1), "SW");
         }
+
+
+
+
+
         //itself
         return ChessPosition; 
     }
@@ -88,33 +170,97 @@ public class BishopCalculator {
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null))){
                 return ChessPosition; 
             }
+
+            if((theBoard.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1)) != null) && (theBoard.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1)).pieceColor == pieceColor)){
+                //STOP don't keep going
+                //moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
+                return ChessPosition;
+            }
+
+            if((theBoard.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1)) != null) && (theBoard.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1)).pieceColor != pieceColor)){
+                //MOVE ONE MORE BUT STOP THERE
+                moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
+                return ChessPosition;
+            }
+
             moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
             endPositions(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), "NE");
         }
+
+
+
 
         if((direction == "SE") && (ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() + 1 <= 8)){
             //bottom right
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), null))){
                 return ChessPosition; 
             }
+
+            if((theBoard.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1)) != null) && (theBoard.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1)).pieceColor == pieceColor)){
+                //STOP don't keep going
+                //moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
+                return ChessPosition;
+            }
+
+            if((theBoard.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1)) != null) && (theBoard.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1)).pieceColor != pieceColor)){
+                //MOVE ONE MORE BUT STOP THERE
+                moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), null));
+                return ChessPosition;
+            }
+
             moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), null));
             endPositions(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), "SE");
         }
+
+
+
+
 
         if((direction == "NW") && (ChessPosition.getRow() + 1 <= 8) && (ChessPosition.getColumn() - 1 >= 1)){
             //top left
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), null))){
                 return ChessPosition; 
             }
+
+            if((theBoard.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)) != null) && (theBoard.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)).pieceColor == pieceColor)){
+                //STOP don't keep going
+                //moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
+                return ChessPosition;
+            }
+
+            if((theBoard.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)) != null) && (theBoard.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)).pieceColor != pieceColor)){
+                //MOVE ONE MORE BUT STOP THERE
+                moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), null));
+                return ChessPosition;
+            }
+
             moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), null));
             endPositions(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), "NW");
         }
+
+
+
+
+
 
         if((direction == "SW") && (ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() - 1 >= 1)){
             //bottom left
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1), null))){
                 return ChessPosition; 
             }
+
+            if((theBoard.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1)) != null) && (theBoard.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1)).pieceColor == pieceColor)){
+                //STOP don't keep going
+                //moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
+                return ChessPosition;
+            }
+
+            if((theBoard.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1)) != null) && (theBoard.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1)).pieceColor != pieceColor)){
+                //MOVE ONE MORE BUT STOP THERE
+                moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1), null));
+                return ChessPosition;
+            }
+
             moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1), null));
             endPositions(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1), "SW");
         }

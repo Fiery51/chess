@@ -61,7 +61,7 @@ public class ChessPiece {
         //}
         //return List.of();
         BishopCalculator bishopCalculator = new BishopCalculator(); 
-        return bishopCalculator.returnAllMoves(board, myPosition);
+        return bishopCalculator.returnAllMoves(board, myPosition, pieceColor);
     }
 
     @Override
