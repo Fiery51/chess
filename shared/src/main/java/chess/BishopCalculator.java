@@ -29,24 +29,8 @@ public class BishopCalculator {
     //that done. 
 
 
-    //hi to whoever reads this git commit later, yes this is what happens when i code at 1:15 am. yes i am tired. please have mercy on my poor soul :0 :)
-
-     __
-   _|==|_  
-    ('')___/
->--(`^^')
-  (`^'^'`)
-  `======' 
-
 
     private ChessPosition endPositions(ChessPosition ChessPosition){
-        String currentDirection; 
-        enum String{
-            NE,
-            NW,
-            SE,
-            SW
-        }
 
         if( !((ChessPosition.getRow() + 1 <= 8)  && (ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() <= 8) && (ChessPosition.getColumn() >= 1))){
             return ChessPosition; 
@@ -61,25 +45,25 @@ public class BishopCalculator {
                 return ChessPosition; 
             }
             moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
-            endPositions(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1));
+            endPositions(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), "NE");
         }
-        //top left
+        //bottom right
         if((ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() + 1 <= 8)){
             //top left
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), null))){
                 return ChessPosition; 
             }
             moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), null));
-            endPositions(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1));
+            endPositions(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), "SE");
         }
-        //bottom right
+        //top left
         if((ChessPosition.getRow() + 1 <= 8) && (ChessPosition.getColumn() - 1 >= 1)){
             //bottom right 
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), null))){
                 return ChessPosition; 
             }
             moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), null));
-            endPositions(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1));
+            endPositions(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), "NW");
         }
         //bottom left
         if((ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() - 1 >= 1)){
@@ -88,9 +72,52 @@ public class BishopCalculator {
                 return ChessPosition; 
             }
             moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1), null));
-            endPositions(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1));
+            endPositions(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1), "SW");
         }
         //itself
         return ChessPosition; 
-    } 
+    }
+    
+    private ChessPosition endPositions(ChessPosition ChessPosition, String direction){
+        if( !((ChessPosition.getRow() + 1 <= 8)  && (ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() <= 8) && (ChessPosition.getColumn() >= 1))){
+            return ChessPosition; 
+        }
+
+        if((direction == "NE") && (ChessPosition.getRow() + 1 <= 8) && (ChessPosition.getColumn() + 1 <= 8)){
+            //top right
+            if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null))){
+                return ChessPosition; 
+            }
+            moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
+            endPositions(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), "NE");
+        }
+
+        if((direction == "SE") && (ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() + 1 <= 8)){
+            //bottom right
+            if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), null))){
+                return ChessPosition; 
+            }
+            moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), null));
+            endPositions(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() + 1), "SE");
+        }
+
+        //if((direction == "NW") && (ChessPosition.getRow() + 1 <= 8) && (ChessPosition.getColumn() - 1 >= 1)){
+        //    //bottom right
+        //    if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null))){
+        //        return ChessPosition; 
+        //    }
+        //    moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
+        //    endPositions(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), "NW");
+        //}
+//
+        //if((direction == "SW") && (ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() - 1 >= 1)){
+        //    //bottom right
+        //    if(moves.contains(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1), null))){
+        //        return ChessPosition; 
+        //    }
+        //    moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
+        //    endPositions(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1), "SW");
+        //}
+        return ChessPosition;
+    }
 }
