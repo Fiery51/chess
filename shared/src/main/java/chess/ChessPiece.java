@@ -60,7 +60,8 @@ public class ChessPiece {
         //    return List.of(new ChessMove(new ChessPosition(5, 4), new ChessPosition(1, 8), null));
         //}
         //return List.of();
-        return BishopCalculator.returnAllMoves(board, myPosition);
+        BishopCalculator bishopCalculator = new BishopCalculator(); 
+        return bishopCalculator.returnAllMoves(board, myPosition);
     }
 
     @Override
