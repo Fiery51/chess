@@ -136,15 +136,15 @@ public class BishopCalculator {
                 return ChessPosition; 
             }
 
-            if((board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)) != null) && (board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)).pieceColor == pieceColor)){
+            if((board.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1)) != null) && (board.getPiece(new ChessPosition(ChessPosition.getRow()-+ 1, ChessPosition.getColumn() - 1)).pieceColor == pieceColor)){
                 //STOP don't keep going
                 //moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() + 1), null));
                 return ChessPosition;
             }
 
-            if((board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)) != null) && (board.getPiece(new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1)).pieceColor != pieceColor)){
+            if((board.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1)) != null) && (board.getPiece(new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1)).pieceColor != pieceColor)){
                 //MOVE ONE MORE BUT STOP THERE
-                moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() + 1, ChessPosition.getColumn() - 1), null));
+                moves.add(new ChessMove(initialPosition, new ChessPosition(ChessPosition.getRow() - 1, ChessPosition.getColumn() - 1), null));
                 return ChessPosition;
             }
 

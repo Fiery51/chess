@@ -56,12 +56,12 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ChessPiece piece = board.getPiece(myPosition);
-        //if(piece.getPieceType() == PieceType.BISHOP){
-        //    return List.of(new ChessMove(new ChessPosition(5, 4), new ChessPosition(1, 8), null));
-        //}
-        //return List.of();
-        BishopCalculator bishopCalculator = new BishopCalculator(); 
-        return bishopCalculator.returnAllMoves(board, myPosition, pieceColor);
+        if(piece.getPieceType() == PieceType.BISHOP){
+            BishopCalculator bishopCalculator = new BishopCalculator(); 
+            return bishopCalculator.returnAllMoves(board, myPosition, pieceColor);
+        }
+        BishopCalculator rookCalculator = new BishopCalculator();
+        return rookCalculator.returnAllMoves(board, myPosition, pieceColor);
     }
 
     @Override
