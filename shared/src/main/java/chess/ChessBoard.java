@@ -42,7 +42,7 @@ public class ChessBoard {
      */
     public void resetBoard() {
         //Create a new board
-        board = new ChessPiece[9][9]; 
+        board = new ChessPiece[8][8]; 
         ChessPiece APawnWhite = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
         ChessPiece BPawnWhite = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
         ChessPiece CPawnWhite = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
