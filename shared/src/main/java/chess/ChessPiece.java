@@ -60,7 +60,7 @@ public class ChessPiece {
             BishopCalculator bishopCalculator = new BishopCalculator(); 
             return bishopCalculator.returnAllMoves(board, myPosition, pieceColor);
         }
-        BishopCalculator rookCalculator = new BishopCalculator();
+        RookCalculator rookCalculator = new RookCalculator();
         return rookCalculator.returnAllMoves(board, myPosition, pieceColor);
     }
 
