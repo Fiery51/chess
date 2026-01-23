@@ -68,8 +68,12 @@ public class ChessPiece {
             QueenCalculator queenCalculator = new QueenCalculator();
             return queenCalculator.returnAllMoves(board, myPosition, pieceColor);
         }
-        KnightCalculator knightCalculator = new KnightCalculator();
-        return knightCalculator.returnAllMoves(board, myPosition, pieceColor);
+        if(piece.getPieceType() == PieceType.KNIGHT){
+            KnightCalculator knightCalculator = new KnightCalculator();
+            return knightCalculator.returnAllMoves(board, myPosition, pieceColor);
+        }
+        KingCalculator kingCalculator = new KingCalculator();
+        return kingCalculator.returnAllMoves(board, myPosition, pieceColor);
     }
 
     @Override
