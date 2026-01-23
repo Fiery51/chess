@@ -60,8 +60,12 @@ public class ChessPiece {
             BishopCalculator bishopCalculator = new BishopCalculator(); 
             return bishopCalculator.returnAllMoves(board, myPosition, pieceColor);
         }
-        RookCalculator rookCalculator = new RookCalculator();
-        return rookCalculator.returnAllMoves(board, myPosition, pieceColor);
+        if(piece.getPieceType() == PieceType.ROOK){
+            RookCalculator rookCalculator = new RookCalculator();
+            return rookCalculator.returnAllMoves(board, myPosition, pieceColor);
+        }
+        QueenCalculator queenCalculator = new QueenCalculator();
+        return queenCalculator.returnAllMoves(board, myPosition, pieceColor);
     }
 
     @Override
