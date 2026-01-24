@@ -72,8 +72,10 @@ public class ChessPiece {
             KnightCalculator knightCalculator = new KnightCalculator();
             return knightCalculator.returnAllMoves(board, myPosition, pieceColor);
         }
-        PawnCalculator pawnCalculator = new PawnCalculator();
-        return pawnCalculator.returnAllMoves(board, myPosition, pieceColor);
+        else{
+            PawnCalculator pawnCalculator = new PawnCalculator();
+            return pawnCalculator.returnAllMoves(board, myPosition, pieceColor);
+        }
     }
 
     @Override
