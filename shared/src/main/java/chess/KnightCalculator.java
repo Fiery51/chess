@@ -29,45 +29,61 @@ public class KnightCalculator {
 
     void addTopRight(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color){
         //Check if the top right square is in bounds
-        if((myPosition.getRow() + 2 <= 8) && (myPosition.getColumn() + 1) <= 8 && checkTeamate(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() + 1), board, color)){
-            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() + 1), null));
+        if((myPosition.getRow() + 2 <= 8) && (myPosition.getColumn() + 1) <= 8){
+            if(checkTeamate(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() + 1), board, color)){
+                moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() + 1), null));
+            }
         }
         //lower right square in top right quadrant
-        if((myPosition.getRow() + 1 <= 8) && (myPosition.getColumn() + 2) <= 8 && checkTeamate(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 2), board, color)){
-            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 2), null));
+        if((myPosition.getRow() + 1 <= 8) && (myPosition.getColumn() + 2) <= 8){
+            if(checkTeamate(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 2), board, color)){
+                moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 2), null));
+            }
         }
     }
 
     void addTopLeft(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color){
         
-        if((myPosition.getRow() + 2 <= 8) && (myPosition.getColumn() - 1) >= 1 && checkTeamate(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() - 1), board, color)){
-            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() - 1), null));
+        if((myPosition.getRow() + 2 <= 8) && (myPosition.getColumn() - 1) >= 1){
+            if(checkTeamate(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() - 1), board, color)){
+                moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn() - 1), null));
+            }
         }
 
-        if((myPosition.getRow() + 1 <= 8) && (myPosition.getColumn() - 2) >= 1 && checkTeamate(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 2), board, color)){
-            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 2), null));
+        if((myPosition.getRow() + 1 <= 8) && (myPosition.getColumn() - 2) >= 1){
+            if(checkTeamate(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 2), board, color)){
+                moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 2), null));
+            }
         }
     }
 
     void addBottomRight(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color){
         
-        if((myPosition.getRow() - 2 >= 1) && (myPosition.getColumn() + 1) <= 8 && checkTeamate(new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() + 1), board, color)){
-            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() + 1), null));
+        if((myPosition.getRow() - 2 >= 1) && (myPosition.getColumn() + 1) <= 8){
+            if(checkTeamate(new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() + 1), board, color)){
+                moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() + 1), null));
+            }
         }
         
-        if((myPosition.getRow() - 1 >= 1) && (myPosition.getColumn() + 2) <= 8 && checkTeamate(new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 2), board, color)){
-            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 2), null));
+        if((myPosition.getRow() - 1 >= 1) && (myPosition.getColumn() + 2) <= 8){
+            if(checkTeamate(new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 2), board, color)){
+                moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() + 2), null));
+            }
         }
     }
 
     void addBottomLeft(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color){
         
-        if((myPosition.getRow() - 2 >= 1) && (myPosition.getColumn() - 1) >= 1 && checkTeamate(new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() - 1), board, color)){
-            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() - 1), null));
+        if((myPosition.getRow() - 2 >= 1) && (myPosition.getColumn() - 1) >= 1){
+            if(checkTeamate(new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() - 1), board, color)){
+                moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn() - 1), null));
+            }
         }
         
-        if((myPosition.getRow() - 1 >= 1) && (myPosition.getColumn() - 2) >= 1 && checkTeamate(new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 2), board, color)){
-            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 2), null));
+        if((myPosition.getRow() - 1 >= 1) && (myPosition.getColumn() - 2) >= 1){
+            if(checkTeamate(new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 2), board, color)){
+                moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn() - 2), null));
+            }
         }
     }
 

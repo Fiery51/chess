@@ -107,6 +107,14 @@ public class ChessPiece {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "ChessPiece [pieceColor=" + pieceColor + ", type=" + type + ", getTeamColor()=" + getTeamColor()
+                + ", getPieceType()=" + getPieceType() + ", hashCode()=" + hashCode() + ", getClass()=" + getClass()
+                + ", toString()=" + super.toString() + "]";
+    }
+
+    
     
 }
 
