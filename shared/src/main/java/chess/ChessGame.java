@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -10,15 +11,20 @@ import java.util.Collection;
  */
 public class ChessGame {
 
-    public ChessGame() {
+    TeamColor currentTeamTurn;
+    ChessBoard currentChessBoard; 
 
+    public ChessGame() {
+        //White always goes first, therefor when the custructor is called, that means its being created i assume? So like white goes first. 
+        //CHECK THIS IF YOU GET ERRORS I GUESS????????????????????????????????????????????
+        currentTeamTurn = TeamColor.WHITE;
     }
 
     /**
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        throw new RuntimeException("Not implemented");
+        return currentTeamTurn; 
     }
 
     /**
@@ -27,7 +33,8 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        throw new RuntimeException("Not implemented");
+        currentTeamTurn = team; 
+        setBoard(currentChessBoard);
     }
 
     /**
@@ -46,7 +53,16 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+        //Grab the chess piece currently at whatever spot is at startPosition
+
+        //from the current board, we want to get the piece at the start position, and return all valid moves that piece can make just for right now 
+        if(getBoard().getPiece(startPosition) == null){
+            return null; 
+        }
+        //else{
+        //    return getBoard().getPiece(startPosition).pieceMoves(currentChessBoard, startPosition);
+        //}
+        return new ArrayList<ChessMove>();
     }
 
     /**
@@ -56,7 +72,13 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        
+
+
+        
+        //If white just moved, set it to black, if black just moved set it to white
+        if(currentTeamTurn == TeamColor.WHITE) setTeamTurn(TeamColor.BLACK);
+        else setTeamTurn(TeamColor.WHITE);
     }
 
     /**
@@ -66,7 +88,7 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return true; 
     }
 
     /**
@@ -76,7 +98,7 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return true; 
     }
 
     /**
@@ -87,7 +109,7 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return true; 
     }
 
     /**
@@ -96,7 +118,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        currentChessBoard = new ChessBoard(); 
     }
 
     /**
@@ -105,6 +127,6 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return currentChessBoard; 
     }
 }
