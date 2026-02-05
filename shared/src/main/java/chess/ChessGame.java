@@ -13,6 +13,7 @@ public class ChessGame {
 
     TeamColor currentTeamTurn;
     ChessBoard currentChessBoard; 
+    //public ChessPosition kingPosition = new ChessPosition(0, 0);  
 
     public ChessGame() {
         //White always goes first, therefor when the custructor is called, that means its being created i assume? So like white goes first. 
@@ -87,7 +88,73 @@ public class ChessGame {
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
      */
+    //For this one we should only care if the king is being hit or not
     public boolean isInCheck(TeamColor teamColor) {
+        ArrayList<ChessMove> movesList = new ArrayList<>();
+        ArrayList<ChessPosition> endPositions = new ArrayList<>(); 
+        ChessPosition kingPosition = new ChessPosition(0, 0);  
+        //First loop over every single position in the board to grab all the pieces of opposite color/king of teamColor
+        for(int i=1; i<=8; i++){
+            for(int j=1; j<=8; j++){
+                //If the current position isn't null
+                if(currentChessBoard.getPiece(new ChessPosition(i, j)) != null){
+                    //Check what color the piece is
+                    //IF IT'S THE OPPOSITE COLOR RUN CHESS PIECE pieceMOVES and add it to movesList for later processing
+                    if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() != teamColor){
+                        movesList.addAll(currentChessBoard.getPiece(new ChessPosition(i, j)).pieceMoves(currentChessBoard, new ChessPosition(i, j)));
+                    }
+                    //IF IT'S THE SAME COLOR
+                    else{
+                        //IF ITS EQUAL TO A KING
+                        if(currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.KING){
+                            //then save it for later so we know where it is
+                            kingPosition = new ChessPosition(i, j);
+                        }
+                    }
+                }
+            }
+        }
+            //Okay after we've looped through, in THEORY we should have where all the opposite pieces are aiming
+            //that means we should just be able to call a simple contains method
+            //First extract all the individual end positions to the array list 
+            for (ChessMove move : movesList) {
+                endPositions.add(move.getEndPosition());
+            }
+            return endPositions.contains(kingPosition);
+    }
+
+    public boolean isInCheck(TeamColor teamColor, ChessPosition newKingPosition) {
+        ArrayList<ChessMove> movesList = new ArrayList<>();
+        ArrayList<ChessPosition> endPositions = new ArrayList<>(); 
+        ChessPosition kingPosition = newKingPosition; 
+        //First loop over every single position in the board to grab all the pieces of opposite color/king of teamColor
+        for(int i=1; i<=8; i++){
+            for(int j=1; j<=8; j++){
+                //If the current position isn't null
+                if(currentChessBoard.getPiece(new ChessPosition(i, j)) != null){
+                    //Check what color the piece is
+                    //IF IT'S THE OPPOSITE COLOR RUN CHESS PIECE pieceMOVES and add it to movesList for later processing
+                    if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() != teamColor){
+                        movesList.addAll(currentChessBoard.getPiece(new ChessPosition(i, j)).pieceMoves(currentChessBoard, new ChessPosition(i, j)));
+                    }
+                }
+            }
+        }
+            //Okay after we've looped through, in THEORY we should have where all the opposite pieces are aiming
+            //that means we should just be able to call a simple contains method
+            //First extract all the individual end positions to the array list 
+            for (ChessMove move : movesList) {
+                endPositions.add(move.getEndPosition());
+            }
+            return endPositions.contains(kingPosition);
+    }
+
+
+
+
+
+
+
         //Overall layout of the function
         //First check if the position is empty, if so skip it
 
@@ -125,8 +192,6 @@ public class ChessGame {
 
 
 
-        return true; 
-    }
 
     /**
      * Determines if the given team is in checkmate
@@ -135,8 +200,62 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        
-        return true; 
+        //Grab all the current team colors allowed moves! Same logic as isInCheck but for the SAME team
+        ArrayList<ChessMove> AllTeamMoves = new ArrayList<>();
+        ArrayList<ChessMove> KingMoves = new ArrayList<>();
+        for(int i=1; i<=8; i++){
+            for(int j=1; j<=8; j++){
+                //If the current position isn't null
+                if(currentChessBoard.getPiece(new ChessPosition(i, j)) != null){
+                    //Check what color the piece is
+                    //If its the SAME color, save it to AllTeamMoves, AND its not the King piece because we already did that above!!
+                    if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() == teamColor && currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() != ChessPiece.PieceType.KING){
+                        AllTeamMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j)).pieceMoves(currentChessBoard, new ChessPosition(i, j)));
+                    }
+                    //If the position is the SAME color and it IS our king
+                    //Grab the moves the king can make
+                    if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() == teamColor && currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.KING){
+                        KingMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j)).pieceMoves(currentChessBoard, new ChessPosition(i, j))); 
+                    }
+                }
+            }
+        }
+
+
+        //First ensure we're in check (use the current king position)
+        if(isInCheck(teamColor)){
+            //Now we know that we're being hit, can the king move out of the way?
+            //We know we're already in check, so first run isInCheck on all of the king's moves to see if we can move out of the way (overloaded method)
+            for (ChessMove move : KingMoves) {
+                //pass in all the end position (starting position is always that middle square)
+                ArrayList<Boolean> canMoveOutOfWay = new ArrayList<>();
+                canMoveOutOfWay.add(isInCheck(teamColor, move.getEndPosition()));
+                //If theres a single false that means the king CAN move out of the way. Return false
+                if(canMoveOutOfWay.contains(false)) return false;
+            }
+            //Now that we know the king can't move out of the way:
+            //Next check if validmoves for every piece on same team is empty assume checkmate (king can't move, no pieces can move)
+            //if you have no legal moves, that means we're in check, the king can't move out of the way, and you can't block it/take it
+            if(AllTeamMoves.size() == 0){
+                return true;
+            }
+            //if you have legal moves means its not checkmate
+            else return false;
+        }
+
+
+
+
+
+
+
+
+
+
+        //If your not even in check, that means your safe, return false. Your not even under attack
+        else{
+            return false; 
+        }
     }
 
     /**
@@ -147,7 +266,7 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        return true; 
+        return false; 
     }
 
     /**
@@ -156,7 +275,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        currentChessBoard = new ChessBoard(); 
+        currentChessBoard = board;
     }
 
     /**
@@ -166,5 +285,38 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return currentChessBoard; 
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((currentTeamTurn == null) ? 0 : currentTeamTurn.hashCode());
+        result = prime * result + ((currentChessBoard == null) ? 0 : currentChessBoard.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ChessGame other = (ChessGame) obj;
+        if (currentTeamTurn != other.currentTeamTurn)
+            return false;
+        if (currentChessBoard == null) {
+            return other.currentChessBoard == null;
+        } else return currentChessBoard.equals(other.currentChessBoard);
+    }
+
+    @Override
+    public String toString() {
+        return "ChessGame{" +
+                "currentTeamTurn=" + currentTeamTurn +
+                ", currentChessBoard=" + currentChessBoard +
+                '}';
     }
 }

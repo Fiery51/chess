@@ -112,7 +112,7 @@ public class ChessPiece {
                 + ", getPieceType()=" + getPieceType() + ", hashCode()=" + hashCode() + ", getClass()=" + getClass()
                 + ", toString()=" + super.toString() + "]";
     }
-
+    
     
     
 }
