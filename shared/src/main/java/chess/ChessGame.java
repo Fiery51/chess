@@ -61,8 +61,25 @@ public class ChessGame {
         //Do we even have a piece on the position we're on?
         if(currentChessBoard.getPiece(startPosition) != null){
             //First lets get all the moves we can possibly make period so we have something to mess around with
-            ArrayList<ChessMove> moves= new ArrayList<>();
+            ArrayList<ChessMove> moves = new ArrayList<>();
             moves.addAll(getBoard().getPiece(startPosition).pieceMoves(currentChessBoard, startPosition));
+            //make a copy of the chessboard;
+             ChessBoard copyBoard = new ChessBoard(currentChessBoard);
+            //Next loop through all the possible moves
+            for(ChessMove movesVar : moves){
+                //apply the move on the copy of the chessboard
+                    //first grab the chesspiece at the position
+                    ChessPiece currentPiece = copyBoard.getPiece(startPosition);
+                    //Next lets delete the piece
+                    copyBoard.addPiece(startPosition, null);
+                    //Then actually move the piece
+                    copyBoard.addPiece(movesVar.getEndPosition(), currentPiece);
+                //then check if the king is in check 
+                if(!isInCheck(currentTeamTurn, startPosition, copyBoard)){
+                    //if we're not in check after that move add that move to the valid moves array we made
+                    moves.add(movesVar);
+                }
+            }
 
             return moves; 
         }
@@ -147,6 +164,32 @@ public class ChessGame {
                     //IF IT'S THE OPPOSITE COLOR RUN CHESS PIECE pieceMOVES and add it to movesList for later processing
                     if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() != teamColor){
                         movesList.addAll(currentChessBoard.getPiece(new ChessPosition(i, j)).pieceMoves(currentChessBoard, new ChessPosition(i, j)));
+                    }
+                }
+            }
+        }
+            //Okay after we've looped through, in THEORY we should have where all the opposite pieces are aiming
+            //that means we should just be able to call a simple contains method
+            //First extract all the individual end positions to the array list 
+            for (ChessMove move : movesList) {
+                endPositions.add(move.getEndPosition());
+            }
+            return endPositions.contains(kingPosition);
+    }
+
+    public boolean isInCheck(TeamColor teamColor, ChessPosition newKingPosition, ChessBoard board) {
+        ArrayList<ChessMove> movesList = new ArrayList<>();
+        ArrayList<ChessPosition> endPositions = new ArrayList<>();
+        ChessPosition kingPosition = newKingPosition;
+        //First loop over every single position in the board to grab all the pieces of opposite color/king of teamColor
+        for(int i=1; i<=8; i++){
+            for(int j=1; j<=8; j++){
+                //If the current position isn't null
+                if(board.getPiece(new ChessPosition(i, j)) != null){
+                    //Check what color the piece is
+                    //IF IT'S THE OPPOSITE COLOR RUN CHESS PIECE pieceMOVES and add it to movesList for later processing
+                    if(board.getPiece(new ChessPosition(i, j)).getTeamColor() != teamColor){
+                        movesList.addAll(board.getPiece(new ChessPosition(i, j)).pieceMoves(board, new ChessPosition(i, j)));
                     }
                 }
             }
