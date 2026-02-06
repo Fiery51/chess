@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -19,6 +20,9 @@ public class ChessGame {
         //White always goes first, therefor when the custructor is called, that means its being created i assume? So like white goes first. 
         //CHECK THIS IF YOU GET ERRORS I GUESS????????????????????????????????????????????
         currentTeamTurn = TeamColor.WHITE;
+        ChessBoard newBoard = new ChessBoard();
+        newBoard.resetBoard();
+        setBoard(newBoard);
     }
 
     /**
@@ -54,16 +58,23 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        //Grab the chess piece currently at whatever spot is at startPosition
+        //Do we even have a piece on the position we're on?
+        if(currentChessBoard.getPiece(startPosition) != null){
+            //First lets get all the moves we can possibly make period so we have something to mess around with
+            ArrayList<ChessMove> moves= new ArrayList<>();
+            moves.addAll(getBoard().getPiece(startPosition).pieceMoves(currentChessBoard, startPosition));
 
-        //from the current board, we want to get the piece at the start position, and return all valid moves that piece can make just for right now 
-        //if(currentChessBoard.getPiece(startPosition) != null){
-            return getBoard().getPiece(startPosition).pieceMoves(currentChessBoard, startPosition);
-        //}
-        //else{
-        //    return null;
-        //}
-        //return new ArrayList<ChessMove>();
+            return moves; 
+        }
+
+
+
+
+
+
+
+
+        else return null;
     }
 
     /**
@@ -125,8 +136,8 @@ public class ChessGame {
 
     public boolean isInCheck(TeamColor teamColor, ChessPosition newKingPosition) {
         ArrayList<ChessMove> movesList = new ArrayList<>();
-        ArrayList<ChessPosition> endPositions = new ArrayList<>(); 
-        ChessPosition kingPosition = newKingPosition; 
+        ArrayList<ChessPosition> endPositions = new ArrayList<>();
+        ChessPosition kingPosition = newKingPosition;
         //First loop over every single position in the board to grab all the pieces of opposite color/king of teamColor
         for(int i=1; i<=8; i++){
             for(int j=1; j<=8; j++){
@@ -236,11 +247,8 @@ public class ChessGame {
             //Now that we know the king can't move out of the way:
             //Next check if validmoves for every piece on same team is empty assume checkmate (king can't move, no pieces can move)
             //if you have no legal moves, that means we're in check, the king can't move out of the way, and you can't block it/take it
-            if(AllTeamMoves.size() == 0){
-                return true;
-            }
             //if you have legal moves means its not checkmate
-            else return false;
+            return AllTeamMoves.isEmpty();
         }
 
 
@@ -288,35 +296,24 @@ public class ChessGame {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((currentTeamTurn == null) ? 0 : currentTeamTurn.hashCode());
-        result = prime * result + ((currentChessBoard == null) ? 0 : currentChessBoard.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        ChessGame other = (ChessGame) obj;
-        if (currentTeamTurn != other.currentTeamTurn)
-            return false;
-        if (currentChessBoard == null) {
-            return other.currentChessBoard == null;
-        } else return currentChessBoard.equals(other.currentChessBoard);
-    }
-
-    @Override
     public String toString() {
         return "ChessGame{" +
                 "currentTeamTurn=" + currentTeamTurn +
                 ", currentChessBoard=" + currentChessBoard +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessGame chessGame = (ChessGame) o;
+        return currentTeamTurn == chessGame.currentTeamTurn && Objects.equals(currentChessBoard, chessGame.currentChessBoard);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(currentTeamTurn, currentChessBoard);
     }
 }

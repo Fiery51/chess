@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -82,38 +83,25 @@ public class ChessPiece {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((pieceColor == null) ? 0 : pieceColor.hashCode());
-        result = prime * result + ((type == null) ? 0 : type.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        ChessPiece other = (ChessPiece) obj;
-        if (pieceColor != other.pieceColor)
-            return false;
-        if (type != other.type)
-            return false;
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "ChessPiece [pieceColor=" + pieceColor + ", type=" + type + ", getTeamColor()=" + getTeamColor()
-                + ", getPieceType()=" + getPieceType() + ", hashCode()=" + hashCode() + ", getClass()=" + getClass()
-                + ", toString()=" + super.toString() + "]";
+        return "ChessPiece{" +
+                "pieceColor=" + pieceColor +
+                ", type=" + type +
+                '}';
     }
-    
-    
-    
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessPiece that = (ChessPiece) o;
+        return pieceColor == that.pieceColor && type == that.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pieceColor, type);
+    }
 }
 

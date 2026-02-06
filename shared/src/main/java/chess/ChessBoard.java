@@ -8,12 +8,23 @@ import java.util.Arrays;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessBoard {
+public class ChessBoard implements Cloneable{
+
     //8x8 grid
     ChessPiece[][] board; 
     public ChessBoard() {
         board = new ChessPiece[8][8]; 
     }
+
+    //Copy constructor
+    public ChessBoard(ChessBoard board) {
+        for(int i=1; i<=8; i++){
+            for(int j=1; j<=8; j++){
+                board.board[i][j] = this.board[i][j];
+            }
+        }
+    }
+
 
     /**
      * Adds a chess piece to the chessboard
@@ -141,8 +152,8 @@ public class ChessBoard {
 
     @Override
     public String toString() {
-        return "ChessBoard{" +
-                "board=" + Arrays.toString(board) +
-                '}';
+        return "ChessBoard [board=" + Arrays.toString(board) + "]";
     }
+
+
 }
