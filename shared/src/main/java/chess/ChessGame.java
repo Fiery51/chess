@@ -62,26 +62,27 @@ public class ChessGame {
         if(currentChessBoard.getPiece(startPosition) != null){
             //First lets get all the moves we can possibly make period so we have something to mess around with
             ArrayList<ChessMove> moves = new ArrayList<>();
+            ArrayList<ChessMove> theValidMoves = new ArrayList<>();
             moves.addAll(getBoard().getPiece(startPosition).pieceMoves(currentChessBoard, startPosition));
             //make a copy of the chessboard;
-             ChessBoard copyBoard = new ChessBoard(currentChessBoard);
+            ChessBoard copyBoard = new ChessBoard(currentChessBoard);
             //Next loop through all the possible moves
             for(ChessMove movesVar : moves){
                 //apply the move on the copy of the chessboard
                     //first grab the chesspiece at the position
                     ChessPiece currentPiece = copyBoard.getPiece(startPosition);
                     //Next lets delete the piece
-                    copyBoard.addPiece(startPosition, null);
+                    copyBoard.addPiece(movesVar.getStartPosition(), null);
                     //Then actually move the piece
                     copyBoard.addPiece(movesVar.getEndPosition(), currentPiece);
                 //then check if the king is in check 
-                if(!isInCheck(currentTeamTurn, startPosition, copyBoard)){
+                if (isInCheck(currentTeamTurn, startPosition, copyBoard) == false) {
                     //if we're not in check after that move add that move to the valid moves array we made
-                    moves.add(movesVar);
+                    theValidMoves.add(movesVar);
                 }
             }
 
-            return moves; 
+            return theValidMoves; 
         }
 
 
