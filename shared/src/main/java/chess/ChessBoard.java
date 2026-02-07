@@ -19,17 +19,17 @@ public class ChessBoard{
     //Copy constructor
     public ChessBoard(ChessBoard board) {
         this.board = new ChessPiece[8][8];
-        for(int i=1; i<=7; i++){
-            for(int j=1; j<=7; j++){
+        for(int i=1; i<=8; i++){
+            for(int j=1; j<=8; j++){
                 if(board.getPiece(new ChessPosition(i, j)) != null){
                     //Read off the attributes
                     ChessGame.TeamColor theTeamColor = board.getPiece(new ChessPosition(i, j)).getTeamColor();
                     ChessPiece.PieceType thePieceType = board.getPiece(new ChessPosition(i, j)).getPieceType(); 
                     //set the new piece up
-                    this.board[i][j] = new ChessPiece(theTeamColor, thePieceType);
+                    addPiece(new ChessPosition(i, j), new ChessPiece(theTeamColor, thePieceType));
                 }
                 else{
-                    this.board[i][j] = null;
+                    addPiece(new ChessPosition(i, j), null);
                 }
             }
         }
