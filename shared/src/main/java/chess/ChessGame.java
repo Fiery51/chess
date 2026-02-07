@@ -97,8 +97,16 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         ArrayList<ChessMove> moves = new ArrayList<>();
-        moves.add()
-
+        moves.addAll(validMoves(theStartPosition));
+        if(!moves.contains(move)){
+            throw new InvalidMoveException("reason");
+        }
+        //make a copy of the piece
+        ChessPiece copyOfPiece = currentChessBoard.getPiece(move.getStartPosition()); 
+        //delete the piece
+        currentChessBoard.addPiece(move.getStartPosition(), null);
+        //add the new piece at the end
+        currentChessBoard.addPiece(move.getEndPosition(), copyOfPiece);
 
         
         //If white just moved, set it to black, if black just moved set it to white
