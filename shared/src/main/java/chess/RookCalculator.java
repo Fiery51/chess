@@ -24,9 +24,9 @@ public class RookCalculator {
 
     
     private ChessPosition endPositions(ChessPosition ChessPosition, String direction){
-        if( !((ChessPosition.getRow() + 1 <= 8)  && (ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() <= 8) && (ChessPosition.getColumn() >= 1))){
-            return ChessPosition; 
-        }
+        //if( !((ChessPosition.getRow() + 1 <= 8)  && (ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() <= 8) && (ChessPosition.getColumn() >= 1))){
+        //    return ChessPosition; 
+        //}
 
         if((direction == "N") && (ChessPosition.getRow() + 1 <= 8)){
             //up

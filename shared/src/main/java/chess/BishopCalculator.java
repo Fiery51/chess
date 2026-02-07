@@ -25,9 +25,9 @@ public class BishopCalculator {
     
     
     private ChessPosition endPositions(ChessPosition ChessPosition, String direction){
-        if( !((ChessPosition.getRow() + 1 <= 8)  && (ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() <= 8) && (ChessPosition.getColumn() >= 1))){
-            return ChessPosition; 
-        }
+        //if( !((ChessPosition.getRow() + 1 <= 8)  && (ChessPosition.getRow() - 1 >= 1) && (ChessPosition.getColumn() <= 8) && (ChessPosition.getColumn() >= 1))){
+        //    return ChessPosition; 
+        //}
 
         if((direction == "NE") && (ChessPosition.getRow() + 1 <= 8) && (ChessPosition.getColumn() + 1 <= 8)){
             //top right
