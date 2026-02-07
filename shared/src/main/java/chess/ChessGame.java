@@ -96,9 +96,15 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
+        if(currentChessBoard.getPiece(move.getStartPosition()) == null){
+            throw new InvalidMoveException("reason");
+        }
         ArrayList<ChessMove> moves = new ArrayList<>();
-        moves.addAll(validMoves(theStartPosition));
+        moves.addAll(validMoves(move.getStartPosition()));
         if(!moves.contains(move)){
+            throw new InvalidMoveException("reason");
+        }
+        if(currentChessBoard.getPiece(move.getStartPosition()).pieceColor != currentTeamTurn){
             throw new InvalidMoveException("reason");
         }
         //make a copy of the piece
