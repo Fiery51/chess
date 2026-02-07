@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
+import chess.ChessPiece.PieceType;
+
 /**
  * For a class that can manage a chess game, making moves on a board
  * <p>
@@ -109,10 +111,28 @@ public class ChessGame {
         }
         //make a copy of the piece
         ChessPiece copyOfPiece = currentChessBoard.getPiece(move.getStartPosition()); 
+        if(getTeamTurn() == TeamColor.WHITE){
+            //add the new piece at the end
+            if(currentChessBoard.getPiece(move.getStartPosition()).getPieceType() == PieceType.PAWN && move.getStartPosition().getRow() == 7){
+                ChessPiece newPromotionPiece = new ChessPiece(copyOfPiece.getTeamColor(), move.getPromotionPiece());
+                currentChessBoard.addPiece(move.getEndPosition(), newPromotionPiece);
+            }
+            else{
+                currentChessBoard.addPiece(move.getEndPosition(), copyOfPiece);
+            }
+        }
+        else{
+            //add the new piece at the end
+            if(currentChessBoard.getPiece(move.getStartPosition()).getPieceType() == PieceType.PAWN && move.getStartPosition().getRow() == 2){
+                ChessPiece newPromotionPiece = new ChessPiece(copyOfPiece.getTeamColor(), move.getPromotionPiece());
+                currentChessBoard.addPiece(move.getEndPosition(), newPromotionPiece);
+            }
+            else{
+                currentChessBoard.addPiece(move.getEndPosition(), copyOfPiece);
+            }
+        }
         //delete the piece
         currentChessBoard.addPiece(move.getStartPosition(), null);
-        //add the new piece at the end
-        currentChessBoard.addPiece(move.getEndPosition(), copyOfPiece);
 
         
         //If white just moved, set it to black, if black just moved set it to white
