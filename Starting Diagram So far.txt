@@ -5,25 +5,32 @@ participant Service
 participant DataAccess
 database db
 
-entryspacing 0.9
+entryspacing 0.6
 
 
 
-
+//REGISTRATION
 group#43829c #lightblue Registration
 Client -> Server: [POST] /user\n{"username":" ", "password":" ", "email":" "}
 Server -> Handler: {"username":" ", "password":" ", "email":" "}
 Handler -> Service: register(RegisterRequest)
 Service -> DataAccess: getUser(username)
 DataAccess -> db:Find UserData by username
+//I would think you'd error immeidatly? 
 break User made a bad request
 DataAccess --> Server: DataAccessException
-Server --> Client: 403\n{"message": "Error: bad request"}
+Server --> Client: 400\n{"message": "Error: bad request"}
 end
 break User with username already exists
 DataAccess --> Service: UserData
 Service --> Server: AlreadyTakenException
 Server --> Client: 403\n{"message": "Error: username already taken"}
+end
+//I assume if this is if we pull the data back and something is wrong with it?
+break User data messed up
+DataAccess --> Service: UserData
+Service --> Server: DataAccessExcpetion
+Server --> Client: 500\n{"message": "Error: (description of error)"}
 end
 DataAccess --> Service: null
 Service -> DataAccess:createUser(userData)
@@ -35,9 +42,47 @@ Handler --> Server: {"username" : " ", "authToken" : " "}
 Server --> Client: 200\n{"username" : " ", "authToken" : " "}
 end
 
+
+
+
+//LOGIN
 group#orange #FCEDCA Login
 Client -> Server: [POST] /session\n{username, password}
+Server -> Handler: {"username":" ", "password":" "}
+Handler -> Service: login(LoginRequest)
+Service -> DataAccess: authenticate(username)
+DataAccess -> db:Find UserData by username
+//Errors
+//FIX THIS
+break User made a bad request
+DataAccess --> Server: DataAccessException
+Server --> Client: 400\n{"message": "Error: bad request"}
 end
+break Unauthorized
+DataAccess --> Service: false
+Service --> Server: DataAccessExcpetion
+Server --> Client: 401\n{"message": "Error: (unauthorized)"}
+end
+break User data messed up
+DataAccess --> Service: null
+Service --> Server: DataAccessExcpetion
+Server --> Client: 500\n{"message": "Error: (description of error)"}
+end
+//Success
+DataAccess --> Service: true
+Service -> DataAccess:createAuth(authData)
+  //auth token
+DataAccess -> db:Add AuthData
+Service --> Handler: LoginResult
+Handler --> Server: {"username" : " ", "authToken" : " "}
+Server --> Client: 200\n{"username" : " ", "authToken" : " "}
+end
+
+
+
+
+
+
 
 group#green #lightgreen Logout
 Client -> Server: [DELETE] /session\nauthToken
