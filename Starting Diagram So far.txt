@@ -6,12 +6,20 @@ participant DataAccess
 database db
 
 entryspacing 0.9
+
+
+
+
 group#43829c #lightblue Registration
 Client -> Server: [POST] /user\n{"username":" ", "password":" ", "email":" "}
 Server -> Handler: {"username":" ", "password":" ", "email":" "}
 Handler -> Service: register(RegisterRequest)
 Service -> DataAccess: getUser(username)
 DataAccess -> db:Find UserData by username
+break User made a bad request
+DataAccess --> Server: DataAccessException
+Server --> Client: 403\n{"message": "Error: bad request"}
+end
 break User with username already exists
 DataAccess --> Service: UserData
 Service --> Server: AlreadyTakenException
