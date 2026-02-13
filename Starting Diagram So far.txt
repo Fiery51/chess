@@ -5,7 +5,7 @@ participant Service
 participant DataAccess
 database db
 
-entryspacing 0.4
+entryspacing 0.6
 
 
 
@@ -53,7 +53,6 @@ Handler -> Service: login(LoginRequest)
 Service -> DataAccess: authenticate(username)
 DataAccess -> db:Find UserData by username
 //Errors
-//FIX THIS
 break User made a bad request
 DataAccess --> Server: DataAccessException
 Server --> Client: 400\n{"message": "Error: bad request"}
@@ -101,11 +100,13 @@ DataAccess --> Service: false
 Service --> Server: DataAccessExcpetion
 Server --> Client: 401\n{"message": "Error: (unauthorized)"}
 end
-end
+
 break User data messed up
 DataAccess --> Service: null
 Service --> Server: DataAccessExcpetion
 Server --> Client: 500\n{"message": "Error: (description of error)"}
+end
+
 end
 
 
@@ -127,7 +128,17 @@ Service --> Handler: List of Games
 Handler --> Server: { "games": [{"gameID": 1234, "whiteUsername":"", "blackUsername":"", "gameName:""} ]}
 Server --> Client: 200\n{{ "games": [{"gameID": 1234, "whiteUsername":"", "blackUsername":"", "gameName:""} ]}}
 
+break Unauthorized
+DataAccess --> Service: false
+Service --> Server: DataAccessExcpetion
+Server --> Client: 401\n{"message": "Error: (unauthorized)"}
+end
 
+break User data messed up
+DataAccess --> Service: null
+Service --> Server: DataAccessExcpetion
+Server --> Client: 500\n{"message": "Error: (description of error)"}
+end
 
 end
 
@@ -141,6 +152,22 @@ DataAccess -> db:Create Game
 Service --> Handler: True
 Handler --> Server: { "gameID": 1234 }
 Server --> Client: 200\n{ "gameID": 1234 }
+
+break User made a bad request
+DataAccess --> Server: DataAccessException
+Server --> Client: 400\n{"message": "Error: bad request"}
+end
+break Unauthorized
+DataAccess --> Service: false
+Service --> Server: DataAccessExcpetion
+Server --> Client: 401\n{"message": "Error: (unauthorized)"}
+end
+break User data messed up
+DataAccess --> Service: null
+Service --> Server: DataAccessExcpetion
+Server --> Client: 500\n{"message": "Error: (description of error)"}
+end
+
 end
 
 group#yellow #lightyellow Join Game #black
@@ -149,14 +176,53 @@ Server -> Handler: 	{ "playerColor":"WHITE/BLACK", "gameID": 1234 }, authorizati
 Handler -> Service: joinGame(joinGameRequest)
 Service -> DataAccess: validate(authToken)
 DataAccess --> Service: true
-Service -> DataAccess: validateGame(gameID, playerColor)
+Service -> DataAccess: validateGame(gameID)
 DataAccess -> db:Find game by name
 DataAccess --> Service: true
+Service -> DataAccess: validateColor(gameID)
+DataAccess -> db:Find if color is available
+break Already Taken
+DataAccess --> Service: false
+Service --> Server: DataAccessExcpetion
+Server --> Client: 403\n{"message": "Error: (Already Taken)"}
+end
 Service --> Handler: True
 Handler --> Server: {}
 Server --> Client: 200\n{}
+
+break User made a bad request
+DataAccess --> Server: DataAccessException
+Server --> Client: 400\n{"message": "Error: bad request"}
+end
+break Unauthorized
+DataAccess --> Service: false
+Service --> Server: DataAccessExcpetion
+Server --> Client: 401\n{"message": "Error: (unauthorized)"}
+end
+
+
+
+break User data messed up
+DataAccess --> Service: null
+Service --> Server: DataAccessExcpetion
+Server --> Client: 500\n{"message": "Error: (description of error)"}
+end
+
 end
 
 group#gray #lightgray Clear application 
 Client -> Server: [DELETE] /db
+Server -> Handler: 	
+Handler -> Service:deleteData(deleteRequest)
+Service -> DataAccess: clearData()
+DataAccess -> db:Clear data
+DataAccess --> Service: true
+Service --> Handler: True
+Handler --> Server: {}
+Server --> Client: 200\n{}
+break User data messed up
+DataAccess --> Service: null
+Service --> Server: DataAccessExcpetion
+Server --> Client: 500\n{"message": "Error: (description of error)"}
+end
 end
