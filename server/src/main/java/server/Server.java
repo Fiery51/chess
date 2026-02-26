@@ -16,7 +16,7 @@ public class Server {
         //javalin.get("/game", null);
         //javalin.post("/game", null);
         //javalin.put("/game", null);
-        javalin.delete("/db", null);
+        javalin.delete("/db", DeleteHandler.deleteData());
     }
 
     public int run(int desiredPort) {
