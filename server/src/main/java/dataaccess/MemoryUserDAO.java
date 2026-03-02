@@ -15,7 +15,7 @@ public class MemoryUserDAO implements UserDAO{
         dataBase.put(userData.getUsername(), userData);
     }
 
-    public void clear(){
+    public void clearData(){
         dataBase = new HashMap<>(); 
     }
 }

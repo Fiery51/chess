@@ -1,6 +1,8 @@
 package server;
 
+import service.ClearService;
 import service.testMethods;
+import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryUserDAO;
 import io.javalin.*;
@@ -23,8 +25,18 @@ public class Server {
         //javalin.get("/game", null);
         //javalin.post("/game", null);
         //javalin.put("/game", null);
-        javalin.delete("/db", ctx -> new testMethods().clearData(memoryAuth, memoryUser));
-
+        javalin.delete("/db", ctx -> {
+            try{
+                new ClearService().clearData(memoryAuth, memoryUser);
+                ctx.status(200);
+            }
+            catch (DataAccessException e){
+                ctx.status(500);
+                ctx.result("Error:" + e);
+            }
+            
+        }
+        );
 
     }
 
