@@ -6,6 +6,7 @@ import service.UserService;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
@@ -32,6 +33,14 @@ public class Server {
         javalin.post("/user", ctx -> {
             try{
                 var body = serializer.fromJson(ctx.body(), Map.class);
+
+                if(body == null || body.get("username") == null || body.get("password") == null || body.get("email") == null){
+                    ctx.status(400);
+                    ctx.result(serializer.toJson(Map.of("message", "Error: bad request")));
+                    return;
+                }
+                
+                
                 String username = body.get("username").toString();
                 String password = body.get("password").toString();
                 String email = body.get("email").toString();
@@ -52,6 +61,11 @@ public class Server {
 
                 
 
+            }
+            
+            catch (JsonSyntaxException e) {
+                ctx.status(400);
+                ctx.result(serializer.toJson(Map.of("message", "Error: bad request")));
             }
 
             catch(IllegalArgumentException e){
