@@ -58,6 +58,10 @@ public class MemoryGameDAO implements GameDAO{
         tracker = 0;
     }
 
+    public int size(){
+        return dataBase.size();
+    }
+
     public void insertPlayer(String username, int gameID, String color){
         GameData theGame = dataBase.get(gameID);
         GameData updated;

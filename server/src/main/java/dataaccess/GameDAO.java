@@ -16,4 +16,6 @@ public interface GameDAO {
     void insertPlayer(String username, int gameID, String Color);
 
     void clearData();
+
+    int size();
 }

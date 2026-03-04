@@ -12,4 +12,6 @@ public interface AuthDAO {
     String getUsername(String authToken);
 
     void clearData();
+
+    int size();
 }

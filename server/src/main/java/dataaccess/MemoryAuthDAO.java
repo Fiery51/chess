@@ -28,4 +28,8 @@ public class MemoryAuthDAO implements AuthDAO{
     public void clearData(){
         dataBase = new HashMap<>(); 
     }
+
+    public int size(){
+        return dataBase.size();
+    }
 }
