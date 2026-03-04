@@ -1,0 +1,21 @@
+package service;
+
+import java.util.ArrayList;
+
+import dataaccess.DataAccessException;
+import dataaccess.MemoryAuthDAO;
+import dataaccess.MemoryGameDAO;
+import io.javalin.http.UnauthorizedResponse;
+import model.GameData;
+
+public class ListGamesService {
+    public ArrayList<GameData> listGames(String authToken, MemoryAuthDAO memoryAuth, MemoryGameDAO memoryGame) throws DataAccessException, UnauthorizedResponse{
+        //if you're not logged in throw an error
+        if(!memoryAuth.validateAuth(authToken)){
+            throw new UnauthorizedResponse("unauthorized");
+        }
+
+        //if you are the grab all the games
+        return memoryGame.getGames();
+    }
+}

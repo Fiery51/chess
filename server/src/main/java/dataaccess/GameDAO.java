@@ -7,7 +7,7 @@ import model.GameData;
 public interface GameDAO {
     ArrayList<GameData> getGames();
 
-    void createGame(String gameName); 
+    int createGame(String gameName); 
 
     GameData findGame(Integer gameID);
 

@@ -18,9 +18,11 @@ public class MemoryGameDAO implements GameDAO{
         return gameList;
     }
 
-    public void createGame(String gameName){
+    public int createGame(String gameName){
         tracker += 1;
         dataBase.put(tracker, new GameData(tracker, null, null, gameName, null)); 
+        //return the tracker so you know what the id of the game is (so you can know what the game you just made is, was originally null)
+        return tracker;
     }
 
     public GameData findGame(Integer gameID){
