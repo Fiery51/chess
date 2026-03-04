@@ -10,6 +10,7 @@ import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryUserDAO;
 import io.javalin.http.ConflictResponse;
 import io.javalin.http.Context;
+import io.javalin.http.UnauthorizedResponse;
 import model.AuthData;
 import model.UserData;
 import service.LoginUserService;
@@ -101,7 +102,9 @@ public class UserHandler {
                 String username = body.get("username").toString();
                 String password = body.get("password").toString();
 
-                var obj = new LoginUserService().login(username, password, userDAO);
+                var obj = new LoginUserService().login(username, password, userDAO, authDAO);
+                ctx.status(200);
+                ctx.result(serializer.toJson(obj));
             }
             
             catch (JsonSyntaxException e) {
@@ -115,8 +118,8 @@ public class UserHandler {
                 ctx.result(serializer.toJson(obj));
             }
 
-            catch(ConflictResponse e){
-                ctx.status(403);
+            catch(UnauthorizedResponse e){
+                ctx.status(401);
                 var obj = Map.of("message", "Error:" + e);
                 ctx.result(serializer.toJson(obj));
             }
