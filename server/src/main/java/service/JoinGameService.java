@@ -19,9 +19,15 @@ public class JoinGameService {
 
         //grab their username for later
         String username = memoryAuth.getUsername(authToken);
-
+        int intGameID;
+        //grab gameID
+        try {
+            intGameID = Integer.parseInt(gameID); 
+        } catch (Exception e) {
+            throw new BadRequestResponse("bad request");
+        }
         //check if game exists
-        GameData game = memoryGame.findGame(Integer.parseInt(gameID));
+        GameData game = memoryGame.findGame(intGameID);
         if(game == null){
             //bad request? game doesn't exist? 
             throw new BadRequestResponse("bad request");
@@ -33,14 +39,17 @@ public class JoinGameService {
                 throw new ForbiddenResponse("Already Taken");
             }
         }
-        else{
+        else if(playerColor.equals("BLACK")){
             if(game.getBlackUsername() != null){
                 throw new ForbiddenResponse("Already Taken");
             }
         }
+        else{
+            throw new DataAccessException("bad request");
+        }
 
         //Alright the color is not taken, we'll slot you in there
-        memoryGame.insertPlayer(username, Integer.parseInt(gameID), playerColor);
+        memoryGame.insertPlayer(username, intGameID, playerColor);
 
         return;
     }
