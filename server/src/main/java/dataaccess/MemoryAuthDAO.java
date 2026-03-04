@@ -13,12 +13,12 @@ public class MemoryAuthDAO implements AuthDAO{
         dataBase.put(authData.getAuthToken(), authData.getUsername());
     }
 
-    public void deleteAuth(AuthData authData){
-        dataBase.remove(authData.getAuthToken());
+    public void deleteAuth(String authToken){
+        dataBase.remove(authToken);
     }
 
-    public boolean validateAuth(AuthData authData){
-        return dataBase.containsKey(authData.getAuthToken());
+    public boolean validateAuth(String authToken){
+        return dataBase.containsKey(authToken);
     }
 
     public void clearData(){

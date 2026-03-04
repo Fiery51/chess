@@ -35,9 +35,11 @@ public class Server {
 
         javalin.post("/session", ctx -> userHandler.login(ctx));
 
-        //javalin.delete("session", null);
+        javalin.delete("/session", ctx -> userHandler.logout(ctx));
         //javalin.get("/game", null);
+
         //javalin.post("/game", null);
+        
         //javalin.put("/game", null);
 
         javalin.delete("/db", ctx -> {

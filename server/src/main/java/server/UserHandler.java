@@ -14,6 +14,7 @@ import io.javalin.http.UnauthorizedResponse;
 import model.AuthData;
 import model.UserData;
 import service.LoginUserService;
+import service.LogoutUserService;
 import service.UserService;
 
 public class UserHandler {
@@ -90,44 +91,67 @@ public class UserHandler {
     public void login(Context ctx){
         var serializer = new Gson();
         try{
-                var body = serializer.fromJson(ctx.body(), Map.class);
-
-                if(body == null || body.get("username") == null || body.get("password") == null){
-                    ctx.status(400);
-                    ctx.result(serializer.toJson(Map.of("message", "Error: bad request")));
-                    return;
-                }
-                
-                
-                String username = body.get("username").toString();
-                String password = body.get("password").toString();
-
-                var obj = new LoginUserService().login(username, password, userDAO, authDAO);
-                ctx.status(200);
-                ctx.result(serializer.toJson(obj));
-            }
-            
-            catch (JsonSyntaxException e) {
+            var body = serializer.fromJson(ctx.body(), Map.class);
+            if(body == null || body.get("username") == null || body.get("password") == null){
                 ctx.status(400);
                 ctx.result(serializer.toJson(Map.of("message", "Error: bad request")));
+                return;
             }
-
-            catch(IllegalArgumentException e){
-                ctx.status(400);
-                var obj = Map.of("message", "Error:" + e);
-                ctx.result(serializer.toJson(obj));
-            }
-
-            catch(UnauthorizedResponse e){
-                ctx.status(401);
-                var obj = Map.of("message", "Error:" + e);
-                ctx.result(serializer.toJson(obj));
-            }
-
-            catch (DataAccessException e){
-                ctx.status(500);
-                var obj = Map.of("message", "Error:" + e);
-                ctx.result(serializer.toJson(obj));
-            }
+            
+            
+            String username = body.get("username").toString();
+            String password = body.get("password").toString();
+            var obj = new LoginUserService().login(username, password, userDAO, authDAO);
+            ctx.status(200);
+            ctx.result(serializer.toJson(obj));
+        }
+        
+        catch (JsonSyntaxException e) {
+            ctx.status(400);
+            ctx.result(serializer.toJson(Map.of("message", "Error: bad request")));
+        }
+        catch(IllegalArgumentException e){
+            ctx.status(400);
+            var obj = Map.of("message", "Error:" + e);
+            ctx.result(serializer.toJson(obj));
+        }
+        catch(UnauthorizedResponse e){
+            ctx.status(401);
+            var obj = Map.of("message", "Error:" + e);
+            ctx.result(serializer.toJson(obj));
+        }
+        
+        catch (DataAccessException e){
+            ctx.status(500);
+            var obj = Map.of("message", "Error:" + e);
+            ctx.result(serializer.toJson(obj));
         }
     }
+
+    public void logout(Context ctx){
+        var serializer = new Gson();
+        try{
+            String authToken = ctx.header("authorization");
+            if(authToken == null){
+                ctx.status(400);
+                ctx.result(serializer.toJson(Map.of("message", "Error: bad request")));
+                return;
+            }
+            
+            new LogoutUserService().logout(authToken, userDAO, authDAO);
+            ctx.status(200);
+        }
+
+        catch(UnauthorizedResponse e){
+            ctx.status(401);
+            var obj = Map.of("message", "Error:" + e);
+            ctx.result(serializer.toJson(obj));
+        }
+        
+        catch (DataAccessException e){
+            ctx.status(500);
+            var obj = Map.of("message", "Error:" + e);
+            ctx.result(serializer.toJson(obj));
+        }
+    }
+}
