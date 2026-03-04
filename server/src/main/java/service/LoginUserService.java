@@ -15,13 +15,13 @@ public class LoginUserService {
             String password,
             MemoryUserDAO memoryUser,
             MemoryAuthDAO memoryAuth) throws IllegalArgumentException, DataAccessException, UnauthorizedResponse {
-        var User = memoryUser.findUser(username);
-        if(User == null){
+        var user = memoryUser.findUser(username);
+        if(user == null){
             //throw unauthroized exception
             throw new UnauthorizedResponse("unauthorized");
         }
 
-        if(!User.getPassword().equals(password)){
+        if(!user.getPassword().equals(password)){
             //throw unauthorize exception
             throw new UnauthorizedResponse("unauthorized");
         }
