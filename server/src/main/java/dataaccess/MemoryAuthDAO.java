@@ -21,6 +21,10 @@ public class MemoryAuthDAO implements AuthDAO{
         return dataBase.containsKey(authToken);
     }
 
+    public String getUsername(String authToken){
+        return dataBase.get(authToken);
+    }
+
     public void clearData(){
         dataBase = new HashMap<>(); 
     }

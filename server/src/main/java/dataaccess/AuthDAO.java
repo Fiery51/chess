@@ -9,5 +9,7 @@ public interface AuthDAO {
 
     boolean validateAuth(String authData);
 
+    String getUsername(String authToken);
+
     void clearData();
 }

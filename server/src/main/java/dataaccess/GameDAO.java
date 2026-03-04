@@ -13,5 +13,7 @@ public interface GameDAO {
 
     boolean isColorAvailable(String color, Integer gameID);
 
+    void insertPlayer(String username, int gameID, String Color);
+
     void clearData();
 }

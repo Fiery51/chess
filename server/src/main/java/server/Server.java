@@ -43,7 +43,7 @@ public class Server {
 
         javalin.post("/game", ctx -> gameHandler.createGame(ctx));
 
-        //javalin.put("/game", null);
+        javalin.put("/game", ctx -> gameHandler.joinGame(ctx));
 
         javalin.delete("/db", ctx -> {
             try{

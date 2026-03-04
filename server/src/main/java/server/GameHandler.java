@@ -8,9 +8,12 @@ import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
+import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
+import io.javalin.http.ForbiddenResponse;
 import io.javalin.http.UnauthorizedResponse;
 import service.CreateGameService;
+import service.JoinGameService;
 import service.ListGamesService;
 import service.UserService;
 
@@ -83,6 +86,50 @@ public class GameHandler {
 
         catch (DataAccessException e){
             ctx.status(500);
+            var obj = Map.of("message", "Error:" + e);
+            ctx.result(serializer.toJson(obj));
+        }
+    }
+
+    public void joinGame(Context ctx){
+        var serializer = new Gson();
+        try{
+            String authToken = ctx.header("authorization");
+            var body = serializer.fromJson(ctx.body(), Map.class);
+            if(authToken == null || body == null || body.get("playerColor") == null || body.get("gameID") == null){
+                ctx.status(400);
+                ctx.result(serializer.toJson(Map.of("message", "Error: bad request")));
+                return;
+            }
+
+            String playerColor = body.get("playerColor").toString();
+            String gameID = body.get("gameID").toString();
+            new JoinGameService().joinGame(playerColor, gameID, authToken, userDAO, authDAO, gameDAO);
+            
+            ctx.status(200);
+        }
+
+        catch (DataAccessException e){
+            ctx.status(500);
+            var obj = Map.of("message", "Error:" + e);
+            ctx.result(serializer.toJson(obj));
+        }
+
+        catch (UnauthorizedResponse e){
+            ctx.status(401);
+            var obj = Map.of("message", "Error:" + e);
+            ctx.result(serializer.toJson(obj));
+        }
+
+        catch (BadRequestResponse e){
+            ctx.status(400);
+            var obj = Map.of("message", "Error:" + e);
+            ctx.result(serializer.toJson(obj));
+        }
+
+
+        catch (ForbiddenResponse e){
+            ctx.status(403);
             var obj = Map.of("message", "Error:" + e);
             ctx.result(serializer.toJson(obj));
         }

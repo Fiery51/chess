@@ -58,6 +58,18 @@ public class MemoryGameDAO implements GameDAO{
         tracker = 0;
     }
 
+    public void insertPlayer(String username, int gameID, String color){
+        GameData theGame = dataBase.get(gameID);
+        GameData updated;
+        if(color.equals("WHITE")){
+            updated = new GameData(theGame.getGameID(), username, theGame.getBlackUsername(), theGame.getGameName(), theGame.getGame());
+        }
+        else{
+            updated = new GameData(theGame.getGameID(), theGame.getWhiteUsername(), username, theGame.getGameName(), theGame.getGame());
+        }
+        dataBase.put(gameID, updated);
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
