@@ -253,11 +253,15 @@ public class ChessGame {
         //Overall layout of the function
         //First check if the position is empty, if so skip it
 
-        //Second if it isn't lets grab that piece's team color. If it is NOT EQUAL to teamColor, and it is NOT a king, then run its pieceMoves function and add that to an arraylist we're making
+        //Second if it isn't lets grab that piece's team color.
+        //If it is NOT EQUAL to teamColor, and it is NOT a king, then run its pieceMoves
+        //function and add that to an arraylist we're making
 
         //Third keep doing above (somehow work out the pawns diagonal, might just have to manually code that in? *sigh*)
 
-        //Fourth, now grab our current teamColors kings position (IF WE FOUND IT KEEP TRACK OF IT), and see if that position is IN that arraylist that we we made of all those moves of the opposite team
+        //Fourth, now grab our current teamColors kings position
+        //(IF WE FOUND IT KEEP TRACK OF IT), and see if that position is IN
+        //that arraylist that we we made of all those moves of the opposite team
         //IF YES, return true. If NO return false
 
 
@@ -305,14 +309,18 @@ public class ChessGame {
                 if(currentChessBoard.getPiece(new ChessPosition(i, j)) != null){
                     //Check what color the piece is
                     //If its the SAME color, save it to AllTeamMoves, AND its not the King piece because we already did that above!!
-                    if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() == teamColor && currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() != ChessPiece.PieceType.KING){
-                        //AllTeamMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j)).pieceMoves(currentChessBoard, new ChessPosition(i, j)));
+                    if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() == teamColor
+                            && currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() != ChessPiece.PieceType.KING){
+                        //AllTeamMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j))
+                        //.pieceMoves(currentChessBoard, new ChessPosition(i, j)));
                         AllTeamMoves.addAll(validMoves(thePosition));
                     }
                     //If the position is the SAME color and it IS our king
                     //Grab the moves the king can make
-                    if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() == teamColor && currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.KING){
-                        //KingMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j)).pieceMoves(currentChessBoard, new ChessPosition(i, j))); 
+                    if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() == teamColor
+                            && currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.KING){
+                        //KingMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j))
+                        //.pieceMoves(currentChessBoard, new ChessPosition(i, j)));
                         KingMoves.addAll(validMoves(thePosition));
                     }
                 }
@@ -323,7 +331,8 @@ public class ChessGame {
         //First ensure we're in check (use the current king position)
         if(isInCheck(teamColor)){
             //Now we know that we're being hit, can the king move out of the way?
-            //We know we're already in check, so first run isInCheck on all of the king's moves to see if we can move out of the way (overloaded method)
+            //We know we're already in check, so first run isInCheck on all of the king's moves
+            //to see if we can move out of the way (overloaded method)
             for (ChessMove move : KingMoves) {
                 //pass in all the end position (starting position is always that middle square)
                 ArrayList<Boolean> canMoveOutOfWay = new ArrayList<>();
@@ -367,14 +376,18 @@ public class ChessGame {
                 if(currentChessBoard.getPiece(new ChessPosition(i, j)) != null){
                     //Check what color the piece is
                     //If its the SAME color, save it to AllTeamMoves, AND its not the King piece because we already did that above!!
-                    if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() == teamColor && currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() != ChessPiece.PieceType.KING){
-                        //AllTeamMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j)).pieceMoves(currentChessBoard, new ChessPosition(i, j)));
+                    if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() == teamColor
+                            && currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() != ChessPiece.PieceType.KING){
+                        //AllTeamMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j))
+                        //.pieceMoves(currentChessBoard, new ChessPosition(i, j)));
                         AllTeamMoves.addAll(validMoves(thePosition));
                     }
                     //If the position is the SAME color and it IS our king
                     //Grab the moves the king can make
-                    if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() == teamColor && currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.KING){
-                        //KingMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j)).pieceMoves(currentChessBoard, new ChessPosition(i, j))); 
+                    if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() == teamColor
+                            && currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.KING){
+                        //KingMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j))
+                        //.pieceMoves(currentChessBoard, new ChessPosition(i, j)));
                         KingMoves.addAll(validMoves(thePosition));
                     }
                 }
@@ -385,7 +398,8 @@ public class ChessGame {
         //First ensure we're in check (use the current king position)
         if(!isInCheck(teamColor)){
             //Now we know that we're being hit, can the king move out of the way?
-            //We know we're already in check, so first run isInCheck on all of the king's moves to see if we can move out of the way (overloaded method)
+            //We know we're already in check, so first run isInCheck on all of the king's moves
+            //to see if we can move out of the way (overloaded method)
             for (ChessMove move : KingMoves) {
                 //pass in all the end position (starting position is always that middle square)
                 ArrayList<Boolean> canMoveOutOfWay = new ArrayList<>();

@@ -69,7 +69,9 @@ public class KingCalculator {
 //ChessPosition.getRow() + 1 <= 8) && (ChessPosition.getColumn() + 1 <= 8)
     boolean inBounds(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color, int x, int y){
         //if it is in bounds
-        if(((myPosition.getRow() + y <= 8) && (myPosition.getColumn() + x <= 8)) && (myPosition.getRow() - y >= 1) && (myPosition.getColumn() + x >= 1)){
+        if (((myPosition.getRow() + y <= 8) && (myPosition.getColumn() + x <= 8))
+                && (myPosition.getRow() - y >= 1)
+                && (myPosition.getColumn() + x >= 1)) {
             return true;
         }
         else{

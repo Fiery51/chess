@@ -10,7 +10,13 @@ import io.javalin.http.UnauthorizedResponse;
 import model.GameData;
 
 public class JoinGameService {
-    public void joinGame(String playerColor, String gameID, String authToken, MemoryUserDAO memoryUser, MemoryAuthDAO memoryAuth, MemoryGameDAO memoryGame) throws DataAccessException, UnauthorizedResponse, BadRequestResponse, ForbiddenResponse{
+    public void joinGame(
+            String playerColor,
+            String gameID,
+            String authToken,
+            MemoryUserDAO memoryUser,
+            MemoryAuthDAO memoryAuth,
+            MemoryGameDAO memoryGame) throws DataAccessException, UnauthorizedResponse, BadRequestResponse, ForbiddenResponse {
         
         //check if logged in
         if(!memoryAuth.validateAuth(authToken)){

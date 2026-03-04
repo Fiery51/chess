@@ -10,7 +10,11 @@ import io.javalin.http.UnauthorizedResponse;
 import model.AuthData;
 
 public class LoginUserService {
-    public Map<String, String> login(String username, String password, MemoryUserDAO memoryUser, MemoryAuthDAO memoryAuth) throws IllegalArgumentException, DataAccessException, UnauthorizedResponse{
+    public Map<String, String> login(
+            String username,
+            String password,
+            MemoryUserDAO memoryUser,
+            MemoryAuthDAO memoryAuth) throws IllegalArgumentException, DataAccessException, UnauthorizedResponse {
         var User = memoryUser.findUser(username);
         if(User == null){
             //throw unauthroized exception
