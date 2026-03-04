@@ -136,8 +136,11 @@ public class ChessGame {
 
         
         //If white just moved, set it to black, if black just moved set it to white
-        if(currentTeamTurn == TeamColor.WHITE) setTeamTurn(TeamColor.BLACK);
-        else setTeamTurn(TeamColor.WHITE);
+        if(currentTeamTurn == TeamColor.WHITE) {
+            setTeamTurn(TeamColor.BLACK);
+        } else {
+            setTeamTurn(TeamColor.WHITE);
+        }
     }
 
     /**
@@ -326,7 +329,9 @@ public class ChessGame {
                 ArrayList<Boolean> canMoveOutOfWay = new ArrayList<>();
                 canMoveOutOfWay.add(isInCheck(teamColor, move.getEndPosition()));
                 //If theres a single false that means the king CAN move out of the way. Return false
-                if(canMoveOutOfWay.contains(false)) return false;
+                if(canMoveOutOfWay.contains(false)) {
+                    return false;
+                }
             }
             //Now that we know the king can't move out of the way:
             //Next check if validmoves for every piece on same team is empty assume checkmate (king can't move, no pieces can move)
@@ -386,7 +391,9 @@ public class ChessGame {
                 ArrayList<Boolean> canMoveOutOfWay = new ArrayList<>();
                 canMoveOutOfWay.add(isInCheck(teamColor, move.getEndPosition()));
                 //If theres a single false that means the king CAN move out of the way. Return false
-                if(canMoveOutOfWay.contains(false)) return false;
+                if(canMoveOutOfWay.contains(false)) {
+                    return false;
+                }
             }
             //Now that we know the king can't move out of the way:
             //Next check if validmoves for every piece on same team is empty assume checkmate (king can't move, no pieces can move)

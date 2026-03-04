@@ -85,20 +85,26 @@ public class MemoryGameDAO implements GameDAO{
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         MemoryGameDAO other = (MemoryGameDAO) obj;
         if (dataBase == null) {
-            if (other.dataBase != null)
+            if (other.dataBase != null) {
                 return false;
-        } else if (!dataBase.equals(other.dataBase))
+            }
+        } else if (!dataBase.equals(other.dataBase)) {
             return false;
-        if (tracker != other.tracker)
+        }
+        if (tracker != other.tracker) {
             return false;
+        }
         return true;
     }
 
