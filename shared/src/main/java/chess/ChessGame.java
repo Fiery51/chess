@@ -308,10 +308,10 @@ public class ChessGame {
                 //If the current position isn't null
                 if(currentChessBoard.getPiece(new ChessPosition(i, j)) != null){
                     //Check what color the piece is
-                    //If its the SAME color, save it to AllTeamMoves, AND its not the King piece because we already did that above!!
+                    //If its the SAME color, save it to allTeamMoves, AND its not the King piece because we already did that above!!
                     if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() == teamColor
                             && currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() != ChessPiece.PieceType.KING){
-                        //AllTeamMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j))
+                        //allTeamMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j))
                         //.pieceMoves(currentChessBoard, new ChessPosition(i, j)));
                         allTeamMoves.addAll(validMoves(thePosition));
                     }
@@ -367,7 +367,7 @@ public class ChessGame {
      */
     public boolean isInStalemate(TeamColor teamColor) {
         //Grab all the current team colors allowed moves! Same logic as isInCheck but for the SAME team
-        ArrayList<ChessMove> AllTeamMoves = new ArrayList<>();
+        ArrayList<ChessMove> allTeamMoves = new ArrayList<>();
         ArrayList<ChessMove> kingMoves = new ArrayList<>();
         for(int i=1; i<=8; i++){
             for(int j=1; j<=8; j++){
@@ -375,12 +375,12 @@ public class ChessGame {
                 //If the current position isn't null
                 if(currentChessBoard.getPiece(new ChessPosition(i, j)) != null){
                     //Check what color the piece is
-                    //If its the SAME color, save it to AllTeamMoves, AND its not the King piece because we already did that above!!
+                    //If its the SAME color, save it to allTeamMoves, AND its not the King piece because we already did that above!!
                     if(currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() == teamColor
                             && currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() != ChessPiece.PieceType.KING){
-                        //AllTeamMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j))
+                        //allTeamMoves.addAll(currentChessBoard.getPiece(new ChessPosition(i, j))
                         //.pieceMoves(currentChessBoard, new ChessPosition(i, j)));
-                        AllTeamMoves.addAll(validMoves(thePosition));
+                        allTeamMoves.addAll(validMoves(thePosition));
                     }
                     //If the position is the SAME color and it IS our king
                     //Grab the moves the king can make
@@ -413,7 +413,7 @@ public class ChessGame {
             //Next check if validmoves for every piece on same team is empty assume checkmate (king can't move, no pieces can move)
             //if you have no legal moves, that means we're in check, the king can't move out of the way, and you can't block it/take it
             //if you have legal moves means its not checkmate
-            return AllTeamMoves.isEmpty();
+            return allTeamMoves.isEmpty();
         }
 
 
