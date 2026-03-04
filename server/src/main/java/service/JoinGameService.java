@@ -20,12 +20,8 @@ public class JoinGameService {
         //grab their username for later
         String username = memoryAuth.getUsername(authToken);
         int intGameID;
-        //grab gameID
-        try {
-            intGameID = Integer.parseInt(gameID); 
-        } catch (Exception e) {
-            throw new BadRequestResponse("bad request");
-        }
+        double parsed = Double.parseDouble(gameID); 
+        intGameID = (int) parsed;
         //check if game exists
         GameData game = memoryGame.findGame(intGameID);
         if(game == null){
@@ -45,7 +41,7 @@ public class JoinGameService {
             }
         }
         else{
-            throw new DataAccessException("bad request");
+            throw new BadRequestResponse("bad request");
         }
 
         //Alright the color is not taken, we'll slot you in there
