@@ -9,6 +9,7 @@ import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
 import io.javalin.http.BadRequestResponse;
+import io.javalin.http.UnauthorizedResponse;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
@@ -33,7 +34,7 @@ public class CreateGameTest {
     }
 
     @Test
-    void createGameNoPlayers() throws DataAccessException{
+    void createGamePositive() throws DataAccessException{
         int gameID = createGameService.createGame("test", "test", userDAO, authDAO, gameDAO);
         GameData game = gameDAO.findGame(gameID);
         Assertions.assertEquals("test", game.getGameName());
@@ -43,10 +44,9 @@ public class CreateGameTest {
     }
 
     @Test
-    void createGamePlayers() throws DataAccessException{
-        int gameID = createGameService.createGame("test", "test", userDAO, authDAO, gameDAO);
-        GameData game = gameDAO.findGame(gameID);
-        Assertions.assertEquals("test", game.getGameName());
-        Assertions.assertThrows(BadRequestResponse.class, () -> new JoinGameService().joinGame("RED", Integer.toString(gameID), "test", userDAO, authDAO, gameDAO));
-    }
+    void createGameNegativeUnauthorized() {
+    Assertions.assertThrows(UnauthorizedResponse.class, () ->
+        createGameService.createGame("testGame", "asdfasdf", userDAO, authDAO, gameDAO)
+    );
+}
 }

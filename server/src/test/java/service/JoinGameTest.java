@@ -14,10 +14,11 @@ import model.GameData;
 import model.UserData;
 
 public class JoinGameTest {
-    private MemoryUserDAO userDAO;
-    private MemoryAuthDAO authDAO;
-    private MemoryGameDAO gameDAO;
-    private CreateGameService createGameService;
+    MemoryUserDAO userDAO;
+    MemoryAuthDAO authDAO;
+    MemoryGameDAO gameDAO;
+    CreateGameService createGameService;
+    JoinGameService joinGameService;
 
     @BeforeEach
     void setup(){
@@ -29,14 +30,24 @@ public class JoinGameTest {
         userDAO.addUser(new UserData("test1", "test", "test"));
         userDAO.addUser(new UserData("test2", "test", "test"));
         createGameService = new CreateGameService();
+        joinGameService = new JoinGameService();
         authDAO.addAuth(new AuthData("test", "test"));
     }
 
-
+    @Test
+    void joinGamePositive() throws DataAccessException{
+        int gameID = createGameService.createGame("test", "test", userDAO, authDAO, gameDAO);
+        joinGameService.joinGame("WHITE", Integer.toString(gameID), "test", userDAO, authDAO, gameDAO);
+        GameData updatedGame = gameDAO.findGame(gameID);
+        Assertions.assertEquals("test", updatedGame.getWhiteUsername());
+    }
 
 
     @Test
     void joinGameNegative() throws DataAccessException{
-        
+        int gameID = createGameService.createGame("test", "test", userDAO, authDAO, gameDAO);
+        GameData game = gameDAO.findGame(gameID);
+        Assertions.assertEquals("test", game.getGameName());
+        Assertions.assertThrows(BadRequestResponse.class, () -> new JoinGameService().joinGame("RED", Integer.toString(gameID), "test", userDAO, authDAO, gameDAO));
     }
 }
