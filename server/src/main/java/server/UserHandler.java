@@ -1,6 +1,7 @@
 package server;
 
 import java.util.Map;
+import java.util.UUID;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -45,7 +46,7 @@ public class UserHandler {
                 String username = body.get("username").toString();
                 String password = body.get("password").toString();
                 String email = body.get("email").toString();
-                String authToken = UserService.generateToken();
+                String authToken = generateToken();
 
                 //see if the user exists
                 new UserService().getUser(username, password, email, userDAO);
@@ -153,5 +154,9 @@ public class UserHandler {
             var obj = Map.of("message", "Error:" + e);
             ctx.result(serializer.toJson(obj));
         }
+    }
+
+    public static String generateToken(){
+        return UUID.randomUUID().toString();
     }
 }

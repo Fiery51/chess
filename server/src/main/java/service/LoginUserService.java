@@ -38,7 +38,7 @@ public class LoginUserService {
         return obj;
     }
 
-    public static String generateToken(){
+    private static String generateToken(){
         return UUID.randomUUID().toString();
     }
 }

@@ -53,7 +53,7 @@ public class UserServiceTest {
     @Test
     void createUserNegative() throws DataAccessException{
         Assertions.assertThrows(IllegalArgumentException.class, ()
-         -> userService.createUser(new UserData(null, null, null), userDAO));
+         -> userService.createUser(null, userDAO));
     }
 
     @Test
@@ -64,16 +64,6 @@ public class UserServiceTest {
     @Test
     void createAuthNegative() throws DataAccessException{
         Assertions.assertThrows(IllegalArgumentException.class, ()
-         -> userService.createAuth(new AuthData(null, null), authDAO));
-    }
-
-    @Test
-    void generateTokenPositive() throws DataAccessException{
-
-    }
-
-    @Test
-    void generateTokenNegative() throws DataAccessException{
-
+         -> userService.createAuth(null, authDAO));
     }
 }

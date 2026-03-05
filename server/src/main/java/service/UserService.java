@@ -27,15 +27,19 @@ public class UserService {
         }
     }
 
-    public void createUser(UserData userData, MemoryUserDAO memoryUser){
+    public void createUser(UserData userData, MemoryUserDAO memoryUser) throws IllegalArgumentException{
+        if(userData == null || memoryUser == null){
+            throw new IllegalArgumentException("bad request");
+        }
         memoryUser.addUser(userData);
     }
 
-    public void createAuth(AuthData authData, MemoryAuthDAO memoryAuth){
+    public void createAuth(AuthData authData, MemoryAuthDAO memoryAuth) throws IllegalArgumentException{
+        if(authData == null || memoryAuth == null){
+            throw new IllegalArgumentException("bad request");
+        }
         memoryAuth.addAuth(authData);
     }
 
-    public static String generateToken(){
-        return UUID.randomUUID().toString();
-    }
+    
 }
