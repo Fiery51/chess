@@ -38,7 +38,7 @@ public class ListGamesTest {
     }
 
     @Test
-    void ListGamesPositive() throws DataAccessException{
+    void listGamesPositive() throws DataAccessException{
         int gameID = createGameService.createGame("test", "test", userDAO, authDAO, gameDAO);
         GameData game = gameDAO.findGame(gameID);
         GameData expectedGame = new GameData(gameID, null, null, "test", null);
@@ -47,7 +47,7 @@ public class ListGamesTest {
     }
 
     @Test
-    void ListGamesNegative () throws DataAccessException{
+    void listGamesNegative () throws DataAccessException{
         int gameID = createGameService.createGame("test", "test", userDAO, authDAO, gameDAO);
         GameData game = gameDAO.findGame(gameID);
         Assertions.assertEquals("test", game.getGameName());

@@ -40,13 +40,13 @@ public class LogoutUserTest {
     }
 
     @Test
-    void LogoutTestPositive() throws DataAccessException{
+    void logoutTestPositive() throws DataAccessException{
         logoutUserService.logout(obj.get("authToken"), userDAO, authDAO);
         Assertions.assertEquals(authDAO.size(), 0);
     }
 
     @Test
-    void LogoutTestNegative() throws DataAccessException{
+    void logoutTestNegative() throws DataAccessException{
         Assertions.assertThrows(UnauthorizedResponse.class, ()
          -> logoutUserService.logout("lets just pass something random here", userDAO, authDAO));
     }
