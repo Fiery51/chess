@@ -9,16 +9,18 @@ import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
 import io.javalin.http.BadRequestResponse;
+import io.javalin.http.UnauthorizedResponse;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
 
-public class JoinGameTest {
+public class ListGamesTest {
     MemoryUserDAO userDAO;
     MemoryAuthDAO authDAO;
     MemoryGameDAO gameDAO;
     CreateGameService createGameService;
     JoinGameService joinGameService;
+    ListGamesService listGamesService;
 
     @BeforeEach
     void setup(){
@@ -31,24 +33,25 @@ public class JoinGameTest {
         userDAO.addUser(new UserData("test2", "test", "test"));
         createGameService = new CreateGameService();
         joinGameService = new JoinGameService();
+        listGamesService = new ListGamesService(); 
         authDAO.addAuth(new AuthData("test", "test"));
     }
 
     @Test
-    void joinGamePositive() throws DataAccessException{
+    void ListGamesPositive() throws DataAccessException{
         int gameID = createGameService.createGame("test", "test", userDAO, authDAO, gameDAO);
-        joinGameService.joinGame("WHITE", Integer.toString(gameID), "test", userDAO, authDAO, gameDAO);
-        GameData updatedGame = gameDAO.findGame(gameID);
-        Assertions.assertEquals("test", updatedGame.getWhiteUsername());
+        GameData game = gameDAO.findGame(gameID);
+        GameData expectedGame = new GameData(gameID, null, null, "test", null);
+        Assertions.assertEquals(1, listGamesService.listGames("test", authDAO, gameDAO).size());
+        Assertions.assertEquals(expectedGame, listGamesService.listGames("test", authDAO, gameDAO).get(0));
     }
 
-
     @Test
-    void joinGameNegative() throws DataAccessException{
+    void ListGamesNegative () throws DataAccessException{
         int gameID = createGameService.createGame("test", "test", userDAO, authDAO, gameDAO);
         GameData game = gameDAO.findGame(gameID);
         Assertions.assertEquals("test", game.getGameName());
-        Assertions.assertThrows(BadRequestResponse.class, ()
-         -> new JoinGameService().joinGame("RED", Integer.toString(gameID), "test", userDAO, authDAO, gameDAO));
+        Assertions.assertThrows(UnauthorizedResponse.class, ()
+         -> listGamesService.listGames("asd fa", authDAO, gameDAO));
     }
 }
