@@ -14,7 +14,7 @@ import io.javalin.http.UnauthorizedResponse;
 import model.AuthData;
 import model.UserData;
 import service.LoginUserService;
-import service.LogoutUserTest;
+import service.LogoutUserService;
 import service.UserService;
 
 public class UserHandler {
@@ -138,7 +138,7 @@ public class UserHandler {
                 return;
             }
             
-            new LogoutUserTest().logout(authToken, userDAO, authDAO);
+            new LogoutUserService().logout(authToken, userDAO, authDAO);
             ctx.status(200);
         }
 
