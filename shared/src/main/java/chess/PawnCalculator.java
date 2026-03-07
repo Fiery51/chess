@@ -3,6 +3,8 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import chess.ChessGame.TeamColor;
+
 public class PawnCalculator {
     ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
 
@@ -163,7 +165,6 @@ public class PawnCalculator {
 
 
 
-
         //BLACK
         //else we're travelling down the board
         else{
@@ -312,5 +313,62 @@ public class PawnCalculator {
         }
         
         return moves;
+    }
+
+    void captureRight(ChessBoard board, ChessPosition myPosition, TeamColor color){
+        //capture right
+                if(board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1)) != null){
+                    if(board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1)).getTeamColor() != color){
+                        if(myPosition.getRow() + 1 == 8){
+                            moves.add(new ChessMove(
+                                    myPosition,
+                                    new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1),
+                                    ChessPiece.PieceType.ROOK));
+                            moves.add(new ChessMove(
+                                    myPosition,
+                                    new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1),
+                                    ChessPiece.PieceType.KNIGHT));
+                            moves.add(new ChessMove(
+                                    myPosition,
+                                    new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1),
+                                    ChessPiece.PieceType.BISHOP));
+                            moves.add(new ChessMove(
+                                    myPosition,
+                                    new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1),
+                                    ChessPiece.PieceType.QUEEN));
+                        }
+                        else {
+                            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1), null));
+                        }
+                    }
+    }
+
+    void captureLeft(ChessBoard board, ChessPosition myPosition, TeamColor color){
+        //Capture left
+                if(board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1)) != null){
+                    if(board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1)).getTeamColor() != color){
+                        if(myPosition.getRow() + 1 == 8){
+                            moves.add(new ChessMove(
+                                    myPosition,
+                                    new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1),
+                                    ChessPiece.PieceType.ROOK));
+                            moves.add(new ChessMove(
+                                    myPosition,
+                                    new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1),
+                                    ChessPiece.PieceType.KNIGHT));
+                            moves.add(new ChessMove(
+                                    myPosition,
+                                    new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1),
+                                    ChessPiece.PieceType.BISHOP));
+                            moves.add(new ChessMove(
+                                    myPosition,
+                                    new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1),
+                                    ChessPiece.PieceType.QUEEN));
+                        }
+                        else {
+                            moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1), null));
+                        }
+                    }
+                }
     }
 }

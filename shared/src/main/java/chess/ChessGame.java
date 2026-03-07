@@ -307,22 +307,7 @@ public class ChessGame {
 
         //First ensure we're in check (use the current king position)
         if(isInCheck(teamColor)){
-            //Now we know that we're being hit, can the king move out of the way?
-            //We know we're already in check, so first run isInCheck on all of the king's moves
-            //to see if we can move out of the way (overloaded method)
-            for (ChessMove move : kingMoves) {
-                //pass in all the end position (starting position is always that middle square)
-                ArrayList<Boolean> canMoveOutOfWay = new ArrayList<>();
-                canMoveOutOfWay.add(isInCheck(teamColor, move.getEndPosition()));
-                //If theres a single false that means the king CAN move out of the way. Return false
-                if(canMoveOutOfWay.contains(false)) {
-                    return false;
-                }
-            }
-            //Now that we know the king can't move out of the way:
-            //Next check if validmoves for every piece on same team is empty assume checkmate (king can't move, no pieces can move)
-            //if you have no legal moves, that means we're in check, the king can't move out of the way, and you can't block it/take it
-            //if you have legal moves means its not checkmate
+            kingCheck(kingMoves, teamColor);
             return allTeamMoves.isEmpty();
         }
 
@@ -351,7 +336,21 @@ public class ChessGame {
 
         //First ensure we're in check (use the current king position)
         if(!isInCheck(teamColor)){
-            //Now we know that we're being hit, can the king move out of the way?
+            kingCheck(kingMoves, teamColor);
+            return allTeamMoves.isEmpty();
+        }
+
+
+
+
+        //If your not even in check, that means your safe, return false. Your not even under attack
+        else{
+            return false; 
+        }
+    }
+
+    boolean kingCheck(ArrayList<ChessMove> kingMoves, TeamColor teamColor){
+        //Now we know that we're being hit, can the king move out of the way?
             //We know we're already in check, so first run isInCheck on all of the king's moves
             //to see if we can move out of the way (overloaded method)
             for (ChessMove move : kingMoves) {
@@ -367,16 +366,7 @@ public class ChessGame {
             //Next check if validmoves for every piece on same team is empty assume checkmate (king can't move, no pieces can move)
             //if you have no legal moves, that means we're in check, the king can't move out of the way, and you can't block it/take it
             //if you have legal moves means its not checkmate
-            return allTeamMoves.isEmpty();
-        }
-
-
-
-
-        //If your not even in check, that means your safe, return false. Your not even under attack
-        else{
-            return false; 
-        }
+            return true;
     }
 
     void grabCurrentTeamColors(ArrayList<ChessMove> kingMoves, ArrayList<ChessMove> allTeamMoves, TeamColor teamColor){
