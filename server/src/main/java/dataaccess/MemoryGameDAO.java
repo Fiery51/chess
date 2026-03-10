@@ -29,29 +29,7 @@ public class MemoryGameDAO implements GameDAO{
         return dataBase.get(gameID);
     }
 
-    public boolean isColorAvailable(String color, Integer gameID){
-        GameData game = findGame(gameID);
-        //if the game exists
-        if(game != null){
-            //if the color is available
-            //if we're looking for white
-            if(color == null){
-                return false;
-            }
-            if(color.equals("WHITE")){
-                if(game.getWhiteUsername() == null){
-                    return true;
-                }
-            }
-            else if(color.equals("BLACK")){
-                if(game.getBlackUsername() == null){
-                    return true;
-                }
-            }
 
-        }
-        return false;
-    }
 
     public void clearData(){
         dataBase = new HashMap<>(); 
