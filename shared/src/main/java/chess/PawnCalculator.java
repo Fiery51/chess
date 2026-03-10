@@ -341,6 +341,7 @@ public class PawnCalculator {
                             moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1), null));
                         }
                     }
+                }
     }
 
     void captureLeft(ChessBoard board, ChessPosition myPosition, TeamColor color){
