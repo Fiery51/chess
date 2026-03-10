@@ -20,9 +20,8 @@ public class PawnCalculator {
                     moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn()), null));
                 }
             }
-            //normal moves
+            //normal moves if we're moving to the back rank and need to promote
             if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn())) == null) {
-                //if we're moving to the back rank and need to promote
                 if(myPosition.getRow() + 1 == 8){
                     moves.add(new ChessMove(
                             myPosition,
@@ -48,24 +47,19 @@ public class PawnCalculator {
             //Capturing
             //if your on the left edge ONLY run the capture right portion
             if(myPosition.getColumn() == 1){
-                //capture right
                 captureRight(board, myPosition, color);
             }
             //if your on the right edge ONLY right the capture left portion
             else if(myPosition.getColumn() == 8){
-                //Capture left
                 captureLeft(board, myPosition, color);
             }
             //else we're in the middle, we should be fine to capture left or right
             else{
-                //capture right
                 captureRight(board, myPosition, color);
-                //Capture left
                 captureLeft(board, myPosition, color);
             }
         }
         //BLACK
-        //else we're travelling down the board
         else{
             if(myPosition.getRow() == 7){
                 if (board.getPiece(new ChessPosition(myPosition.getRow() - 2, myPosition.getColumn())) == null
@@ -97,18 +91,13 @@ public class PawnCalculator {
                 }
             }
             if(myPosition.getColumn() == 1){
-                //Capture right
                 captureRightBlack(board, myPosition, color);
             }
             else if(myPosition.getColumn() == 8){
-                //Capture left
                 captureLeftBlack(board, myPosition, color);
             }
             else{
-                //Capture right
                 captureRightBlack(board, myPosition, color);
-
-                //Capture left
                 captureLeftBlack(board, myPosition, color);
             }
         }
