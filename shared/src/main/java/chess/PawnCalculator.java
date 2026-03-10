@@ -20,7 +20,6 @@ public class PawnCalculator {
                     moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn()), null));
                 }
             }
-
             //normal moves
             if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn())) == null) {
                 //if we're moving to the back rank and need to promote
@@ -46,7 +45,6 @@ public class PawnCalculator {
                     moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), null));
                 }
             }
-
             //Capturing
             //if your on the left edge ONLY run the capture right portion
             if(myPosition.getColumn() == 1){
@@ -66,9 +64,6 @@ public class PawnCalculator {
                 captureLeft(board, myPosition, color);
             }
         }
-
-
-
         //BLACK
         //else we're travelling down the board
         else{
@@ -101,8 +96,6 @@ public class PawnCalculator {
                     moves.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() - 1, myPosition.getColumn()), null));
                 }
             }
-
-
             if(myPosition.getColumn() == 1){
                 //Capture right
                 captureRightBlack(board, myPosition, color);
@@ -119,7 +112,6 @@ public class PawnCalculator {
                 captureLeftBlack(board, myPosition, color);
             }
         }
-        
         return moves;
     }
 
