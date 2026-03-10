@@ -165,12 +165,11 @@ public class ChessGame {
                         movesList.addAll(currentChessBoard.getPiece(new ChessPosition(i, j)).pieceMoves(currentChessBoard, new ChessPosition(i, j)));
                     }
                     //IF IT'S THE SAME COLOR
-                    else{
-                        //IF ITS EQUAL TO A KING
-                        if(currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.KING){
-                            //then save it for later so we know where it is
-                            kingPosition = new ChessPosition(i, j);
-                        }
+                    //IF ITS EQUAL TO A KING
+                    if(currentChessBoard.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.KING && 
+                    currentChessBoard.getPiece(new ChessPosition(i, j)).getTeamColor() == teamColor){
+                        //then save it for later so we know where it is
+                        kingPosition = new ChessPosition(i, j);
                     }
                 }
             }
