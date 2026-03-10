@@ -24,8 +24,6 @@ public class RookCalculator {
 
     
     private ChessPosition endPositions(ChessPosition chessPosition, String direction){
-
-
         if((direction == "N") && (chessPosition.getRow() + 1 <= 8)){
             //up
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(chessPosition.getRow() + 1, chessPosition.getColumn()), null))){
@@ -49,10 +47,6 @@ public class RookCalculator {
             moves.add(new ChessMove(initialPosition, new ChessPosition(chessPosition.getRow() + 1, chessPosition.getColumn()), null));
             endPositions(new ChessPosition(chessPosition.getRow() + 1, chessPosition.getColumn()), "N");
         }
-
-
-
-
         if((direction == "S") && (chessPosition.getRow() - 1 >= 1)){
             //Down
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(chessPosition.getRow() - 1, chessPosition.getColumn()), null))){
@@ -77,10 +71,6 @@ public class RookCalculator {
             endPositions(new ChessPosition(chessPosition.getRow() - 1, chessPosition.getColumn()), "S");
         }
 
-
-
-
-
         if((direction == "W") && (chessPosition.getColumn() - 1 >= 1)){
             //left
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(chessPosition.getRow(), chessPosition.getColumn() - 1), null))){
@@ -104,12 +94,6 @@ public class RookCalculator {
             moves.add(new ChessMove(initialPosition, new ChessPosition(chessPosition.getRow(), chessPosition.getColumn() - 1), null));
             endPositions(new ChessPosition(chessPosition.getRow(), chessPosition.getColumn() - 1), "W");
         }
-
-
-
-
-
-
         if((direction == "E") && (chessPosition.getColumn() + 1 <= 8)){
             //Right
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(chessPosition.getRow(), chessPosition.getColumn() + 1), null))){

@@ -25,7 +25,6 @@ public class BishopCalculator {
     
     private ChessPosition endPositions(ChessPosition chessPosition, String direction){
 
-
         if((direction == "NE") && (chessPosition.getRow() + 1 <= 8) && (chessPosition.getColumn() + 1 <= 8)){
             //top right
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(chessPosition.getRow() + 1, chessPosition.getColumn() + 1), null))){
@@ -49,9 +48,6 @@ public class BishopCalculator {
             moves.add(new ChessMove(initialPosition, new ChessPosition(chessPosition.getRow() + 1, chessPosition.getColumn() + 1), null));
             endPositions(new ChessPosition(chessPosition.getRow() + 1, chessPosition.getColumn() + 1), "NE");
         }
-
-
-
 
         if((direction == "SE") && (chessPosition.getRow() - 1 >= 1) && (chessPosition.getColumn() + 1 <= 8)){
             //bottom right
@@ -77,10 +73,6 @@ public class BishopCalculator {
             endPositions(new ChessPosition(chessPosition.getRow() - 1, chessPosition.getColumn() + 1), "SE");
         }
 
-
-
-
-
         if((direction == "NW") && (chessPosition.getRow() + 1 <= 8) && (chessPosition.getColumn() - 1 >= 1)){
             //top left
             if(moves.contains(new ChessMove(initialPosition, new ChessPosition(chessPosition.getRow() + 1, chessPosition.getColumn() - 1), null))){
@@ -104,11 +96,6 @@ public class BishopCalculator {
             moves.add(new ChessMove(initialPosition, new ChessPosition(chessPosition.getRow() + 1, chessPosition.getColumn() - 1), null));
             endPositions(new ChessPosition(chessPosition.getRow() + 1, chessPosition.getColumn() - 1), "NW");
         }
-
-
-
-
-
 
         if((direction == "SW") && (chessPosition.getRow() - 1 >= 1) && (chessPosition.getColumn() - 1 >= 1)){
             //bottom left
