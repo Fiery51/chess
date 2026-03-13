@@ -6,6 +6,7 @@ import java.util.Map;
 import model.UserData;
 
 public class MemoryUserDAO implements UserDAO{
+    //Username, userdata
     Map<String, UserData> dataBase = new HashMap<>(); 
     public UserData findUser(String username){
         return dataBase.get(username);
