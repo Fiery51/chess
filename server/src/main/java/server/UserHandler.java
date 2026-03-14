@@ -6,9 +6,11 @@ import java.util.UUID;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryUserDAO;
+import dataaccess.UserDAO;
 import io.javalin.http.ConflictResponse;
 import io.javalin.http.Context;
 import io.javalin.http.UnauthorizedResponse;
@@ -20,11 +22,11 @@ import service.UserService;
 
 public class UserHandler {
     UserService userService;
-    MemoryUserDAO userDAO;
-    MemoryAuthDAO authDAO;
+    UserDAO userDAO;
+    AuthDAO authDAO;
     Gson gson;
 
-    public UserHandler(UserService userService, MemoryUserDAO userDAO, MemoryAuthDAO authDAO, Gson gson) {
+    public UserHandler(UserService userService, UserDAO userDAO, AuthDAO authDAO, Gson gson) {
         this.userService = userService;
         this.userDAO = userDAO;
         this.authDAO = authDAO;

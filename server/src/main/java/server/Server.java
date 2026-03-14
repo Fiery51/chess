@@ -7,10 +7,14 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
+import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
+import dataaccess.UserDAO;
+import dataaccess.SQLUserDAO;
+import dataaccess.SQLAuthDAO; 
 import io.javalin.*;
 
 public class Server {
@@ -19,16 +23,18 @@ public class Server {
 
     public Server() {
         MemoryAuthDAO memoryAuth = new MemoryAuthDAO();
+        AuthDAO sqlAuth = new SQLAuthDAO(); 
         MemoryUserDAO memoryUser = new MemoryUserDAO();
+        UserDAO sqlUser = new SQLUserDAO(); 
         MemoryGameDAO memoryGame = new MemoryGameDAO();
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
         var serializer = new Gson();
 
         UserService userService = new UserService();
-        UserHandler userHandler = new UserHandler(userService, memoryUser, memoryAuth, serializer);
+        UserHandler userHandler = new UserHandler(userService, sqlUser, sqlAuth, serializer);
         
-        GameHandler gameHandler = new GameHandler(userService, memoryUser, memoryAuth, memoryGame, serializer);
+        GameHandler gameHandler = new GameHandler(userService, sqlUser, sqlAuth, memoryGame, serializer);
         
 
 
@@ -47,7 +53,7 @@ public class Server {
 
         javalin.delete("/db", ctx -> {
             try{
-                new ClearService().clearData(memoryAuth, memoryUser, memoryGame);
+                new ClearService().clearData(sqlAuth, sqlUser, memoryGame);
                 ctx.status(200);
             }
             catch (DataAccessException e){
