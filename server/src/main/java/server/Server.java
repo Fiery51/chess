@@ -13,8 +13,10 @@ import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
 import dataaccess.UserDAO;
+import dataaccess.*;
 import dataaccess.SQLUserDAO;
-import dataaccess.SQLAuthDAO; 
+import dataaccess.SQLAuthDAO;
+import dataaccess.SQLGameDAO;
 import io.javalin.*;
 
 public class Server {
@@ -27,6 +29,7 @@ public class Server {
         //MemoryUserDAO memoryUser = new MemoryUserDAO();
         UserDAO sqlUser = new SQLUserDAO(); 
         MemoryGameDAO memoryGame = new MemoryGameDAO();
+        GameDAO sqlGame = new SQLGameDAO();
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
         var serializer = new Gson();
@@ -34,7 +37,7 @@ public class Server {
         UserService userService = new UserService();
         UserHandler userHandler = new UserHandler(userService, sqlUser, sqlAuth, serializer);
         
-        GameHandler gameHandler = new GameHandler(userService, sqlUser, sqlAuth, memoryGame, serializer);
+        GameHandler gameHandler = new GameHandler(userService, sqlUser, sqlAuth, sqlGame, serializer);
         
 
 
@@ -53,7 +56,7 @@ public class Server {
 
         javalin.delete("/db", ctx -> {
             try{
-                new ClearService().clearData(sqlAuth, sqlUser, memoryGame);
+                new ClearService().clearData(sqlAuth, sqlUser, sqlGame);
                 ctx.status(200);
             }
             catch (DataAccessException e){
