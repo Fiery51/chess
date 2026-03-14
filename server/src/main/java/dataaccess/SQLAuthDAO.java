@@ -1,21 +1,21 @@
 package dataaccess;
 
-import java.util.ArrayList;
-
-import model.GameData;
+import model.AuthData;
 
 public class SQLAuthDAO implements AuthDAO{
-    int tracker = 0;
-
-    public ArrayList<GameData> getGames(){
+    public void addAuth(AuthData authData){
 
     }
 
-    public int createGame(String gameName){
+    public void deleteAuth(String authToken){
 
     }
 
-    public GameData findGame(Integer gameID){
+    public boolean validateAuth(String authToken){
+
+    }
+
+    public String getUsername(String authToken){
 
     }
 
@@ -23,8 +23,8 @@ public class SQLAuthDAO implements AuthDAO{
 
     }
 
-    public void insertPlayer(String username, int gameID, String color){
-
+    public int size(){
+        
     }
 
     
