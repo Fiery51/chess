@@ -4,10 +4,10 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
+import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.GameDAO;
+import dataaccess.UserDAO;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.ForbiddenResponse;
@@ -19,12 +19,12 @@ import service.UserService;
 
 public class GameHandler {
     UserService userService;
-    MemoryUserDAO userDAO;
-    MemoryAuthDAO authDAO;
-    MemoryGameDAO gameDAO;
+    UserDAO userDAO;
+    AuthDAO authDAO;
+    GameDAO gameDAO;
     Gson gson;
 
-    public GameHandler(UserService userService, MemoryUserDAO userDAO, MemoryAuthDAO authDAO, MemoryGameDAO gameDAO, Gson gson){
+    public GameHandler(UserService userService, UserDAO userDAO, AuthDAO authDAO, GameDAO gameDAO, Gson gson){
         this.userService = userService;
         this.userDAO = userDAO;
         this.authDAO = authDAO;

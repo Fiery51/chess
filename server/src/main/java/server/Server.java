@@ -22,9 +22,9 @@ public class Server {
     private final Javalin javalin;
 
     public Server() {
-        MemoryAuthDAO memoryAuth = new MemoryAuthDAO();
+        //MemoryAuthDAO memoryAuth = new MemoryAuthDAO();
         AuthDAO sqlAuth = new SQLAuthDAO(); 
-        MemoryUserDAO memoryUser = new MemoryUserDAO();
+        //MemoryUserDAO memoryUser = new MemoryUserDAO();
         UserDAO sqlUser = new SQLUserDAO(); 
         MemoryGameDAO memoryGame = new MemoryGameDAO();
 

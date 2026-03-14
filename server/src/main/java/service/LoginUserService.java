@@ -3,25 +3,27 @@ package service;
 import java.util.Map;
 import java.util.UUID;
 
+import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.UserDAO;
 import io.javalin.http.UnauthorizedResponse;
 import model.AuthData;
+import org.mindrot.jbcrypt.BCrypt;
+
 
 public class LoginUserService {
     public Map<String, String> login(
             String username,
             String password,
-            MemoryUserDAO memoryUser,
-            MemoryAuthDAO memoryAuth) throws IllegalArgumentException, DataAccessException, UnauthorizedResponse {
+            UserDAO memoryUser,
+            AuthDAO memoryAuth) throws IllegalArgumentException, DataAccessException, UnauthorizedResponse {
         var user = memoryUser.findUser(username);
         if(user == null){
             //throw unauthroized exception
             throw new UnauthorizedResponse("unauthorized");
         }
 
-        if(!user.getPassword().equals(password)){
+        if(!BCrypt.checkpw(password, user.getPassword())){
             //throw unauthorize exception
             throw new UnauthorizedResponse("unauthorized");
         }

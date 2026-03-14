@@ -1,9 +1,9 @@
 package service;
 
+import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.GameDAO;
+import dataaccess.UserDAO;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.ForbiddenResponse;
 import io.javalin.http.UnauthorizedResponse;
@@ -14,9 +14,9 @@ public class JoinGameService {
             String playerColor,
             String gameID,
             String authToken,
-            MemoryUserDAO memoryUser,
-            MemoryAuthDAO memoryAuth,
-            MemoryGameDAO memoryGame) throws DataAccessException, UnauthorizedResponse, BadRequestResponse, ForbiddenResponse {
+            UserDAO memoryUser,
+            AuthDAO memoryAuth,
+            GameDAO memoryGame) throws DataAccessException, UnauthorizedResponse, BadRequestResponse, ForbiddenResponse {
         
         //check if logged in
         if(!memoryAuth.validateAuth(authToken)){

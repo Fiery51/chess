@@ -1,18 +1,18 @@
 package service;
 
+import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.GameDAO;
+import dataaccess.UserDAO;
 import io.javalin.http.UnauthorizedResponse;
 
 public class CreateGameService {
     public int createGame(
             String gameName,
             String authToken,
-            MemoryUserDAO memoryUser,
-            MemoryAuthDAO memoryAuth,
-            MemoryGameDAO memoryGame) throws DataAccessException, UnauthorizedResponse {
+            UserDAO memoryUser,
+            AuthDAO memoryAuth,
+            GameDAO memoryGame) throws DataAccessException, UnauthorizedResponse {
         //if you're not logged in throw an error
         if(!memoryAuth.validateAuth(authToken)){
             throw new UnauthorizedResponse("unauthorized");
