@@ -3,15 +3,15 @@ package dataaccess;
 import model.AuthData;
 
 public interface AuthDAO {
-    void addAuth(AuthData authData);
+    void addAuth(AuthData authData) throws DataAccessException;
 
-    void deleteAuth(String authToken);
+    void deleteAuth(String authToken) throws DataAccessException;
 
-    boolean validateAuth(String authData);
+    boolean validateAuth(String authData) throws DataAccessException;
 
-    String getUsername(String authToken);
+    String getUsername(String authToken) throws DataAccessException;
 
-    void clearData();
+    void clearData() throws DataAccessException;
 
-    int size();
+    int size() throws DataAccessException;
 }
