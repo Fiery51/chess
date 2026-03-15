@@ -71,37 +71,47 @@ public class GameTest {
 
     @Test
     void getGamesPositive() throws DataAccessException{
-        createGamePositive();
-        createGamePositive();
-        createGamePositive();
-        createGamePositive();
-        createGamePositive();
+        gameDAO.createGame("test");
+        gameDAO.createGame("test2");
+        gameDAO.createGame("test3");
+        gameDAO.createGame("test4");
+        gameDAO.createGame("test5");
         ArrayList<GameData> games = gameDAO.getGames();
         Assertions.assertEquals(5, games.size());
     }
 
     @Test
     void getGamesNegative() throws DataAccessException{
-
+        ArrayList<GameData> games = gameDAO.getGames();
+        Assertions.assertNotNull(games);
     }
 
     @Test
     void insertPlayerPositive() throws DataAccessException{
-
+        gameDAO.createGame("test");
+        gameDAO.insertPlayer("test", 1, "white");
+        Assertions.assertEquals("test", gameDAO.findGame(1).getWhiteUsername());
     }
 
     @Test
     void insertPlayerNegative() throws DataAccessException{
-
+        gameDAO.createGame("test");
+        gameDAO.insertPlayer("test", 123, "white");
+        GameData game = gameDAO.findGame(123);
+        Assertions.assertNull(game);
     }
 
     @Test
-    void size(){
-
+    void size() throws DataAccessException{
+        gameDAO.createGame("test");
+        Assertions.assertEquals(1, gameDAO.size());
     }
 
 
-
+    @Test
+    void sizeTestNegative() throws DataAccessException{
+        Assertions.assertEquals(0, gameDAO.size());
+    }
 
 
 

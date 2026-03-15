@@ -116,7 +116,10 @@ public class AuthTest {
         Assertions.assertEquals(1, authDAO.size());
     }
 
-
+@Test
+    void sizeTestNegative() throws DataAccessException{
+        Assertions.assertEquals(0, authDAO.size());
+    }
 
 
 
