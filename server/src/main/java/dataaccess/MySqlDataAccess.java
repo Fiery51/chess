@@ -2,10 +2,9 @@ package dataaccess;
 
 import java.sql.SQLException;
 
-
 public class MySqlDataAccess {
     
-    public MySqlDataAccess() throws RuntimeException {
+    public MySqlDataAccess() throws DataAccessException {
         configureDatabase();
     }
 
@@ -50,7 +49,7 @@ public class MySqlDataAccess {
 
 
 
-    private void configureDatabase() throws RuntimeException {
+    private void configureDatabase() throws DataAccessException {
         DatabaseManager.createDatabase();
 
         try (java.sql.Connection conn = DatabaseManager.getConnection()) {

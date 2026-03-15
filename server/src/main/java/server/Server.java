@@ -7,16 +7,9 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
-import dataaccess.AuthDAO;
-import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
-import dataaccess.UserDAO;
+//import dataaccess.MemoryAuthDAO;
+//import dataaccess.MemoryUserDAO;
 import dataaccess.*;
-import dataaccess.SQLUserDAO;
-import dataaccess.SQLAuthDAO;
-import dataaccess.SQLGameDAO;
 import io.javalin.*;
 
 public class Server {
@@ -24,6 +17,11 @@ public class Server {
     private final Javalin javalin;
 
     public Server() {
+        try {
+            new MySqlDataAccess();
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Error: ", e);
+        }
         //MemoryAuthDAO memoryAuth = new MemoryAuthDAO();
         AuthDAO sqlAuth = new SQLAuthDAO(); 
         //MemoryUserDAO memoryUser = new MemoryUserDAO();
