@@ -5,10 +5,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import model.AuthData;
 import model.UserData;
 import service.LoginUserService;
 
-public class UserTest {
+public class GameTest {
     UserDAO userDAO;
     AuthDAO authDAO;
     GameDAO gameDAO;
@@ -52,31 +53,17 @@ public class UserTest {
 
     }
 
-    //________________
 
-    @Test
-    void findUserPositive() throws DataAccessException{
-        addUserPositive();
-    }
 
-    @Test 
-    void findUserNegative() throws DataAccessException{
-        Assertions.assertNull(userDAO.findUser("hello?"));
-    }
 
-    //________
 
-    @Test 
-    void sizeTestPositive() throws DataAccessException{
-        UserData testUser = new UserData("test1", "test", "test");
-        userDAO.addUser(testUser);
-        Assertions.assertEquals(1, userDAO.size());
-    }
 
-    @Test
-    void sizeTestNegative() throws DataAccessException{
-        Assertions.assertEquals(0, userDAO.size());
-    }
+
+
+
+
+
+
 
 
     @Test
