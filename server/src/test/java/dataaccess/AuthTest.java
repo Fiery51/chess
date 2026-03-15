@@ -40,6 +40,8 @@ public class AuthTest {
         loginUserService = new LoginUserService();
     }
 
+
+
     @Test
     void addAuthPositive() throws DataAccessException{
         UserData testUser = new UserData("test1", "test", "test");

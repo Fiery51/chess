@@ -1,11 +1,14 @@
 package dataaccess;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 import service.LoginUserService;
 
@@ -38,25 +41,64 @@ public class GameTest {
     }
 
     @Test
-    void addUserPositive() throws DataAccessException{
-        UserData testUser = new UserData("test1", "test", "test");
-        userDAO.addUser(testUser);
-        Assertions.assertEquals(1, userDAO.size());
-        Assertions.assertEquals(testUser.getUsername(), userDAO.findUser("test1").getUsername());
-        Assertions.assertEquals(testUser.getEmail(), userDAO.findUser("test1").getEmail());
+    void createGamePositive() throws DataAccessException{
+        gameDAO.createGame("test");
+        Assertions.assertEquals(1, gameDAO.size());
     }
 
     @Test
-    void addUserNegative() throws DataAccessException{
+    void createGameNegative() throws DataAccessException{
         Assertions.assertThrows(DataAccessException.class, ()
-         -> userDAO.addUser(new UserData(null, null, null)));
+         -> gameDAO.createGame(null));
 
+    }
+
+
+    @Test
+    void findGamePositive() throws DataAccessException{
+        createGamePositive();
+        Assertions.assertEquals("test", gameDAO.findGame(1).getGameName());
+    }
+
+
+    @Test
+    void findGameNegative() throws DataAccessException{
+        Assertions.assertNull(gameDAO.findGame(0));
     }
 
 
 
 
+    @Test
+    void getGamesPositive() throws DataAccessException{
+        createGamePositive();
+        createGamePositive();
+        createGamePositive();
+        createGamePositive();
+        createGamePositive();
+        ArrayList<GameData> games = gameDAO.getGames();
+        Assertions.assertEquals(5, games.size());
+    }
 
+    @Test
+    void getGamesNegative() throws DataAccessException{
+
+    }
+
+    @Test
+    void insertPlayerPositive() throws DataAccessException{
+
+    }
+
+    @Test
+    void insertPlayerNegative() throws DataAccessException{
+
+    }
+
+    @Test
+    void size(){
+
+    }
 
 
 
