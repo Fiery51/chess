@@ -57,12 +57,7 @@ public class UserTest {
 
     @Test
     void findUserPositive() throws DataAccessException{
-        UserData testUser = new UserData("test1", "test", "test");
-        userDAO.addUser(testUser);
-        Assertions.assertEquals(1, userDAO.size());
-
-        Assertions.assertEquals(testUser.getUsername(), userDAO.findUser("test1").getUsername());
-        Assertions.assertEquals(testUser.getEmail(), userDAO.findUser("test1").getEmail());
+        addUserPositive();
     }
 
     @Test 
