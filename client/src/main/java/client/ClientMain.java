@@ -77,6 +77,8 @@ public class ClientMain {
         String password = console.readLine("Enter password: ");
         String email = console.readLine("Enter email: ");
         
+        //make HTTP request to rester a user
+        loggedIn(out);
     }
 
     private static void login(PrintStream out){
@@ -141,6 +143,22 @@ public class ClientMain {
                     helpLoggedIn(out);
                 }
                 break;
+
+            case "logout":
+                logout(out);
+                break;
+            case "create game":
+                createGame(out);
+                break;
+            case "list games":
+                listGames(out);
+                break;
+            case "play game":
+                playGame(out);
+                break;
+            case "observe game":
+                observeGame(out);
+                break;
         }
     }
 
@@ -187,11 +205,58 @@ public class ClientMain {
         out.print(SET_TEXT_COLOR_LIGHT_GREY);
         out.println(" - to view a game");
 
+        out.print(SET_TEXT_COLOR_BLUE);
+        out.print("logout");
+        out.print(SET_TEXT_COLOR_LIGHT_GREY);
+        out.println(" - to logout");
+
+        out.print(SET_TEXT_COLOR_BLUE);
+        out.print("help");
+        out.print(SET_TEXT_COLOR_LIGHT_GREY);
+        out.println(" - to view commands");
+
         loggedIn(out);
     }
     
+    private static void logout(PrintStream out){
+        //send HTTP request to logout
+        loggedOut(out);
+    }
 
+    private static void createGame(PrintStream out){
+        Console console = System.console();
+        out.print(ERASE_SCREEN);
+        out.println("Create Game");
+        String name = console.readLine("Enter game name: ");
+        //send HTTP request to create the game
+        loggedIn(out);
+    }
 
+    private static void listGames(PrintStream out){
+        Console console = System.console();
+        out.print(ERASE_SCREEN);
+        out.println("Games Available:");
+        //list all the games here. Make HTTP request to list all the games and well, list them all out
+        console.readLine("Press enter to continue");
+        loggedIn(out);
+    }
+
+    private static void playGame(PrintStream out){
+        Console console = System.console();
+        out.print(ERASE_SCREEN);
+        out.println("Play game:");
+        String id = console.readLine("Game ID: ");
+        String color = console.readLine("Color: ");
+        //make HTTP request to join teh game
+    }
+
+    private static void observeGame(PrintStream out){
+        Console console = System.console();
+        out.print(ERASE_SCREEN);
+        out.println("Observe game:");
+        String id = console.readLine("Game ID: ");
+        //make http request to view teh game
+    }
 
 
 
