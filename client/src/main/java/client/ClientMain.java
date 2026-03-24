@@ -46,12 +46,10 @@ public class ClientMain {
 
 
 
-        //DELETE THIS
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         out.print(ERASE_SCREEN);
         //drawHeaders(out);
         loggedOut(out);
-        //_______________
     }
 
 
@@ -88,6 +86,8 @@ public class ClientMain {
         String username = console.readLine("Enter username: ");
         String password = console.readLine("Enter password: ");
 
+        //send http request do all that jazz. For now just pretend we logged in to test functionality
+        loggedIn(out);
     }
 
     private static void quit(PrintStream out){
@@ -148,7 +148,25 @@ public class ClientMain {
         }
     }
 
+    
+    //logged in
+    private static void loggedIn(PrintStream out){
+        Console console = System.console();
 
+        command = console.readLine("[LOGGED_IN] >>> ");
+        ArrayList<String> s = new ArrayList<>();
+        s.add("help");
+        s.add("logout");
+        s.add("create game");
+        s.add("list games");
+        s.add("play game");
+        s.add("observe game");
+        
+        while(!validInput(command, s)){
+            command = console.readLine("[LOGGED_IN] >>> ");
+        }
+        moveNext(command, out);
+    }
 
 
 
