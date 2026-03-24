@@ -66,7 +66,7 @@ public class ClientMain {
         while(!validInput(command, s)){
             command = console.readLine("[LOGGED_OUT] >>> ");
         }
-        moveNext(command, out);
+        moveNext(command, out, 0);
     }
 
     private static void register(PrintStream out){
@@ -94,7 +94,7 @@ public class ClientMain {
         out.print(ERASE_SCREEN);
     }
 
-    private static void help(PrintStream out){
+    private static void helpLogout(PrintStream out){
         Console console = System.console();
         out.print(ERASE_SCREEN);
         out.print(SET_BG_COLOR_BLACK);
@@ -118,20 +118,11 @@ public class ClientMain {
         out.print(SET_TEXT_COLOR_LIGHT_GREY);
         out.println(" - with possible commands");
 
-        command = console.readLine("[LOGGED_OUT] >>> ");
-        ArrayList<String> s = new ArrayList<>();
-        s.add("register");
-        s.add("login");
-        s.add("quit");
-        s.add("help");
-        while(!validInput(command, s)){
-            command = console.readLine("[LOGGED_OUT] >>> ");
-        }
-        moveNext(command, out);
+        loggedOut(out);
     }
 
 
-    static void moveNext(String command, PrintStream out){
+    static void moveNext(String command, PrintStream out, int loggedIn){
         switch (command) {
             case "register":
                 register(out);
@@ -143,7 +134,12 @@ public class ClientMain {
                 quit(out);
                 break;
             case "help":
-                help(out);
+                if(loggedIn == 0){
+                    helpLogout(out);
+                }
+                else{
+                    helpLoggedIn(out);
+                }
                 break;
         }
     }
@@ -165,10 +161,35 @@ public class ClientMain {
         while(!validInput(command, s)){
             command = console.readLine("[LOGGED_IN] >>> ");
         }
-        moveNext(command, out);
+        moveNext(command, out, 1);
     }
 
+    private static void helpLoggedIn(PrintStream out){
+        out.print(ERASE_SCREEN);
+        out.print(SET_BG_COLOR_BLACK);
+        out.print(SET_TEXT_COLOR_BLUE);
+        out.print("create game");
+        out.print(SET_TEXT_COLOR_LIGHT_GREY);
+        out.println(" - to create a game");
 
+        out.print(SET_TEXT_COLOR_BLUE);
+        out.print("list games");
+        out.print(SET_TEXT_COLOR_LIGHT_GREY);
+        out.println(" - list all games");
+
+        out.print(SET_TEXT_COLOR_BLUE);
+        out.print("play game");
+        out.print(SET_TEXT_COLOR_LIGHT_GREY);
+        out.println(" - to join a game");
+
+        out.print(SET_TEXT_COLOR_BLUE);
+        out.print("observe game");
+        out.print(SET_TEXT_COLOR_LIGHT_GREY);
+        out.println(" - to view a game");
+
+        loggedIn(out);
+    }
+    
 
 
 
