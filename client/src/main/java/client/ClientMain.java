@@ -2,48 +2,38 @@ package client;
 
 import chess.*;
 import java.io.PrintStream;
+import java.net.Authenticator;
+import java.net.InetSocketAddress;
+import java.net.ProxySelector;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpClient.Redirect;
+import java.net.http.HttpClient.Version;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
+
+import com.google.gson.Gson;
+
 import static ui.EscapeSequences.*;
 import java.io.Console;
+import java.io.IOException;
 
 
 public class ClientMain {
 
 
-    //DELETE THIS STUFF
-
-    // Board dimensions.
-    private static final int BOARD_SIZE_IN_SQUARES = 3;
-    private static final int SQUARE_SIZE_IN_PADDED_CHARS = 3;
-    private static final int LINE_WIDTH_IN_PADDED_CHARS = 1;
-
-    // Padded characters.
-    private static final String EMPTY = "   ";
-    private static final String X = " X ";
-    private static final String O = " O ";
-
-    private static Random rand = new Random();
-
     static String command;
 
-
-
-
-    //__________________________________________
-
-
-
-
-
-
-
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, InterruptedException {
         var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
         System.out.println("♕ 240 Chess Client: " + piece);
-
 
 
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
@@ -53,7 +43,7 @@ public class ClientMain {
     }
 
 
-    private static void loggedOut(PrintStream out){
+    private static void loggedOut(PrintStream out) throws IOException, InterruptedException{
         Console console = System.console();
 
         command = console.readLine("[LOGGED_OUT] >>> ");
@@ -69,19 +59,34 @@ public class ClientMain {
         moveNext(command, out, 0);
     }
 
-    private static void register(PrintStream out){
+    private static void register(PrintStream out) throws IOException, InterruptedException{
         Console console = System.console();
         out.print(ERASE_SCREEN);
         out.println("Register");
         String username = console.readLine("Enter username: ");
         String password = console.readLine("Enter password: ");
         String email = console.readLine("Enter email: ");
+        var data = Map.of("username", username, "password", password, "email", email);
+        var serializer = new Gson();
+        String jsonRequest = serializer.toJson(data);
         
         //make HTTP request to rester a user
+        HttpClient client = HttpClient.newBuilder().build();
+    HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("http://localhost:8080/user"))
+            .POST(BodyPublishers.ofString(jsonRequest))
+            .build();
+
+    HttpResponse<?> response = client.send(request, BodyHandlers.discarding());
+    System.out.println(response.statusCode());
+
+
+
+
         loggedIn(out);
     }
 
-    private static void login(PrintStream out){
+    private static void login(PrintStream out) throws IOException, InterruptedException{
         Console console = System.console();
         out.print(ERASE_SCREEN);
         out.println("Login");
@@ -96,7 +101,7 @@ public class ClientMain {
         out.print(ERASE_SCREEN);
     }
 
-    private static void helpLogout(PrintStream out){
+    private static void helpLogout(PrintStream out) throws IOException, InterruptedException{
         Console console = System.console();
         out.print(ERASE_SCREEN);
         out.print(SET_BG_COLOR_BLACK);
@@ -124,7 +129,7 @@ public class ClientMain {
     }
 
 
-    static void moveNext(String command, PrintStream out, int loggedIn){
+    static void moveNext(String command, PrintStream out, int loggedIn) throws IOException, InterruptedException{
         switch (command) {
             case "register":
                 register(out);
@@ -164,7 +169,7 @@ public class ClientMain {
 
     
     //logged in
-    private static void loggedIn(PrintStream out){
+    private static void loggedIn(PrintStream out) throws IOException, InterruptedException{
         Console console = System.console();
 
         command = console.readLine("[LOGGED_IN] >>> ");
@@ -182,7 +187,7 @@ public class ClientMain {
         moveNext(command, out, 1);
     }
 
-    private static void helpLoggedIn(PrintStream out){
+    private static void helpLoggedIn(PrintStream out) throws IOException, InterruptedException{
         out.print(ERASE_SCREEN);
         out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_BLUE);
@@ -218,12 +223,12 @@ public class ClientMain {
         loggedIn(out);
     }
     
-    private static void logout(PrintStream out){
+    private static void logout(PrintStream out) throws IOException, InterruptedException{
         //send HTTP request to logout
         loggedOut(out);
     }
 
-    private static void createGame(PrintStream out){
+    private static void createGame(PrintStream out) throws IOException, InterruptedException{
         Console console = System.console();
         out.print(ERASE_SCREEN);
         out.println("Create Game");
@@ -232,7 +237,7 @@ public class ClientMain {
         loggedIn(out);
     }
 
-    private static void listGames(PrintStream out){
+    private static void listGames(PrintStream out) throws IOException, InterruptedException{
         Console console = System.console();
         out.print(ERASE_SCREEN);
         out.println("Games Available:");
