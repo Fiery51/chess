@@ -13,7 +13,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 public class ServerFacade {
-    public String registerRequest(String username, String password, String email) throws IOException, InterruptedException{
+    public String[] registerRequest(String username, String password, String email) throws IOException, InterruptedException{
         String authToken; 
         var data = Map.of("username", username, "password", password, "email", email);
         var serializer = new Gson();
@@ -37,10 +37,13 @@ public class ServerFacade {
         else{
             authToken = "Error";
         }
-        return authToken;
+        String[] returnObject = new String[2];
+        returnObject[0] = authToken;
+        returnObject[1] = String.valueOf(response.statusCode());
+        return returnObject;
     }
 
-    public String loginRequest(String username, String password) throws IOException, InterruptedException{
+    public String[] loginRequest(String username, String password) throws IOException, InterruptedException{
         String authToken;
         var data = Map.of("username", username, "password", password);
         var serializer = new Gson();
@@ -64,6 +67,22 @@ public class ServerFacade {
         else{
             authToken = "Error";
         }
-        return authToken;
+
+        String[] returnObject = new String[2];
+        returnObject[0] = authToken;
+        returnObject[1] = String.valueOf(response.statusCode());
+        return returnObject;
+    }
+
+    public void logoutRequest(String authToken) throws IOException, InterruptedException{
+        HttpClient client = HttpClient.newBuilder().build();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create("http://localhost:8080/session"))
+            .DELETE()
+            .header("authorization", authToken)
+            .timeout(Duration.ofSeconds(5))
+            .build();
+
+        HttpResponse<?> response = client.send(request, BodyHandlers.ofString());
     }
 }

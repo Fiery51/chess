@@ -2,24 +2,8 @@ package client;
 
 import chess.*;
 import java.io.PrintStream;
-import java.net.Authenticator;
-import java.net.InetSocketAddress;
-import java.net.ProxySelector;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpClient.Redirect;
-import java.net.http.HttpClient.Version;
-import java.net.http.HttpRequest;
-import java.net.http.HttpRequest.BodyPublishers;
-import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Random;
-
-import com.google.gson.Gson;
 
 import static ui.EscapeSequences.*;
 import java.io.Console;
@@ -86,15 +70,33 @@ public class ClientMain {
         String username = console.readLine("Enter username: ");
         String password = console.readLine("Enter password: ");
         var result = new ServerFacade().loginRequest(username, password);
+        int statusCode = Integer.parseInt(result[1]);
 
-        if(result.equals("Error")){
-            out.print(ERASE_SCREEN);
-            out.println("Error Logging in User");
-            loggedOut(out);
+        switch (statusCode) {
+            case 200:
+                authToken = result[0];
+                loggedIn(out);
+                break;
+                
+            case 400:
+                out.print(ERASE_SCREEN);
+                out.println("Bad request");
+                loggedOut(out);
+                break;
+
+            case 401:
+                out.print(ERASE_SCREEN);
+                out.println("Invalid Credentials");
+                loggedOut(out);
+                break;
+
+            case 500:
+                out.print(ERASE_SCREEN);
+                out.println("Could not connect to server");
+                loggedOut(out);
+                break;
+
         }
-
-        authToken = result;
-        loggedIn(out);
     }
 
     private static void quit(PrintStream out){
@@ -102,7 +104,7 @@ public class ClientMain {
     }
 
     private static void helpLogout(PrintStream out) throws IOException, InterruptedException{
-        Console console = System.console();
+
         out.print(ERASE_SCREEN);
         out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_BLUE);
@@ -224,6 +226,7 @@ public class ClientMain {
     }
     
     private static void logout(PrintStream out) throws IOException, InterruptedException{
+        new ServerFacade().logoutRequest(authToken);
         //send HTTP request to logout
         loggedOut(out);
     }
@@ -262,12 +265,6 @@ public class ClientMain {
         String id = console.readLine("Game ID: ");
         //make http request to view teh game
     }
-
-
-
-
-
-
 
     
     static boolean validInput(String input, ArrayList<String> s){
