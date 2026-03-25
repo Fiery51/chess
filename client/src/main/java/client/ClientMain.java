@@ -30,6 +30,7 @@ public class ClientMain {
 
 
     static String command;
+    private static String authToken;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
@@ -72,18 +73,25 @@ public class ClientMain {
         
         //make HTTP request to rester a user
         HttpClient client = HttpClient.newBuilder().build();
-    HttpRequest request = HttpRequest.newBuilder()
+        HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create("http://localhost:8080/user"))
             .POST(BodyPublishers.ofString(jsonRequest))
             .build();
 
-    HttpResponse<?> response = client.send(request, BodyHandlers.discarding());
-    System.out.println(response.statusCode());
+        HttpResponse<?> response = client.send(request, BodyHandlers.ofString());;
+        System.out.println(response.body());
+        var result = serializer.fromJson((String) response.body(), Map.class);
 
+        if(response.statusCode() == 200){
+            authToken = result.get("authToken").toString();
+            System.out.println(authToken);
+            loggedIn(out);
+        }
 
-
-
-        loggedIn(out);
+        out.print(ERASE_SCREEN);
+        //ERROR HANDLING DO THIS
+        out.println("Error Logging in");
+        loggedOut(out);
     }
 
     private static void login(PrintStream out) throws IOException, InterruptedException{
