@@ -53,14 +53,37 @@ public class ClientMain {
         String email = console.readLine("Enter email: ");
         var result = new ServerFacade().registerRequest(username, password, email);
 
-        if(result.equals("Error")){
-            out.print(ERASE_SCREEN);
-            out.println("Error Registering User");
-            loggedOut(out);
-        }
+        int statusCode = Integer.parseInt(result[1]);
 
-        authToken = result;
-        loggedIn(out);
+        switch (statusCode) {
+            case 200:
+                authToken = result[0];
+                loggedIn(out);
+                break;
+            case 400:
+                out.print(ERASE_SCREEN);
+                out.println("Bad request");
+                loggedOut(out);
+                break;
+
+            case 403:
+                out.print(ERASE_SCREEN);
+                out.println("Username already taken :( ");
+                loggedOut(out);
+                break;
+
+            case 500:
+                out.print(ERASE_SCREEN);
+                out.println("Server problem (nah doesn't happen)");
+                loggedOut(out);
+                break;
+                
+            default:
+                out.print(ERASE_SCREEN);
+                out.println("Unexpected server problem");
+                loggedOut(out);
+                break;
+        }
     }
 
     private static void login(PrintStream out) throws IOException, InterruptedException{
@@ -77,7 +100,6 @@ public class ClientMain {
                 authToken = result[0];
                 loggedIn(out);
                 break;
-                
             case 400:
                 out.print(ERASE_SCREEN);
                 out.println("Bad request");
@@ -92,10 +114,15 @@ public class ClientMain {
 
             case 500:
                 out.print(ERASE_SCREEN);
-                out.println("Could not connect to server");
+                out.println("Server problem (nah doesn't happen)");
                 loggedOut(out);
                 break;
 
+            default:
+                out.print(ERASE_SCREEN);
+                out.println("Unexpected server problem, the heck happened here man, the frick you do");
+                loggedOut(out);
+                break;
         }
     }
 
