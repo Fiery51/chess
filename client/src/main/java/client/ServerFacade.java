@@ -21,7 +21,7 @@ public class ServerFacade {
         String jsonRequest = serializer.toJson(data);
         
         HttpResponse<?> response;
-        Map result; 
+        Map<?, ?> result; 
         try {
             //make HTTP request to rester a user
             HttpClient client = HttpClient.newBuilder().build();
@@ -59,7 +59,7 @@ public class ServerFacade {
         String[] returnObject = new String[2];
         
         HttpResponse<?> response = null;
-        Map result = null; 
+        Map<?, ?> result = null; 
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
@@ -105,4 +105,67 @@ public class ServerFacade {
             return 500;
         }
     }
+
+    public int[] createGame(String authToken, String gameName){
+        int[] returnObject = new int[2];
+        var data = Map.of("gameName", gameName);
+        var serializer = new Gson();
+        String jsonRequest = serializer.toJson(data);
+
+        HttpResponse<?> response = null;
+        Map<?, ?> result = null; 
+
+        try {
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/session"))
+                .POST(BodyPublishers.ofString(jsonRequest))
+                .header("authorization", authToken)
+                .timeout(Duration.ofSeconds(5))
+                .build();
+
+            response = client.send(request, BodyHandlers.ofString());
+            result = serializer.fromJson((String) response.body(), Map.class);
+            returnObject[0] = response.statusCode(); 
+            returnObject[1] = Integer.parseInt((String)result.get("gameID"));
+            return returnObject;
+        } catch (Exception e) {
+            returnObject[0] = 500; 
+            return returnObject; 
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    //public int[] createGame(String authToken, String gameName){
+    //    int[] returnObject = new int[2];
+    //    var data = Map.of("gameName", gameName);
+    //    var serializer = new Gson();
+    //    String jsonRequest = serializer.toJson(data);
+//
+    //    HttpResponse<?> response = null;
+    //    Map result = null; 
+//
+    //    try {
+    //        HttpClient client = HttpClient.newBuilder().build();
+    //        HttpRequest request = HttpRequest.newBuilder()
+    //            .uri(URI.create("http://localhost:8080/session"))
+    //            .POST(BodyPublishers.ofString(jsonRequest))
+    //            .header("authorization", authToken)
+    //            .timeout(Duration.ofSeconds(5))
+    //            .build();
+//
+    //        response = client.send(request, BodyHandlers.ofString());
+    //        return returnObject;
+    //    } catch (Exception e) {
+    //        return returnObject; 
+    //    }
+    //}
 }

@@ -55,35 +55,7 @@ public class ClientMain {
 
         int statusCode = Integer.parseInt(result[1]);
 
-        switch (statusCode) {
-            case 200:
-                authToken = result[0];
-                loggedIn(out);
-                break;
-            case 400:
-                out.print(ERASE_SCREEN);
-                out.println("Bad request");
-                loggedOut(out);
-                break;
-
-            case 403:
-                out.print(ERASE_SCREEN);
-                out.println("Username already taken :( ");
-                loggedOut(out);
-                break;
-
-            case 500:
-                out.print(ERASE_SCREEN);
-                out.println("Server problem (nah doesn't happen, trust trust im a perfect software dev you should never see thi- why are you seeing this)");
-                loggedOut(out);
-                break;
-                
-            default:
-                out.print(ERASE_SCREEN);
-                out.println("Unexpected server problem");
-                loggedOut(out);
-                break;
-        }
+        codesLoggedOut(out, statusCode, result[0]);
     }
 
     private static void login(PrintStream out) throws IOException, InterruptedException{
@@ -95,35 +67,7 @@ public class ClientMain {
         var result = new ServerFacade().loginRequest(username, password);
         int statusCode = Integer.parseInt(result[1]);
 
-        switch (statusCode) {
-            case 200:
-                authToken = result[0];
-                loggedIn(out);
-                break;
-            case 400:
-                out.print(ERASE_SCREEN);
-                out.println("Bad request");
-                loggedOut(out);
-                break;
-
-            case 401:
-                out.print(ERASE_SCREEN);
-                out.println("Invalid Credentials");
-                loggedOut(out);
-                break;
-
-            case 500:
-                out.print(ERASE_SCREEN);
-                out.println("Server problem (nah doesn't happen, trust trust im a perfect software dev you should never see thi- why are you seeing this)");
-                loggedOut(out);
-                break;
-
-            default:
-                out.print(ERASE_SCREEN);
-                out.println("Unexpected server problem, the heck happened here man, the frick you do");
-                loggedOut(out);
-                break;
-        }
+        codesLoggedOut(out, statusCode, result[0]);
     }
 
     private static void quit(PrintStream out){
@@ -299,6 +243,44 @@ public class ClientMain {
     }
 
 
+
+    public static void codesLoggedOut(PrintStream out, int code, String authToken) throws IOException, InterruptedException{
+        switch (code) {
+            case 200:
+                ClientMain.authToken = authToken;
+                loggedIn(out);
+                break;
+            case 400:
+                out.print(ERASE_SCREEN);
+                out.println("Bad request");
+                loggedOut(out);
+                break;
+
+            case 401:
+                out.print(ERASE_SCREEN);
+                out.println("Invalid Credentials");
+                loggedOut(out);
+                break;
+
+            case 403:
+                out.print(ERASE_SCREEN);
+                out.println("Username already taken :( ");
+                loggedOut(out);
+                break;
+
+            case 500:
+                out.print(ERASE_SCREEN);
+                out.println("Server problem (nah doesn't happen, trust trust im a perfect software dev you should never see thi- why are you seeing this)");
+                loggedOut(out);
+                break;
+
+            default:
+                out.print(ERASE_SCREEN);
+                out.println("Unexpected server problem, the heck happened here man, the frick you do");
+                loggedOut(out);
+                break;
+        }
+    }
 }
 
 
