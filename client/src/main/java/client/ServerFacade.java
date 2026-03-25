@@ -118,16 +118,16 @@ public class ServerFacade {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/session"))
+                .uri(URI.create("http://localhost:8080/game"))
                 .POST(BodyPublishers.ofString(jsonRequest))
                 .header("authorization", authToken)
                 .timeout(Duration.ofSeconds(5))
                 .build();
 
             response = client.send(request, BodyHandlers.ofString());
-            result = serializer.fromJson((String) response.body(), Map.class);
             returnObject[0] = response.statusCode(); 
-            returnObject[1] = Integer.parseInt((String)result.get("gameID"));
+            result = serializer.fromJson((String) response.body(), Map.class);
+            returnObject[1] = (int) result.get("gameID");
             return returnObject;
         } catch (Exception e) {
             returnObject[0] = 500; 

@@ -66,7 +66,6 @@ public class ClientMain {
         String password = console.readLine("Enter password: ");
         var result = new ServerFacade().loginRequest(username, password);
         int statusCode = Integer.parseInt(result[1]);
-
         codesLoggedOut(out, statusCode, result[0]);
     }
 
@@ -197,9 +196,13 @@ public class ClientMain {
     }
     
     private static void logout(PrintStream out) throws IOException, InterruptedException{
-        new ServerFacade().logoutRequest(authToken);
-        //send HTTP request to logout
-        loggedOut(out);
+        var result = new ServerFacade().logoutRequest(authToken);
+        if(result == 200){
+            //custom 200 one for this
+            loggedOut(out);;
+            return;
+        }
+        codesLoggedIn(out, result);
     }
 
     private static void createGame(PrintStream out) throws IOException, InterruptedException{
@@ -207,8 +210,13 @@ public class ClientMain {
         out.print(ERASE_SCREEN);
         out.println("Create Game");
         String name = console.readLine("Enter game name: ");
-        //send HTTP request to create the game
-        loggedIn(out);
+        var result = new ServerFacade().createGame(authToken, name);
+        if(result[0] == 200){
+            out.println("Game: " + name + " created");
+            loggedIn(out);
+            return;
+        }
+        codesLoggedIn(out, result[0]);
     }
 
     private static void listGames(PrintStream out) throws IOException, InterruptedException{
@@ -278,6 +286,43 @@ public class ClientMain {
                 out.print(ERASE_SCREEN);
                 out.println("Unexpected server problem, the heck happened here man, the frick you do");
                 loggedOut(out);
+                break;
+        }
+    }
+
+    public static void codesLoggedIn(PrintStream out, int code) throws IOException, InterruptedException{
+        switch (code) {
+            case 200:
+                loggedIn(out);
+                break; 
+            case 400:
+                out.print(ERASE_SCREEN);
+                out.println("Bad request");
+                loggedIn(out);
+                break;
+
+            case 401:
+                out.print(ERASE_SCREEN);
+                out.println("Invalid Credentials");
+                loggedIn(out);
+                break;
+
+            case 403:
+                out.print(ERASE_SCREEN);
+                out.println("Color already taken");
+                loggedIn(out);
+                break;
+
+            case 500:
+                out.print(ERASE_SCREEN);
+                out.println("Server problem (nah doesn't happen, trust trust im a perfect software dev you should never see thi- why are you seeing this)");
+                loggedIn(out);
+                break;
+
+            default:
+                out.print(ERASE_SCREEN);
+                out.println("Unexpected server problem, the heck happened here man, the frick you do");
+                loggedIn(out);
                 break;
         }
     }
