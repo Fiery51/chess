@@ -67,31 +67,16 @@ public class ClientMain {
         String username = console.readLine("Enter username: ");
         String password = console.readLine("Enter password: ");
         String email = console.readLine("Enter email: ");
-        var data = Map.of("username", username, "password", password, "email", email);
-        var serializer = new Gson();
-        String jsonRequest = serializer.toJson(data);
-        
-        //make HTTP request to rester a user
-        HttpClient client = HttpClient.newBuilder().build();
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create("http://localhost:8080/user"))
-            .POST(BodyPublishers.ofString(jsonRequest))
-            .build();
+        var result = new ServerFacade().registerRequest(username, password, email);
 
-        HttpResponse<?> response = client.send(request, BodyHandlers.ofString());;
-        System.out.println(response.body());
-        var result = serializer.fromJson((String) response.body(), Map.class);
-
-        if(response.statusCode() == 200){
-            authToken = result.get("authToken").toString();
-            System.out.println(authToken);
-            loggedIn(out);
+        if(result.equals("Error")){
+            out.print(ERASE_SCREEN);
+            out.println("Error Registering User");
+            loggedOut(out);
         }
 
-        out.print(ERASE_SCREEN);
-        //ERROR HANDLING DO THIS
-        out.println("Error Logging in");
-        loggedOut(out);
+        authToken = result;
+        loggedIn(out);
     }
 
     private static void login(PrintStream out) throws IOException, InterruptedException{
@@ -100,8 +85,15 @@ public class ClientMain {
         out.println("Login");
         String username = console.readLine("Enter username: ");
         String password = console.readLine("Enter password: ");
+        var result = new ServerFacade().loginRequest(username, password);
 
-        //send http request do all that jazz. For now just pretend we logged in to test functionality
+        if(result.equals("Error")){
+            out.print(ERASE_SCREEN);
+            out.println("Error Logging in User");
+            loggedOut(out);
+        }
+
+        authToken = result;
         loggedIn(out);
     }
 
