@@ -357,49 +357,67 @@ public class ClientMain {
         //y, x
         String[][] chessBoardTerminal = new String[10][10];
         
-        chessBoardTerminal[0][0] = SET_BG_COLOR_LIGHT_GREY + EMPTY.repeat(1);
-        chessBoardTerminal[1][0] = SET_BG_COLOR_LIGHT_GREY + " 8";
-        chessBoardTerminal[2][0] = SET_BG_COLOR_LIGHT_GREY + " 7";
-        chessBoardTerminal[3][0] = SET_BG_COLOR_LIGHT_GREY + " 6";
-        chessBoardTerminal[4][0] = SET_BG_COLOR_LIGHT_GREY + " 5";
-        chessBoardTerminal[5][0] = SET_BG_COLOR_LIGHT_GREY + " 4";
-        chessBoardTerminal[6][0] = SET_BG_COLOR_LIGHT_GREY + " 3";
-        chessBoardTerminal[7][0] = SET_BG_COLOR_LIGHT_GREY + " 2";
-        chessBoardTerminal[8][0] = SET_BG_COLOR_LIGHT_GREY + " 1";
-        chessBoardTerminal[9][0] = SET_BG_COLOR_LIGHT_GREY + "  ";
+        chessBoardTerminal[0][0] = SET_BG_COLOR_DARK_GREY + "   ";
+        chessBoardTerminal[1][0] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 8 ";
+        chessBoardTerminal[2][0] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 7 ";
+        chessBoardTerminal[3][0] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 6 ";
+        chessBoardTerminal[4][0] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 5 ";
+        chessBoardTerminal[5][0] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 4 ";
+        chessBoardTerminal[6][0] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 3 ";
+        chessBoardTerminal[7][0] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 2 ";
+        chessBoardTerminal[8][0] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 1 ";
+        chessBoardTerminal[9][0] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + "   ";
 
-        chessBoardTerminal[0][9] = SET_BG_COLOR_LIGHT_GREY + EMPTY.repeat(1);
-        chessBoardTerminal[1][9] = SET_BG_COLOR_LIGHT_GREY + " 8";
-        chessBoardTerminal[2][9] = SET_BG_COLOR_LIGHT_GREY + " 7";
-        chessBoardTerminal[3][9] = SET_BG_COLOR_LIGHT_GREY + " 6";
-        chessBoardTerminal[4][9] = SET_BG_COLOR_LIGHT_GREY + " 5";
-        chessBoardTerminal[5][9] = SET_BG_COLOR_LIGHT_GREY + " 4";
-        chessBoardTerminal[6][9] = SET_BG_COLOR_LIGHT_GREY + " 3";
-        chessBoardTerminal[7][9] = SET_BG_COLOR_LIGHT_GREY + " 2";
-        chessBoardTerminal[8][9] = SET_BG_COLOR_LIGHT_GREY + " 1";
-        chessBoardTerminal[9][9] = SET_BG_COLOR_LIGHT_GREY + "  ";
+        chessBoardTerminal[0][9] = SET_BG_COLOR_DARK_GREY + EMPTY.repeat(1);
+        chessBoardTerminal[1][9] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 8";
+        chessBoardTerminal[2][9] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 7";
+        chessBoardTerminal[3][9] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 6";
+        chessBoardTerminal[4][9] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 5";
+        chessBoardTerminal[5][9] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 4";
+        chessBoardTerminal[6][9] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 3";
+        chessBoardTerminal[7][9] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 2";
+        chessBoardTerminal[8][9] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " 1";
+        chessBoardTerminal[9][9] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + "  ";
 
-        chessBoardTerminal[0][0] = SET_BG_COLOR_LIGHT_GREY + "  ";
-        chessBoardTerminal[0][1] = SET_BG_COLOR_LIGHT_GREY + " a";
-        chessBoardTerminal[0][2] = SET_BG_COLOR_LIGHT_GREY + " b";
-        chessBoardTerminal[0][3] = SET_BG_COLOR_LIGHT_GREY + " c";
-        chessBoardTerminal[0][4] = SET_BG_COLOR_LIGHT_GREY + " d";
-        chessBoardTerminal[0][5] = SET_BG_COLOR_LIGHT_GREY + " e";
-        chessBoardTerminal[0][6] = SET_BG_COLOR_LIGHT_GREY + " f";
-        chessBoardTerminal[0][7] = SET_BG_COLOR_LIGHT_GREY + " g";
-        chessBoardTerminal[0][8] = SET_BG_COLOR_LIGHT_GREY + " h";
-        chessBoardTerminal[0][9] = SET_BG_COLOR_LIGHT_GREY + "  ";
+        chessBoardTerminal[0][0] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + "   ";
+        chessBoardTerminal[0][1] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " a ";
+        chessBoardTerminal[0][2] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " b ";
+        chessBoardTerminal[0][3] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " c ";
+        chessBoardTerminal[0][4] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " d ";
+        chessBoardTerminal[0][5] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " e ";
+        chessBoardTerminal[0][6] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " f ";
+        chessBoardTerminal[0][7] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " g ";
+        chessBoardTerminal[0][8] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " h ";
+        chessBoardTerminal[0][9] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + "   ";
 
-        chessBoardTerminal[9][0] = SET_BG_COLOR_LIGHT_GREY + "  ";
-        chessBoardTerminal[9][1] = SET_BG_COLOR_LIGHT_GREY + " a";
-        chessBoardTerminal[9][2] = SET_BG_COLOR_LIGHT_GREY + " b";
-        chessBoardTerminal[9][3] = SET_BG_COLOR_LIGHT_GREY + " c";
-        chessBoardTerminal[9][4] = SET_BG_COLOR_LIGHT_GREY + " d";
-        chessBoardTerminal[9][5] = SET_BG_COLOR_LIGHT_GREY + " e";
-        chessBoardTerminal[9][6] = SET_BG_COLOR_LIGHT_GREY + " f";
-        chessBoardTerminal[9][7] = SET_BG_COLOR_LIGHT_GREY + " g";
-        chessBoardTerminal[9][8] = SET_BG_COLOR_LIGHT_GREY + " h";
-        chessBoardTerminal[9][9] = SET_BG_COLOR_LIGHT_GREY + "  ";
+        chessBoardTerminal[9][0] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + "   ";
+        chessBoardTerminal[9][1] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " a ";
+        chessBoardTerminal[9][2] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " b ";
+        chessBoardTerminal[9][3] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " c ";
+        chessBoardTerminal[9][4] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " d ";
+        chessBoardTerminal[9][5] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " e ";
+        chessBoardTerminal[9][6] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " f ";
+        chessBoardTerminal[9][7] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " g ";
+        chessBoardTerminal[9][8] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " h ";
+        chessBoardTerminal[9][9] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + "   ";
+
+        chessBoardTerminal[1][1] = SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLUE + " R ";
+        chessBoardTerminal[1][2] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " N ";
+        chessBoardTerminal[1][3] = SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLUE + " B ";
+        chessBoardTerminal[1][4] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " Q ";
+        chessBoardTerminal[1][5] = SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLUE + " K ";
+        chessBoardTerminal[1][6] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " B ";
+        chessBoardTerminal[1][7] = SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLUE + " N ";
+        chessBoardTerminal[1][8] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " R ";
+
+        chessBoardTerminal[2][1] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " P ";
+        chessBoardTerminal[2][2] = SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLUE + " P ";
+        chessBoardTerminal[2][3] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " P ";
+        chessBoardTerminal[2][4] = SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLUE + " P ";
+        chessBoardTerminal[2][5] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " P ";
+        chessBoardTerminal[2][6] = SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLUE + " P ";
+        chessBoardTerminal[2][7] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " P ";
+        chessBoardTerminal[2][8] = SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_BLUE + " P ";
 
 
 
