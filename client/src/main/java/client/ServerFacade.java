@@ -156,9 +156,6 @@ public class ServerFacade {
             System.out.println(response.statusCode());
             System.out.println(response.body());
 
-            result = serializer.fromJson((String) response.body(), Map.class);
-
-
             
             Map<?, ?> root = serializer.fromJson((String) response.body(), Map.class);
             ArrayList<?> games = (ArrayList<?>) root.get("games");
