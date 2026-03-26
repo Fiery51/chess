@@ -246,6 +246,8 @@ public class ClientMain {
         String id = console.readLine("Game ID: ");
         String color = console.readLine("Color: ");
         //make HTTP request to join teh game
+
+        drawChessBoard(out);
     }
 
     private static void observeGame(PrintStream out){
@@ -335,6 +337,25 @@ public class ClientMain {
                 out.println("Unexpected server problem, the heck happened here man, the frick you do");
                 loggedIn(out);
                 break;
+        }
+    }
+
+
+
+    public static void drawChessBoard(PrintStream out){
+        out.print(ERASE_SCREEN);
+
+
+        for(int i=0; i<8; i++){
+            for(int j=0; j < 8; j++){
+                if(i + j % 2 == 0){
+                    out.print(SET_BG_COLOR_LIGHT_GREY);
+                }
+                else{
+                    out.print(SET_BG_COLOR_DARK_GREEN);
+                }
+            }
+            out.println(EMPTY.repeat(3));
         }
     }
 }
