@@ -128,11 +128,15 @@ public class ServerFacade {
                 .build();
 
             response = client.send(request, BodyHandlers.ofString());
+            System.out.println(response.statusCode());
             returnObject[0] = response.statusCode(); 
             result = serializer.fromJson((String) response.body(), Map.class);
-            returnObject[1] = (int) result.get("gameID");
+            String stringVersion = String.valueOf(result.get("gameID"));
+            int intVersion = (int) Double.parseDouble(stringVersion);
+            returnObject[1] = intVersion;
             return returnObject;
         } catch (Exception e) {
+            e.printStackTrace();
             returnObject[0] = 500; 
             return returnObject; 
         }
