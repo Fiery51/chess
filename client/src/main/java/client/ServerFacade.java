@@ -8,9 +8,12 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
+
 
 public class ServerFacade {
     public String[] registerRequest(String username, String password, String email) throws IOException, InterruptedException{
@@ -131,6 +134,50 @@ public class ServerFacade {
             return returnObject;
         } catch (Exception e) {
             returnObject[0] = 500; 
+            return returnObject; 
+        }
+    }
+
+    public ListGamesResult listGames(String authToken){
+        HttpResponse<?> response = null;
+        Map<Integer, String> result = new HashMap<>();
+        var serializer = new Gson();
+
+        try {
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/game"))
+                .GET()
+                .header("authorization", authToken)
+                .timeout(Duration.ofSeconds(5))
+                .build();
+
+            response = client.send(request, BodyHandlers.ofString());
+            System.out.println(response.statusCode());
+            System.out.println(response.body());
+
+            result = serializer.fromJson((String) response.body(), Map.class);
+
+
+            
+            Map<?, ?> root = serializer.fromJson((String) response.body(), Map.class);
+            ArrayList<?> games = (ArrayList<?>) root.get("games");
+            for (int i = 0; i < games.size(); i++) {
+                //turn the game BACK INTO A MAP AGAIN
+                Map<?, ?> gameMap = (Map<?, ?>) games.get(i);
+                //then we can NOW grab the ID and Name from it
+                int gameID = ((Number) gameMap.get("gameID")).intValue();
+                String gameName = (String) gameMap.get("gameName");
+                //NOW we can put it into the stupid OTHER map holy smokes
+                result.put(gameID, gameName);
+            }
+
+
+            ListGamesResult returnObject = new ListGamesResult(response.statusCode(), result);
+            return returnObject;
+        } catch (Exception e) {
+            e.printStackTrace();
+            ListGamesResult returnObject = new ListGamesResult(500, null);
             return returnObject; 
         }
     }

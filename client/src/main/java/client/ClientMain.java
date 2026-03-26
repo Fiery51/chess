@@ -2,8 +2,10 @@ package client;
 
 import chess.*;
 import java.io.PrintStream;
+import java.net.ServerSocket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Map;
 
 import static ui.EscapeSequences.*;
 import java.io.Console;
@@ -221,11 +223,20 @@ public class ClientMain {
 
     private static void listGames(PrintStream out) throws IOException, InterruptedException{
         Console console = System.console();
-        out.print(ERASE_SCREEN);
-        out.println("Games Available:");
-        //list all the games here. Make HTTP request to list all the games and well, list them all out
-        console.readLine("Press enter to continue");
-        loggedIn(out);
+        var result = new ServerFacade().listGames(authToken);
+
+        if(result.statusCode() == 200){
+            out.print(ERASE_SCREEN);
+            out.println("Games Available:");
+            for (var element : result.games().entrySet()) {
+                out.println(element.getKey() + " " + element.getValue());
+            }
+            console.readLine("Press enter to continue");
+            loggedIn(out);
+            return;
+        }
+        codesLoggedIn(out, result.statusCode());
+
     }
 
     private static void playGame(PrintStream out){
