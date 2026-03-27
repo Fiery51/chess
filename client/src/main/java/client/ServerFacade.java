@@ -247,6 +247,9 @@ public class ServerFacade {
                 .build();
 
             response = client.send(request, BodyHandlers.ofString());
+            if(response.statusCode() != 200){
+                return response.statusCode();
+            }
             //System.out.println(response.statusCode());
             //System.out.println(response.body());
 
@@ -268,8 +271,8 @@ public class ServerFacade {
                 //System.out.println(whiteUsername);
                 //NOW we can put it into the stupid OTHER map holy smokes
                 result.put(gameIDSomething, gameName);
-                System.out.println(gameIDSomething);
-                System.out.println(gameIDInt);
+                //System.out.println(gameIDSomething);
+                //System.out.println(gameIDInt);
                 if(gameIDSomething == gameIDInt){
                     return 200;
                 }
@@ -278,39 +281,6 @@ public class ServerFacade {
         catch(Exception e){
             return 500;
         }
+        return 400;
     }
-
-
-
-
-
-
-
-
-
-
-    //public int[] createGame(String authToken, String gameName){
-    //    int[] returnObject = new int[2];
-    //    var data = Map.of("gameName", gameName);
-    //    var serializer = new Gson();
-    //    String jsonRequest = serializer.toJson(data);
-//
-    //    HttpResponse<?> response = null;
-    //    Map result = null; 
-//
-    //    try {
-    //        HttpClient client = HttpClient.newBuilder().build();
-    //        HttpRequest request = HttpRequest.newBuilder()
-    //            .uri(URI.create("http://localhost:8080/session"))
-    //            .POST(BodyPublishers.ofString(jsonRequest))
-    //            .header("authorization", authToken)
-    //            .timeout(Duration.ofSeconds(5))
-    //            .build();
-//
-    //        response = client.send(request, BodyHandlers.ofString());
-    //        return returnObject;
-    //    } catch (Exception e) {
-    //        return returnObject; 
-    //    }
-    //}
 }

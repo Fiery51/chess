@@ -269,13 +269,16 @@ public class ClientMain {
         out.print(ERASE_SCREEN);
         out.println("Play game:");
         String id = console.readLine("Game ID: ");
-        try {
-            Integer.parseInt(id);
-        } catch (Exception e) {
-            id = console.readLine("Please input a numeric game ID: ");
+        while(true){
+            try {
+                Integer.parseInt(id);
+                break;
+            } catch (Exception e) {
+                id = console.readLine("Please input a numeric game ID: ");
+            }
         }
         String color = console.readLine("Color (WHITE) or (BLACK): ");
-        if(!color.equals("WHITE") || !color.equals("BLACK")){
+        if(!color.equals("WHITE") && !color.equals("BLACK")){
             color = console.readLine("Please select a color (WHITE) or (BLACK): ");
         }
         //make HTTP request to join teh game
@@ -303,8 +306,8 @@ public class ClientMain {
         }
         //make http request to view teh game
         var result = new ServerFacade().observeGame(authToken, id);
-        System.out.println(result);
-        System.out.println(id);
+        //System.out.println(result);
+        //System.out.println(id);
         if(result == 200){
             drawChessBoardWhite(out);
         }
