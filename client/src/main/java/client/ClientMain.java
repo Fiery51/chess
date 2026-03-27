@@ -228,8 +228,15 @@ public class ClientMain {
         if(result.statusCode() == 200){
             out.print(ERASE_SCREEN);
             out.println("Games Available:");
+            int i = 0;
             for (var element : result.games().entrySet()) {
-                out.println(element.getKey() + " " + element.getValue());
+                out.println(element.getKey() + " " + 
+                element.getValue() +
+                 "   White: " +
+                  result.whiteUsernames().get(i) +
+                   "  Black " +
+                    result.blackUsernames().get(i));
+                i++; 
             }
             console.readLine("Press enter to continue");
             loggedIn(out);
@@ -247,22 +254,28 @@ public class ClientMain {
         String color = console.readLine("Color (WHITE) or (BLACK): ");
         //make HTTP request to join teh game
         var result = new ServerFacade().playGame(authToken, color, id); //hey ID might be null check on this 
+        if(result == 200){
+            if(color.equals("WHITE")){
+                drawChessBoardWhite(out);
+            }
+            else{
+                drawChessBoardBlack(out);
+            }
+        }
         codesLoggedIn(out, result);
-        System.out.println(color);
-        if(color.equals("WHITE")){
-            drawChessBoardWhite(out);
-        }
-        else{
-            drawChessBoardBlack(out);
-        }
     }
 
-    private static void observeGame(PrintStream out){
+    private static void observeGame(PrintStream out) throws IOException, InterruptedException{
         Console console = System.console();
         out.print(ERASE_SCREEN);
         out.println("Observe game:");
         String id = console.readLine("Game ID: ");
         //make http request to view teh game
+        var result = new ServerFacade().observeGame(authToken, id);
+        if(result == 200){
+            drawChessBoardWhite(out);
+        }
+        codesLoggedIn(out, result);
     }
 
     

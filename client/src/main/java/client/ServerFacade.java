@@ -35,7 +35,7 @@ public class ServerFacade {
                 .build();
 
             response = client.send(request, BodyHandlers.ofString());;
-            System.out.println(response.body());
+            //System.out.println(response.body());
             result = serializer.fromJson((String) response.body(), Map.class);
         } catch (Exception e) {
             returnObject[0] = "Error";
@@ -72,7 +72,7 @@ public class ServerFacade {
                 .build();
 
             response = client.send(request, BodyHandlers.ofString());;
-            System.out.println(response.body());
+            //System.out.println(response.body());
             result = serializer.fromJson((String) response.body(), Map.class);
         } catch (Exception e) {
             returnObject[0] = "Error";
@@ -128,7 +128,7 @@ public class ServerFacade {
                 .build();
 
             response = client.send(request, BodyHandlers.ofString());
-            System.out.println(response.statusCode());
+            //System.out.println(response.statusCode());
             returnObject[0] = response.statusCode(); 
             result = serializer.fromJson((String) response.body(), Map.class);
             String stringVersion = String.valueOf(result.get("gameID"));
@@ -157,28 +157,35 @@ public class ServerFacade {
                 .build();
 
             response = client.send(request, BodyHandlers.ofString());
-            System.out.println(response.statusCode());
-            System.out.println(response.body());
+            //System.out.println(response.statusCode());
+            //System.out.println(response.body());
 
             
             Map<?, ?> root = serializer.fromJson((String) response.body(), Map.class);
             ArrayList<?> games = (ArrayList<?>) root.get("games");
+            ArrayList<String> whiteUsernames = new ArrayList<>();
+            ArrayList<String> blackUsernames = new ArrayList<>();
             for (int i = 0; i < games.size(); i++) {
                 //turn the game BACK INTO A MAP AGAIN
                 Map<?, ?> gameMap = (Map<?, ?>) games.get(i);
                 //then we can NOW grab the ID and Name from it
                 int gameID = ((Number) gameMap.get("gameID")).intValue();
                 String gameName = (String) gameMap.get("gameName");
+                String whiteUsername = (String) gameMap.get("whiteUsername");
+                whiteUsernames.add(whiteUsername);
+                String blackUsername = (String) gameMap.get("blackUsername");
+                blackUsernames.add(blackUsername);
+                //System.out.println(whiteUsername);
                 //NOW we can put it into the stupid OTHER map holy smokes
                 result.put(gameID, gameName);
             }
 
 
-            ListGamesResult returnObject = new ListGamesResult(response.statusCode(), result);
+            ListGamesResult returnObject = new ListGamesResult(response.statusCode(), result, whiteUsernames, blackUsernames);
             return returnObject;
         } catch (Exception e) {
             e.printStackTrace();
-            ListGamesResult returnObject = new ListGamesResult(500, null);
+            ListGamesResult returnObject = new ListGamesResult(500, null, null, null);
             return returnObject; 
         }
     }
@@ -186,6 +193,30 @@ public class ServerFacade {
     public int playGame(String authToken, String color, String gameID){
         HttpResponse<?> response = null;
         var data = Map.of("playerColor", color, "gameID", gameID);
+        var serializer = new Gson();
+        String jsonRequest = serializer.toJson(data);
+
+        try {
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/game"))
+                .PUT(BodyPublishers.ofString(jsonRequest))
+                .header("authorization", authToken)
+                .timeout(Duration.ofSeconds(5))
+                .build();
+
+            response = client.send(request, BodyHandlers.ofString());
+            return response.statusCode();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 500; 
+        }
+    }
+
+    public int observeGame(String authToken, String gameID){
+        HttpResponse<?> response = null;
+        var data = Map.of("gameID", gameID);
         var serializer = new Gson();
         String jsonRequest = serializer.toJson(data);
 
