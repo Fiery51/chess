@@ -575,8 +575,8 @@ public class ClientMain {
         chessBoardTerminal[8][1] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " R ";
         chessBoardTerminal[8][2] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " N ";
         chessBoardTerminal[8][3] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " B ";
-        chessBoardTerminal[8][4] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " Q ";
-        chessBoardTerminal[8][5] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " K ";
+        chessBoardTerminal[8][4] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " K ";
+        chessBoardTerminal[8][5] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " Q ";
         chessBoardTerminal[8][6] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " B ";
         chessBoardTerminal[8][7] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " N ";
         chessBoardTerminal[8][8] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " R ";
@@ -605,8 +605,8 @@ public class ClientMain {
         chessBoardTerminal[1][1] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " R ";
         chessBoardTerminal[1][2] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_RED + " N ";
         chessBoardTerminal[1][3] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " B ";
-        chessBoardTerminal[1][4] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_RED + " Q ";
-        chessBoardTerminal[1][5] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " K ";
+        chessBoardTerminal[1][4] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_RED + " K ";
+        chessBoardTerminal[1][5] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " Q ";
         chessBoardTerminal[1][6] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_RED + " B ";
         chessBoardTerminal[1][7] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " N ";
         chessBoardTerminal[1][8] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_RED + " R ";

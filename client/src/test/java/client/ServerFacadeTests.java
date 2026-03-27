@@ -122,23 +122,50 @@ public class ServerFacadeTests {
     }
 
     @Test
-    public void playGamePositive(){
+    public void playGamePositive() throws IOException, InterruptedException{
+        var register = facade.registerRequest("test", "test", "test");
+        var login = facade.loginRequest("test", "test");
+        var createGame = facade.createGame(login[0], "testGame");
+        var result = facade.playGame(login[0], "WHITE", "1");
 
+        Assertions.assertEquals(200, result);
     }
 
     @Test
-    public void playGameNegative(){
+    public void playGameNegative() throws IOException, InterruptedException{
+        var register = facade.registerRequest("test", "test", "test");
+        var register2 = facade.registerRequest("test2", "test2", "test2");
 
+        var login = facade.loginRequest("test", "test");
+        var createGame = facade.createGame(login[0], "testGame");
+        var joinGame1 = facade.playGame(login[0], "WHITE", "1");
+        var logout = facade.logoutRequest(login[1]);
+
+        var login2 = facade.loginRequest("test2", "test2");
+        var result = facade.playGame(login2[0], "WHITE", "1");
+        
+
+        Assertions.assertEquals(403, result);
     }
 
     @Test
-    public void observeGamePositive(){
+    public void observeGamePositive() throws IOException, InterruptedException{
+        var register = facade.registerRequest("test", "test", "test");
+        var login = facade.loginRequest("test", "test");
+        var createGame = facade.createGame(login[0], "testGame");
+        var result = facade.observeGame(login[0], "1");
 
+        Assertions.assertEquals(200, result);
     }
 
     @Test
-    public void observeGameNegative(){
+    public void observeGameNegative() throws IOException, InterruptedException{
+        var register = facade.registerRequest("test", "test", "test");
+        var login = facade.loginRequest("test", "test");
+        var createGame = facade.createGame(login[0], "testGame");
+        var result = facade.observeGame(login[0], "5");
 
+        Assertions.assertEquals(400, result);
     }
 
 }
