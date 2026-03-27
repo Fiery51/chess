@@ -215,25 +215,65 @@ public class ServerFacade {
     }
 
     public int observeGame(String authToken, String gameID){
+        int gameIDInt = Integer.parseInt(gameID);
         HttpResponse<?> response = null;
-        var data = Map.of("gameID", gameID);
+        Map<Integer, String> result = new HashMap<>();
         var serializer = new Gson();
-        String jsonRequest = serializer.toJson(data);
+        if(authToken == null){
+            return 401;
+        }
+        if(gameID == null){
+            System.out.println("game ID was null");
+            return 400;
+        }
 
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/game"))
-                .PUT(BodyPublishers.ofString(jsonRequest))
+                .GET()
                 .header("authorization", authToken)
                 .timeout(Duration.ofSeconds(5))
                 .build();
 
             response = client.send(request, BodyHandlers.ofString());
-            return response.statusCode();
+            //System.out.println(response.statusCode());
+            //System.out.println(response.body());
 
-        } catch (Exception e) {
-            return 500; 
+            
+            Map<?, ?> root = serializer.fromJson((String) response.body(), Map.class);
+            ArrayList<?> games = (ArrayList<?>) root.get("games");
+            ArrayList<String> whiteUsernames = new ArrayList<>();
+            ArrayList<String> blackUsernames = new ArrayList<>();
+            for (int i = 0; i < games.size(); i++) {
+                //turn the game BACK INTO A MAP AGAIN
+                Map<?, ?> gameMap = (Map<?, ?>) games.get(i);
+                //then we can NOW grab the ID and Name from it
+                int gameIDSomething = ((Number) gameMap.get("gameID")).intValue();
+                String gameName = (String) gameMap.get("gameName");
+                String whiteUsername = (String) gameMap.get("whiteUsername");
+                whiteUsernames.add(whiteUsername);
+                String blackUsername = (String) gameMap.get("blackUsername");
+                blackUsernames.add(blackUsername);
+                //System.out.println(whiteUsername);
+                //NOW we can put it into the stupid OTHER map holy smokes
+                result.put(gameIDSomething, gameName);
+                System.out.println(gameIDSomething);
+                System.out.println(gameIDInt);
+                if(gameIDSomething == gameIDInt){
+                    return 200;
+                }
+            }
+        }
+        catch(Exception e){
+            return 500;
+        }
+        if(result.containsKey(Integer.getInteger(gameID))){
+            return 200;
+        }
+        else{
+            System.out.println("Couldn't parse the gameID is my guess, or i couldn't find it in the result");
+            return 400;
         }
     }
 

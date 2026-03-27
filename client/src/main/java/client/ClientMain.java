@@ -272,6 +272,8 @@ public class ClientMain {
         String id = console.readLine("Game ID: ");
         //make http request to view teh game
         var result = new ServerFacade().observeGame(authToken, id);
+        System.out.println(result);
+        System.out.println(id);
         if(result == 200){
             drawChessBoardWhite(out);
         }
