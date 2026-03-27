@@ -26,4 +26,14 @@ public class ServerFacadeTests {
         Assertions.assertTrue(true);
     }
 
+    @Test
+    public void registerPositive(){
+        
+    }
+
+    @Test
+    public void registerNegative(){
+
+    }
+
 }
