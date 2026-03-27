@@ -313,7 +313,7 @@ public class ClientMain {
 
             case 500:
                 out.print(ERASE_SCREEN);
-                out.println("Server problem (nah doesn't happen, trust trust im a perfect software dev you should never see thi- why are you seeing this)");
+                out.println("Server problem (nah doesn't happen");
                 loggedOut(out);
                 break;
 
@@ -350,7 +350,7 @@ public class ClientMain {
 
             case 500:
                 out.print(ERASE_SCREEN);
-                out.println("Server problem (nah doesn't happen, trust trust im a perfect software dev you should never see thi- why are you seeing this)");
+                out.println("Server problem (nah doesn't happen)");
                 loggedIn(out);
                 break;
 
