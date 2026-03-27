@@ -86,22 +86,39 @@ public class ServerFacadeTests {
     public void createGamePositive() throws IOException, InterruptedException{
         var register = facade.registerRequest("test", "test", "test");
         var login = facade.loginRequest("test", "test");
-        
+        var result = facade.createGame(login[0], "testGame");
+
+        Assertions.assertEquals(200, result[0]);
+        Assertions.assertEquals(1, result[1]);
     }
 
     @Test
-    public void createGameNegative(){
+    public void createGameNegative() throws IOException, InterruptedException{
+        var register = facade.registerRequest("test", "test", "test");
+        var login = facade.loginRequest("test", "test");
+        var result = facade.createGame("yeah i ain't giving you something good", "testGame");
 
+        Assertions.assertEquals(401, result[0]);
     }
 
     @Test
-    public void listGamesPositive(){
+    public void listGamesPositive() throws IOException, InterruptedException{
+        var register = facade.registerRequest("test", "test", "test");
+        var login = facade.loginRequest("test", "test");
+        var createGame = facade.createGame(login[0], "testGame");
+        var result = facade.listGames(login[0]);
 
+        Assertions.assertEquals("testGame", result.games().get(1));
     }
 
     @Test
-    public void listGamesNegative(){
+    public void listGamesNegative() throws IOException, InterruptedException{
+        var register = facade.registerRequest("test", "test", "test");
+        var login = facade.loginRequest("test", "test");
+        var createGame = facade.createGame(login[0], "testGame");
+        var result = facade.listGames("oops");
 
+        Assertions.assertEquals(401, result.statusCode());
     }
 
     @Test
