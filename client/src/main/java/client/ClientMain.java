@@ -647,23 +647,3 @@ public class ClientMain {
         }
     }
 }
-
-
-
-
-
-
-
-//HEY THIS ISN"T NEARLY AS COMPLICATED AS YOU THINK IT IS!!!
-
-//WHEN YOU PRESS PLAY
-//SHOW A MENU
-//menu should have options to: join game, create game, etc.
-
-//ONLY THEN when they press on an option
-//send an http request
-//once we get a response back then update the UI
-
-//make sure that each request has a time out response 
-//(i don't think you need to connect to the server at first, just timeout each request after x seconds)
-

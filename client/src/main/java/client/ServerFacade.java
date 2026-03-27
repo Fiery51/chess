@@ -283,4 +283,22 @@ public class ServerFacade {
         }
         return 400;
     }
+
+    public int deleteRequest(){
+        HttpResponse<?> response = null;
+        try {
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/db"))
+                .DELETE()
+                .timeout(Duration.ofSeconds(5))
+                .build();
+
+            response = client.send(request, BodyHandlers.ofString());
+            return response.statusCode();
+        }
+        catch(Exception e){
+            return 500;
+        }
+    }
 }
