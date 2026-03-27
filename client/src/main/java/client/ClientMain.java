@@ -62,7 +62,7 @@ public class ClientMain {
         while(email.equals("")){
             email = console.readLine("Please enter an email: ");
         }
-        var result = new ServerFacade().registerRequest(username, password, email);
+        var result = new ServerFacade(0).registerRequest(username, password, email);
 
         int statusCode = Integer.parseInt(result[1]);
 
@@ -81,7 +81,7 @@ public class ClientMain {
         while(password.equals("")){
             password = console.readLine("Please enter a password: ");
         }
-        var result = new ServerFacade().loginRequest(username, password);
+        var result = new ServerFacade(0).loginRequest(username, password);
         int statusCode = Integer.parseInt(result[1]);
         codesLoggedOut(out, statusCode, result[0]);
     }
@@ -213,7 +213,7 @@ public class ClientMain {
     }
     
     private static void logout(PrintStream out) throws IOException, InterruptedException{
-        var result = new ServerFacade().logoutRequest(authToken);
+        var result = new ServerFacade(0).logoutRequest(authToken);
         if(result == 200){
             //custom 200 one for this
             loggedOut(out);;
@@ -230,7 +230,7 @@ public class ClientMain {
         while(name.equals("")){
             name = console.readLine("Please enter a game name: ");
         }
-        var result = new ServerFacade().createGame(authToken, name);
+        var result = new ServerFacade(0).createGame(authToken, name);
         if(result[0] == 200){
             out.println("Game: " + name + " created");
             loggedIn(out);
@@ -241,7 +241,7 @@ public class ClientMain {
 
     private static void listGames(PrintStream out) throws IOException, InterruptedException{
         Console console = System.console();
-        var result = new ServerFacade().listGames(authToken);
+        var result = new ServerFacade(0).listGames(authToken);
 
         if(result.statusCode() == 200){
             out.print(ERASE_SCREEN);
@@ -282,7 +282,7 @@ public class ClientMain {
             color = console.readLine("Please select a color (WHITE) or (BLACK): ");
         }
         //make HTTP request to join teh game
-        var result = new ServerFacade().playGame(authToken, color, id); //hey ID might be null check on this 
+        var result = new ServerFacade(0).playGame(authToken, color, id); //hey ID might be null check on this 
         if(result == 200){
             if(color.equals("WHITE")){
                 drawChessBoardWhite(out);
@@ -305,7 +305,7 @@ public class ClientMain {
             id = console.readLine("Please input a numeric game ID: ");
         }
         //make http request to view teh game
-        var result = new ServerFacade().observeGame(authToken, id);
+        var result = new ServerFacade(0).observeGame(authToken, id);
         //System.out.println(result);
         //System.out.println(id);
         if(result == 200){

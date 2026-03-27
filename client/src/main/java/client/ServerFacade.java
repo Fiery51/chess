@@ -16,6 +16,13 @@ import com.google.gson.Gson;
 
 
 public class ServerFacade {
+    int portNumber;
+    String baseURI;
+    public ServerFacade(int portNumber){
+        this.portNumber = portNumber;
+        baseURI = "http://localhost:" + portNumber;
+    }
+
     public String[] registerRequest(String username, String password, String email) throws IOException, InterruptedException{
         String authToken; 
         String[] returnObject = new String[2];
@@ -29,7 +36,7 @@ public class ServerFacade {
             //make HTTP request to rester a user
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/user"))
+                .uri(URI.create(baseURI + "/user"))
                 .POST(BodyPublishers.ofString(jsonRequest))
                 .timeout(Duration.ofSeconds(5))
                 .build();
@@ -66,7 +73,7 @@ public class ServerFacade {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/session"))
+                .uri(URI.create(baseURI + "/session"))
                 .POST(BodyPublishers.ofString(jsonRequest))
                 .timeout(Duration.ofSeconds(5))
                 .build();
@@ -96,7 +103,7 @@ public class ServerFacade {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/session"))
+                .uri(URI.create(baseURI + "/session"))
                 .DELETE()
                 .header("authorization", authToken)
                 .timeout(Duration.ofSeconds(5))
@@ -121,7 +128,7 @@ public class ServerFacade {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/game"))
+                .uri(URI.create( baseURI + "/game"))
                 .POST(BodyPublishers.ofString(jsonRequest))
                 .header("authorization", authToken)
                 .timeout(Duration.ofSeconds(5))
@@ -153,7 +160,7 @@ public class ServerFacade {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/game"))
+                .uri(URI.create(baseURI + "/game"))
                 .GET()
                 .header("authorization", authToken)
                 .timeout(Duration.ofSeconds(5))
@@ -204,7 +211,7 @@ public class ServerFacade {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/game"))
+                .uri(URI.create(baseURI + "/game"))
                 .PUT(BodyPublishers.ofString(jsonRequest))
                 .header("authorization", authToken)
                 .timeout(Duration.ofSeconds(5))
@@ -240,7 +247,7 @@ public class ServerFacade {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/game"))
+                .uri(URI.create(baseURI + "/game"))
                 .GET()
                 .header("authorization", authToken)
                 .timeout(Duration.ofSeconds(5))
@@ -289,7 +296,7 @@ public class ServerFacade {
         try {
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/db"))
+                .uri(URI.create(baseURI + "/db"))
                 .DELETE()
                 .timeout(Duration.ofSeconds(5))
                 .build();
