@@ -183,6 +183,29 @@ public class ServerFacade {
         }
     }
 
+    public int playGame(String authToken, String color, String gameID){
+        HttpResponse<?> response = null;
+        var data = Map.of("playerColor", color, "gameID", gameID);
+        var serializer = new Gson();
+        String jsonRequest = serializer.toJson(data);
+
+        try {
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/game"))
+                .PUT(BodyPublishers.ofString(jsonRequest))
+                .header("authorization", authToken)
+                .timeout(Duration.ofSeconds(5))
+                .build();
+
+            response = client.send(request, BodyHandlers.ofString());
+            return response.statusCode();
+
+        } catch (Exception e) {
+            return 500; 
+        }
+    }
+
 
 
 
