@@ -51,8 +51,17 @@ public class ClientMain {
         out.print(ERASE_SCREEN);
         out.println("Register");
         String username = console.readLine("Enter username: ");
+        while(username.equals("")){
+            username = console.readLine("Please enter a username: ");
+        }
         String password = console.readLine("Enter password: ");
+        while(password.equals("")){
+            password = console.readLine("Please enter a password: ");
+        }
         String email = console.readLine("Enter email: ");
+        while(email.equals("")){
+            email = console.readLine("Please enter an email: ");
+        }
         var result = new ServerFacade().registerRequest(username, password, email);
 
         int statusCode = Integer.parseInt(result[1]);
@@ -65,7 +74,13 @@ public class ClientMain {
         out.print(ERASE_SCREEN);
         out.println("Login");
         String username = console.readLine("Enter username: ");
+        while(username.equals("")){
+            username = console.readLine("Please enter a username: ");
+        }
         String password = console.readLine("Enter password: ");
+        while(password.equals("")){
+            password = console.readLine("Please enter a password: ");
+        }
         var result = new ServerFacade().loginRequest(username, password);
         int statusCode = Integer.parseInt(result[1]);
         codesLoggedOut(out, statusCode, result[0]);
@@ -212,6 +227,9 @@ public class ClientMain {
         out.print(ERASE_SCREEN);
         out.println("Create Game");
         String name = console.readLine("Enter game name: ");
+        while(name.equals("")){
+            name = console.readLine("Please enter a game name: ");
+        }
         var result = new ServerFacade().createGame(authToken, name);
         if(result[0] == 200){
             out.println("Game: " + name + " created");
@@ -251,7 +269,15 @@ public class ClientMain {
         out.print(ERASE_SCREEN);
         out.println("Play game:");
         String id = console.readLine("Game ID: ");
+        try {
+            Integer.parseInt(id);
+        } catch (Exception e) {
+            id = console.readLine("Please input a numeric game ID: ");
+        }
         String color = console.readLine("Color (WHITE) or (BLACK): ");
+        if(!color.equals("WHITE") || !color.equals("BLACK")){
+            color = console.readLine("Please select a color (WHITE) or (BLACK): ");
+        }
         //make HTTP request to join teh game
         var result = new ServerFacade().playGame(authToken, color, id); //hey ID might be null check on this 
         if(result == 200){
@@ -270,6 +296,11 @@ public class ClientMain {
         out.print(ERASE_SCREEN);
         out.println("Observe game:");
         String id = console.readLine("Game ID: ");
+        try {
+            Integer.parseInt(id);
+        } catch (Exception e) {
+            id = console.readLine("Please input a numeric game ID: ");
+        }
         //make http request to view teh game
         var result = new ServerFacade().observeGame(authToken, id);
         System.out.println(result);

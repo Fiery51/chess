@@ -130,6 +130,9 @@ public class ServerFacade {
             response = client.send(request, BodyHandlers.ofString());
             //System.out.println(response.statusCode());
             returnObject[0] = response.statusCode(); 
+            if(returnObject[0] != 200){
+                return returnObject; 
+            }
             result = serializer.fromJson((String) response.body(), Map.class);
             String stringVersion = String.valueOf(result.get("gameID"));
             int intVersion = (int) Double.parseDouble(stringVersion);
@@ -157,8 +160,10 @@ public class ServerFacade {
                 .build();
 
             response = client.send(request, BodyHandlers.ofString());
-            //System.out.println(response.statusCode());
-            //System.out.println(response.body());
+            if(response.statusCode() != 200){
+                ListGamesResult returnObject = new ListGamesResult(response.statusCode(), null, null, null);
+                return returnObject; 
+            }
 
             
             Map<?, ?> root = serializer.fromJson((String) response.body(), Map.class);
@@ -215,7 +220,12 @@ public class ServerFacade {
     }
 
     public int observeGame(String authToken, String gameID){
-        int gameIDInt = Integer.parseInt(gameID);
+        int gameIDInt;
+        try {
+            gameIDInt = Integer.parseInt(gameID);
+        } catch (Exception e) {
+            return 400;
+        }
         HttpResponse<?> response = null;
         Map<Integer, String> result = new HashMap<>();
         var serializer = new Gson();
@@ -267,13 +277,6 @@ public class ServerFacade {
         }
         catch(Exception e){
             return 500;
-        }
-        if(result.containsKey(Integer.getInteger(gameID))){
-            return 200;
-        }
-        else{
-            System.out.println("Couldn't parse the gameID is my guess, or i couldn't find it in the result");
-            return 400;
         }
     }
 
