@@ -9,7 +9,8 @@ import server.Server;
 public class ServerFacadeTests {
 
     private static Server server;
-    ServerFacade facade = new ServerFacade(0);
+    private static int port;
+    private ServerFacade facade;
 
 
     @BeforeAll
@@ -21,6 +22,7 @@ public class ServerFacadeTests {
 
     @BeforeEach
     void setup(){
+        facade = new ServerFacade(port);
         facade.deleteRequest();
     }
 
