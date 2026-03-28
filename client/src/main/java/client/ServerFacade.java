@@ -16,10 +16,8 @@ import com.google.gson.Gson;
 
 
 public class ServerFacade {
-    int portNumber;
     String baseURI;
     public ServerFacade(int portNumber){
-        this.portNumber = portNumber;
         baseURI = "http://localhost:" + portNumber;
     }
 
