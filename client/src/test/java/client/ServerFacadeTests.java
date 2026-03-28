@@ -16,7 +16,7 @@ public class ServerFacadeTests {
     @BeforeAll
     public static void init() {
         server = new Server();
-        var port = server.run(0);
+        port = server.run(0);
         System.out.println("Started test HTTP server on " + port);
     }
 
@@ -29,7 +29,7 @@ public class ServerFacadeTests {
     @AfterAll
     static void stopServer() {
         server.stop();
-    }
+    }   
 
 
     @Test
