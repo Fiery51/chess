@@ -89,7 +89,7 @@ public class GameTest {
     @Test
     void insertPlayerPositive() throws DataAccessException{
         gameDAO.createGame("test");
-        gameDAO.insertPlayer("test", 1, "white");
+        gameDAO.insertPlayer("test", 1, "WHITE");
         Assertions.assertEquals("test", gameDAO.findGame(1).getWhiteUsername());
     }
 
