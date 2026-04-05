@@ -64,7 +64,7 @@ public class ClientMain {
         }
         var result = new ServerFacade(8080).registerRequest(username, password, email);
 
-        int statusCode = Integer.parseInt(result[1]);
+        int statusCode = Integer.parseInt(result[1 ]);
 
         codesLoggedOut(out, statusCode, result[0]);
     }
