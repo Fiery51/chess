@@ -292,6 +292,8 @@ public class ClientMain {
             }
         }
         codesLoggedIn(out, result);
+        //replace this with a websocket connection call
+        //then transfer us from here over to the GameUI script's logic
     }
 
     private static void observeGame(PrintStream out) throws IOException, InterruptedException{
