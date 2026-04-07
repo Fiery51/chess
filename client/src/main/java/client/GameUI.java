@@ -73,7 +73,7 @@ public class GameUI {
             //return;
 
             var games = result.games().entrySet();
-            ChessBoard games2 = games.game(); 
+            ChessBoard games2 = result.gameBoards().get(gameID).getBoard();
         }
         //then loop through and assign the chessboard pieces to each matrix slot
         //Looking at it we want to do probably a pretty big if/else loop or switch statement

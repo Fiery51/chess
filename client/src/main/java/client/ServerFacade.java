@@ -14,6 +14,8 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
+import chess.ChessGame;
+
 
 public class ServerFacade {
     String baseURI;
@@ -119,6 +121,7 @@ public class ServerFacade {
         var data = Map.of("gameName", gameName);
         var serializer = new Gson();
         String jsonRequest = serializer.toJson(data);
+        
 
         HttpResponse<?> response = null;
         Map<?, ?> result = null; 
@@ -154,6 +157,7 @@ public class ServerFacade {
         HttpResponse<?> response = null;
         Map<Integer, String> result = new HashMap<>();
         var serializer = new Gson();
+        Map<Integer, ChessGame> gameBoards = new HashMap<>();
 
         try {
             HttpClient client = HttpClient.newBuilder().build();
@@ -166,7 +170,7 @@ public class ServerFacade {
 
             response = client.send(request, BodyHandlers.ofString());
             if(response.statusCode() != 200){
-                ListGamesResult returnObject = new ListGamesResult(response.statusCode(), null, null, null);
+                ListGamesResult returnObject = new ListGamesResult(response.statusCode(), null, null, null, null);
                 return returnObject; 
             }
 
@@ -175,6 +179,7 @@ public class ServerFacade {
             ArrayList<?> games = (ArrayList<?>) root.get("games");
             ArrayList<String> whiteUsernames = new ArrayList<>();
             ArrayList<String> blackUsernames = new ArrayList<>();
+            
             for (int i = 0; i < games.size(); i++) {
                 //turn the game BACK INTO A MAP AGAIN
                 Map<?, ?> gameMap = (Map<?, ?>) games.get(i);
@@ -186,16 +191,18 @@ public class ServerFacade {
                 String blackUsername = (String) gameMap.get("blackUsername");
                 blackUsernames.add(blackUsername);
                 //System.out.println(whiteUsername);
+                ChessGame game = serializer.fromJson(serializer.toJsonTree(gameMap.get("game")), ChessGame.class);
+                gameBoards.put(gameID, game); // add here
                 //NOW we can put it into the stupid OTHER map holy smokes
                 result.put(gameID, gameName);
             }
 
 
-            ListGamesResult returnObject = new ListGamesResult(response.statusCode(), result, whiteUsernames, blackUsernames);
+            ListGamesResult returnObject = new ListGamesResult(response.statusCode(), result, whiteUsernames, blackUsernames, gameBoards);
             return returnObject;
         } catch (Exception e) {
             e.printStackTrace();
-            ListGamesResult returnObject = new ListGamesResult(500, null, null, null);
+            ListGamesResult returnObject = new ListGamesResult(500, null, null, null, null);
             return returnObject; 
         }
     }
