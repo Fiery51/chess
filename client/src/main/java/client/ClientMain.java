@@ -291,7 +291,7 @@ public class ClientMain {
                 drawChessBoardBlack(out);
             }
         }
-        codesLoggedIn(out, result);
+        //codesLoggedIn(out, result);
         //replace this with a websocket connection call
         //then transfer us from here over to the GameUI script's logic
         GameUI gameUI = new GameUI(Integer.parseInt(id), authToken);

@@ -5,6 +5,9 @@ import java.io.PrintStream;
 import javax.print.PrintService;
 
 import chess.ChessBoard;
+import chess.ChessGame;
+import chess.ChessPiece;
+import chess.ChessPosition;
 
 import static ui.EscapeSequences.*;
 
@@ -56,9 +59,25 @@ public class GameUI {
         //when redrawing the chessboard lets use the connection, and grab the current state of the chessboard, and well, redraw it
         //Actually lets just make an http request to list games, lets just filter through and grab our current game we joined
         var result = new ServerFacade(8080).listGames(authToken);
+        ChessBoard board = null; 
         //first clear the terminal
         out.print(ERASE_SCREEN);
+        out.print(result.statusCode());
         //next lets grab the current chessboard
+        if(result.statusCode() == 400){
+            out.print(ERASE_SCREEN);
+            out.println("Bad request");
+            //loggedIn(out);
+            
+        }
+        if(result.statusCode() == 401){
+            out.print(ERASE_SCREEN);
+            out.println("Invalid Credentials");
+        }
+        if(result.statusCode() == 500){
+            out.print(ERASE_SCREEN);
+            out.println("Server Problem");
+        }
         if(result.statusCode() == 200){
             int i = 0;
             for (var element : result.games().entrySet()) {
@@ -73,7 +92,42 @@ public class GameUI {
             //return;
 
             var games = result.games().entrySet();
-            ChessBoard games2 = result.gameBoards().get(gameID).getBoard();
+            board = result.gameBoards().get(gameID - 1).getBoard();
+        }
+        String color;
+        String piece;
+        for(int i=1; i<=8; i++){
+            for(int j=1; j<=8; j++){
+                if(board.getPiece(new ChessPosition(i, j)) != null){
+                    if(board.getPiece(new ChessPosition(i, j)).getTeamColor() == ChessGame.TeamColor.WHITE){
+                        color = SET_TEXT_COLOR_RED;
+                    }
+                    else{
+                        color = SET_TEXT_COLOR_BLUE;
+                    }
+
+                    if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.KING){
+                        piece = " K ";
+                    }
+                    if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.QUEEN){
+                        piece = " Q ";
+                    }
+                    if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.BISHOP){
+                        piece = " B ";
+                    }
+                    if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.KNIGHT){
+                        piece = " K ";
+                    }
+                    if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.ROOK){
+                        piece = " R ";
+                    }
+                    if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.PAWN){
+                        piece = " P ";
+                    }
+                }
+                
+            }
+            
         }
         //then loop through and assign the chessboard pieces to each matrix slot
         //Looking at it we want to do probably a pretty big if/else loop or switch statement
