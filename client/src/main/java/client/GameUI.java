@@ -1,6 +1,8 @@
 package client;
 
+import java.io.Console;
 import java.io.PrintStream;
+import java.net.StandardProtocolFamily;
 
 import javax.print.PrintService;
 
@@ -14,19 +16,19 @@ import static ui.EscapeSequences.*;
 public class GameUI {
     static int gameID;
     static String authToken;
-
+    static ChessBoard theBoard; 
     public GameUI(int id, String authToken){
         //lets create the web socket connection here im thinking?
         gameID = id;
         this.authToken = authToken;
     }
 
-    public void playGame(PrintStream out){
+    public void playGame(PrintStream out, String teamColor, String[][] board){
         //lets just redraw it here
-        redrawChessBoard(out);
+        redrawChessBoard(out, teamColor, board);
     }
 
-    private static void help(PrintStream out){
+    public static void help(PrintStream out){
         out.print(ERASE_SCREEN);
         out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_BLUE);
@@ -55,14 +57,14 @@ public class GameUI {
         out.println(" - to highlight all legal moves on the board");
     }
 
-    private static void redrawChessBoard(PrintStream out){
+    public static void redrawChessBoard(PrintStream out, String teamColor, String[][] chessBoard){
         //when redrawing the chessboard lets use the connection, and grab the current state of the chessboard, and well, redraw it
         //Actually lets just make an http request to list games, lets just filter through and grab our current game we joined
         var result = new ServerFacade(8080).listGames(authToken);
         ChessBoard board = null; 
         //first clear the terminal
         out.print(ERASE_SCREEN);
-        out.print(result.statusCode());
+        //out.print(result.statusCode());
         //next lets grab the current chessboard
         if(result.statusCode() == 400){
             out.print(ERASE_SCREEN);
@@ -79,23 +81,12 @@ public class GameUI {
             out.println("Server Problem");
         }
         if(result.statusCode() == 200){
-            int i = 0;
-            for (var element : result.games().entrySet()) {
-                out.println(element.getKey() + " " + 
-                element.getValue() +
-                 "   White: " +
-                  result.whiteUsernames().get(i) +
-                   "  Black " +
-                    result.blackUsernames().get(i));
-                i++; 
-            }
-            //return;
-
             var games = result.games().entrySet();
-            board = result.gameBoards().get(gameID - 1).getBoard();
+            board = result.gameBoards().get(gameID).getBoard();
+            theBoard = board;
         }
         String color;
-        String piece;
+        String piece = "   ";
         for(int i=1; i<=8; i++){
             for(int j=1; j<=8; j++){
                 if(board.getPiece(new ChessPosition(i, j)) != null){
@@ -125,9 +116,25 @@ public class GameUI {
                         piece = " P ";
                     }
                 }
-                
+                else{
+                    piece = "   ";
+                    color = "";
+                }
+                chessBoard[9 - i][9 - j] += color + piece;
             }
             
+        }
+        for(int i = 0; i<10; i++){
+            out.println(chessBoard[i][0] + 
+            chessBoard[i][1] + 
+            chessBoard[i][2] + 
+            chessBoard[i][3] + 
+            chessBoard[i][4] +
+            chessBoard[i][5] +
+            chessBoard[i][6] +
+            chessBoard[i][7] +
+            chessBoard[i][8] +
+            chessBoard[i][9]);
         }
         //then loop through and assign the chessboard pieces to each matrix slot
         //Looking at it we want to do probably a pretty big if/else loop or switch statement
@@ -142,8 +149,30 @@ public class GameUI {
 
     }
 
-    private static void makeMove(PrintStream out){
-
+    private static void makeMove(PrintStream out, String teamColor){
+        
+        Console console = System.console();
+        int startRank;
+        int startFile;
+        int endRank;
+        int endFile;
+        boolean validInput = false;
+        while(!validInput){
+            try {
+                startRank = Integer.parseInt(console.readLine("What row would you like to move (input a num): "));
+                startFile = Integer.parseInt(console.readLine("What row would you like to move (input a num): "));
+                if(theBoard.getPiece(new ChessPosition(startFile, startRank)) != null &&
+                    theBoard.getPiece(new ChessPosition(startFile, startRank)).getTeamColor() == teamColor)
+                validInput = true;
+            } catch (Exception e) {
+                System.out.println("Please input a valid start position");
+                startRank = Integer.parseInt(console.readLine("What row would you like to move (input a num): "));
+                startFile = Integer.parseInt(console.readLine("What row would you like to move (input a num): "));
+                validInput = false;
+            }
+        }
+        
+        file = input("What file would you like to move (input a num): ");
     }
 
     private static void resign(PrintStream out){
@@ -153,6 +182,7 @@ public class GameUI {
     private static void highlightMoves(PrintStream out){
         
     }
+
 
 
     

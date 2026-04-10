@@ -285,17 +285,18 @@ public class ClientMain {
         var result = new ServerFacade(8080).playGame(authToken, color, id); //hey ID might be null check on this 
         if(result == 200){
             if(color.equals("WHITE")){
-                drawChessBoardWhite(out);
+                GameUI gameUI = new GameUI(Integer.parseInt(id), authToken);
+                gameUI.playGame(out, "WHITE", drawChessBoardWhite());
             }
             else{
                 drawChessBoardBlack(out);
+                GameUI gameUI = new GameUI(Integer.parseInt(id), authToken);
+                gameUI.playGame(out, "BLACK", drawChessBoardWhite());
             }
         }
         //codesLoggedIn(out, result);
         //replace this with a websocket connection call
         //then transfer us from here over to the GameUI script's logic
-        GameUI gameUI = new GameUI(Integer.parseInt(id), authToken);
-        gameUI.playGame(out);
     }
 
     private static void observeGame(PrintStream out) throws IOException, InterruptedException{
@@ -313,7 +314,9 @@ public class ClientMain {
         //System.out.println(result);
         //System.out.println(id);
         if(result == 200){
-            drawChessBoardWhite(out);
+            //drawChessBoardWhite();
+            GameUI gameUI = new GameUI(Integer.parseInt(id), authToken);
+            gameUI.playGame(out, "WHITE", drawChessBoardWhite());
         }
         codesLoggedIn(out, result);
     }
@@ -402,8 +405,8 @@ public class ClientMain {
 
 
 
-    public static void drawChessBoardWhite(PrintStream out){
-        out.print(ERASE_SCREEN);
+    public static String[][] drawChessBoardWhite(){
+        //out.print(ERASE_SCREEN);
 
         String[][] chessBoardTerminal = new String[10][10];
         
@@ -451,79 +454,81 @@ public class ClientMain {
         chessBoardTerminal[9][8] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " h ";
         chessBoardTerminal[9][9] = SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + "   ";
 
-        chessBoardTerminal[1][1] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " R ";
-        chessBoardTerminal[1][2] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " N ";
-        chessBoardTerminal[1][3] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " B ";
-        chessBoardTerminal[1][4] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " Q ";
-        chessBoardTerminal[1][5] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " K ";
-        chessBoardTerminal[1][6] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " B ";
-        chessBoardTerminal[1][7] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " N ";
-        chessBoardTerminal[1][8] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " R ";
+        chessBoardTerminal[1][1] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[1][2] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[1][3] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[1][4] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[1][5] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[1][6] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[1][7] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[1][8] = SET_BG_COLOR_BLACK;
 
-        chessBoardTerminal[2][1] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " P ";
-        chessBoardTerminal[2][2] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " P ";
-        chessBoardTerminal[2][3] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " P ";
-        chessBoardTerminal[2][4] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " P ";
-        chessBoardTerminal[2][5] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " P ";
-        chessBoardTerminal[2][6] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " P ";
-        chessBoardTerminal[2][7] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_BLUE + " P ";
-        chessBoardTerminal[2][8] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLUE + " P ";
+        chessBoardTerminal[2][1] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[2][2] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[2][3] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[2][4] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[2][5] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[2][6] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[2][7] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[2][8] = SET_BG_COLOR_WHITE;
 
 
         //Red
-        chessBoardTerminal[7][1] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " P ";
-        chessBoardTerminal[7][2] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_RED + " P ";
-        chessBoardTerminal[7][3] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " P ";
-        chessBoardTerminal[7][4] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_RED + " P ";
-        chessBoardTerminal[7][5] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " P ";
-        chessBoardTerminal[7][6] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_RED + " P ";
-        chessBoardTerminal[7][7] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " P ";
-        chessBoardTerminal[7][8] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_RED + " P ";
+        chessBoardTerminal[7][1] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[7][2] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[7][3] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[7][4] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[7][5] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[7][6] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[7][7] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[7][8] = SET_BG_COLOR_BLACK;
 
 
-        chessBoardTerminal[8][1] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_RED + " R ";
-        chessBoardTerminal[8][2] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " N ";
-        chessBoardTerminal[8][3] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_RED + " B ";
-        chessBoardTerminal[8][4] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " Q ";
-        chessBoardTerminal[8][5] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_RED + " K ";
-        chessBoardTerminal[8][6] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " B ";
-        chessBoardTerminal[8][7] = SET_BG_COLOR_BLACK + SET_TEXT_COLOR_RED + " N ";
-        chessBoardTerminal[8][8] = SET_BG_COLOR_WHITE + SET_TEXT_COLOR_RED + " R ";
+        chessBoardTerminal[8][1] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[8][2] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[8][3] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[8][4] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[8][5] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[8][6] = SET_BG_COLOR_WHITE;
+        chessBoardTerminal[8][7] = SET_BG_COLOR_BLACK;
+        chessBoardTerminal[8][8] = SET_BG_COLOR_WHITE;
 
 
         for(int i = 1; i<=8; i++){
             if(i % 2 == 1){
-                chessBoardTerminal[4][i] = SET_BG_COLOR_BLACK + "   ";
-                chessBoardTerminal[6][i] = SET_BG_COLOR_BLACK + "   ";
+                chessBoardTerminal[4][i] = SET_BG_COLOR_BLACK;
+                chessBoardTerminal[6][i] = SET_BG_COLOR_BLACK;
             }
             else{
-                chessBoardTerminal[4][i] = SET_BG_COLOR_WHITE + "   ";
-                chessBoardTerminal[6][i] = SET_BG_COLOR_WHITE + "   ";
+                chessBoardTerminal[4][i] = SET_BG_COLOR_WHITE;
+                chessBoardTerminal[6][i] = SET_BG_COLOR_WHITE;
             }
         }
         for(int i = 1; i<=8; i++){
             if(i % 2 == 1){
-                chessBoardTerminal[5][i] = SET_BG_COLOR_WHITE + "   ";
-                chessBoardTerminal[3][i] = SET_BG_COLOR_WHITE + "   ";
+                chessBoardTerminal[5][i] = SET_BG_COLOR_WHITE;
+                chessBoardTerminal[3][i] = SET_BG_COLOR_WHITE;
             }
             else{
-                chessBoardTerminal[5][i] = SET_BG_COLOR_BLACK + "   ";
-                chessBoardTerminal[3][i] = SET_BG_COLOR_BLACK + "   ";
+                chessBoardTerminal[5][i] = SET_BG_COLOR_BLACK;
+                chessBoardTerminal[3][i] = SET_BG_COLOR_BLACK;
             }
         }
 
-        for(int i = 0; i<10; i++){
-            out.println(chessBoardTerminal[i][0] + 
-                chessBoardTerminal[i][1] + 
-                chessBoardTerminal[i][2] + 
-                chessBoardTerminal[i][3] + 
-                chessBoardTerminal[i][4] +
-                chessBoardTerminal[i][5] +
-                chessBoardTerminal[i][6] +
-                chessBoardTerminal[i][7] +
-                chessBoardTerminal[i][8] +
-                chessBoardTerminal[i][9]);
-        }
+        return chessBoardTerminal; 
+
+        //for(int i = 0; i<10; i++){
+        //    out.println(chessBoardTerminal[i][0] + 
+        //        chessBoardTerminal[i][1] + 
+        //        chessBoardTerminal[i][2] + 
+        //        chessBoardTerminal[i][3] + 
+        //        chessBoardTerminal[i][4] +
+        //        chessBoardTerminal[i][5] +
+        //        chessBoardTerminal[i][6] +
+        //        chessBoardTerminal[i][7] +
+        //        chessBoardTerminal[i][8] +
+        //        chessBoardTerminal[i][9]);
+        //}
     }
 
 
