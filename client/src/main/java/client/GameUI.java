@@ -150,7 +150,13 @@ public class GameUI {
     }
 
     private static void makeMove(PrintStream out, String teamColor){
-        
+        ChessGame.TeamColor color;
+        if(teamColor == "WHITE"){
+            color = ChessGame.TeamColor.WHITE;
+        }
+        else{
+            color = ChessGame.TeamColor.BLACK;
+        }
         Console console = System.console();
         int startRank;
         int startFile;
@@ -159,20 +165,32 @@ public class GameUI {
         boolean validInput = false;
         while(!validInput){
             try {
-                startRank = Integer.parseInt(console.readLine("What row would you like to move (input a num): "));
-                startFile = Integer.parseInt(console.readLine("What row would you like to move (input a num): "));
+                startRank = Integer.parseInt(console.readLine("What row would you like to move? (input a num): "));
+                startFile = Integer.parseInt(console.readLine("What col would you like to move? (input a num): "));
                 if(theBoard.getPiece(new ChessPosition(startFile, startRank)) != null &&
-                    theBoard.getPiece(new ChessPosition(startFile, startRank)).getTeamColor() == teamColor)
-                validInput = true;
+                    theBoard.getPiece(new ChessPosition(startFile, startRank)).getTeamColor() == color){
+                        validInput = true;
+                    }
             } catch (Exception e) {
                 System.out.println("Please input a valid start position");
-                startRank = Integer.parseInt(console.readLine("What row would you like to move (input a num): "));
-                startFile = Integer.parseInt(console.readLine("What row would you like to move (input a num): "));
                 validInput = false;
             }
         }
-        
-        file = input("What file would you like to move (input a num): ");
+        validInput = false;
+        while(!validInput){
+            try {
+                endRank = Integer.parseInt(console.readLine("What row would you like to move to? (input a num): "));
+                endFile = Integer.parseInt(console.readLine("What col would you like to move to? (input a num): "));
+                //if its in the list of valid end posistions for that specific chess piece
+                if(){
+                        validInput = true;
+                    }
+            } catch (Exception e) {
+                System.out.println("Please input a valid start position");
+                validInput = false;
+            }
+        }
+
     }
 
     private static void resign(PrintStream out){
