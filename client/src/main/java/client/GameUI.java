@@ -10,6 +10,7 @@ import chess.ChessBoard;
 import chess.ChessGame;
 import chess.ChessPiece;
 import chess.ChessPosition;
+import chess.KingCalculator;
 
 import static ui.EscapeSequences.*;
 
@@ -181,15 +182,23 @@ public class GameUI {
             try {
                 endRank = Integer.parseInt(console.readLine("What row would you like to move to? (input a num): "));
                 endFile = Integer.parseInt(console.readLine("What col would you like to move to? (input a num): "));
+                ChessPiece piece = theBoard.getPiece(new ChessPosition(startFile, startRank));
+                ChessPosition endPosition = new ChessPosition(endFile, endRank);
                 //if its in the list of valid end posistions for that specific chess piece
-                if(){
+                if(piece.getPieceType() == ChessPiece.PieceType.KING){
+                    var calculator = new KingCalculator();
+                    var validMoves = calculator.returnAllMoves(theBoard, new ChessPosition(startFile, startRank), color);
+                    if(validMoves.contains(endPosition)){
                         validInput = true;
                     }
+                }
             } catch (Exception e) {
                 System.out.println("Please input a valid start position");
                 validInput = false;
             }
         }
+
+        
 
     }
 
