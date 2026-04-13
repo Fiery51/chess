@@ -18,14 +18,16 @@ public class GameUI {
     static int gameID;
     static String authToken;
     static ChessBoard theBoard; 
+    static WebsocketClient connection;
     public GameUI(int id, String authToken){
         //lets create the web socket connection here im thinking?
         gameID = id;
         this.authToken = authToken;
     }
 
-    public void playGame(PrintStream out, String teamColor, String[][] board){
+    public void playGame(PrintStream out, String teamColor, String[][] board) throws Exception{
         //lets just redraw it here
+        connection = new WebsocketClient(authToken, gameID);
         redrawChessBoard(out, teamColor, board);
     }
 
@@ -159,8 +161,8 @@ public class GameUI {
             color = ChessGame.TeamColor.BLACK;
         }
         Console console = System.console();
-        int startRank;
-        int startFile;
+        int startRank = 0;
+        int startFile = 0;
         int endRank;
         int endFile;
         boolean validInput = false;

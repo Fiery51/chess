@@ -1,66 +1,33 @@
-package server.websocket;
+package server;
 
-import com.google.gson.Gson;
+import io.javalin.Javalin;
 import io.javalin.websocket.WsCloseContext;
-import io.javalin.websocket.WsCloseHandler;
 import io.javalin.websocket.WsConnectContext;
-import io.javalin.websocket.WsConnectHandler;
 import io.javalin.websocket.WsMessageContext;
-import io.javalin.websocket.WsMessageHandler;
 
-import org.eclipse.jetty.server.HttpChannelState.Action;
-import org.eclipse.jetty.websocket.api.Session;
-import java.io.IOException;
-
-public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsCloseHandler {
-
-    private final ConnectionManager connections = new ConnectionManager();
-
-    @Override
-    public void handleConnect(WsConnectContext ctx) {
-        System.out.println("Websocket connected");
-        ctx.enableAutomaticPings();
+public class WebSocketHandler {
+    public static void main(String[] args){
+        Javalin.create()
+            .ws("/ws", ws -> {
+                ws.onConnect(ctx -> {
+                    ctx.enableAutomaticPings();
+                    System.out.println("Websocket connected");
+                });
+                ws.onMessage(ctx -> ctx.send("Websocket response: " + ctx.message()));
+                ws.onClose(ctx -> System.out.println("Websocket connection closed"));
+            })
+        .start(8080);
     }
 
-    @Override
-    public void handleMessage(WsMessageContext ctx) {
-        try {
-            Action action = new Gson().fromJson(ctx.message(), Action.class);
-            switch (action.type()) {
-                case ENTER -> enter(action.visitorName(), ctx.session);
-                case EXIT -> exit(action.visitorName(), ctx.session);
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    public Object onConnect(WsConnectContext ctx) {
+        throw new UnsupportedOperationException("Connected!");
     }
 
-    @Override
-    public void handleClose(WsCloseContext ctx) {
-        System.out.println("Websocket closed");
+    public Object onClose(WsCloseContext ctx) {
+        throw new UnsupportedOperationException("Closed!");
     }
 
-    private void enter(String visitorName, Session session) throws IOException {
-        connections.add(session);
-        var message = String.format("%s is in the shop", visitorName);
-        var notification = new Notification(Notification.Type.ARRIVAL, message);
-        connections.broadcast(session, notification);
-    }
-
-    private void exit(String visitorName, Session session) throws IOException {
-        var message = String.format("%s left the shop", visitorName);
-        var notification = new Notification(Notification.Type.DEPARTURE, message);
-        connections.broadcast(session, notification);
-        connections.remove(session);
-    }
-
-    public void makeNoise(String petName, String sound) throws ResponseException {
-        try {
-            var message = String.format("%s says %s", petName, sound);
-            var notification = new Notification(Notification.Type.NOISE, message);
-            connections.broadcast(null, notification);
-        } catch (Exception ex) {
-            throw new ResponseException(ResponseException.Code.ServerError, ex.getMessage());
-        }
+    public Object onMessage(WsMessageContext ctx) {
+        throw new UnsupportedOperationException("We got a message from da client! What? idk im too lazy to print it out man");
     }
 }

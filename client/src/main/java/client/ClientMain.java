@@ -43,7 +43,12 @@ public class ClientMain {
         while(!validInput(command, s)){
             command = console.readLine("[LOGGED_OUT] >>> ");
         }
-        moveNext(command, out, 0);
+        try {
+            moveNext(command, out, 0);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     private static void register(PrintStream out) throws IOException, InterruptedException{
@@ -118,7 +123,7 @@ public class ClientMain {
     }
 
 
-    static void moveNext(String command, PrintStream out, int loggedIn) throws IOException, InterruptedException{
+    static void moveNext(String command, PrintStream out, int loggedIn) throws Exception{
         switch (command) {
             case "register":
                 register(out);
@@ -173,7 +178,12 @@ public class ClientMain {
         while(!validInput(command, s)){
             command = console.readLine("[LOGGED_IN] >>> ");
         }
-        moveNext(command, out, 1);
+        try {
+            moveNext(command, out, 1);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     private static void helpLoggedIn(PrintStream out) throws IOException, InterruptedException{
@@ -264,7 +274,7 @@ public class ClientMain {
 
     }
 
-    private static void playGame(PrintStream out) throws IOException, InterruptedException{
+    private static void playGame(PrintStream out) throws Exception{
         Console console = System.console();
         out.print(ERASE_SCREEN);
         out.println("Play game:");
@@ -299,7 +309,7 @@ public class ClientMain {
         //then transfer us from here over to the GameUI script's logic
     }
 
-    private static void observeGame(PrintStream out) throws IOException, InterruptedException{
+    private static void observeGame(PrintStream out) throws Exception{
         Console console = System.console();
         out.print(ERASE_SCREEN);
         out.println("Observe game:");

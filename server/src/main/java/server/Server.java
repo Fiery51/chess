@@ -37,7 +37,7 @@ public class Server {
         
         GameHandler gameHandler = new GameHandler(userService, sqlUser, sqlAuth, sqlGame, serializer);
         
-
+        WebSocketHandler wsHandler = new WebSocketHandler();
 
         // Register your endpoints and exception handlers here.
         javalin.post("/user", ctx -> userHandler.register(ctx));
@@ -65,6 +65,12 @@ public class Server {
             
         }
         );
+
+        javalin.ws("/ws", ws -> {
+            ws.onConnect(ctx -> wsHandler.onConnect(ctx));
+            ws.onClose(ctx -> wsHandler.onClose(ctx));
+            ws.onMessage(ctx -> wsHandler.onMessage(ctx));
+        });
 
     }
 
