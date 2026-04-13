@@ -90,7 +90,7 @@ public class WebSocketHandler {
         //i'm just gonna have them do redraw board preetty simple, its built out and ready
         //for us. We although need to direct them to WHICH game though? 
         var serializer = new Gson();
-        var message = Map.of(gameID, new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME))
+        var message = Map.of(gameID, new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME));
         var json = serializer.toJson(message);
         client.send(json);
     }
@@ -100,7 +100,7 @@ public class WebSocketHandler {
         var serializer = new Gson();
         SQLAuthDAO authDAO = new SQLAuthDAO();
         String username = authDAO.getUsername(authToken);
-        String message =  username + " joined the game";
+        var message = Map.of(new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME), username + " joined the game");
         var json = serializer.toJson(message);
         for(var client : set){
             client.send(json);
