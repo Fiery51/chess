@@ -7,33 +7,25 @@ import java.util.Set;
 
 import com.google.gson.Gson;
 
+import chess.ChessGame;
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.SQLAuthDAO;
+import dataaccess.SQLGameDAO;
 import io.javalin.Javalin;
 import io.javalin.websocket.WsCloseContext;
 import io.javalin.websocket.WsConnectContext;
 import io.javalin.websocket.WsContext;
 import io.javalin.websocket.WsMessageContext;
 import websocket.commands.UserGameCommand;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationsMessage;
 import websocket.messages.ServerMessage;
 import websocket.messages.ServerMessage.ServerMessageType;
 
 public class WebSocketHandler {
     //Game id's, then we have a set of strings that are the authtokens of everyone who is connected to the current game?
     Map<Integer, Set<WsContext>> connectionMap = new HashMap<>();
-    public static void main(String[] args){
-        Javalin.create()
-            .ws("/ws", ws -> {
-                ws.onConnect(ctx -> {
-                    ctx.enableAutomaticPings();
-                    System.out.println("Websocket connected");
-                });
-                ws.onMessage(ctx -> ctx.send("Websocket response: " + ctx.message()));
-                ws.onClose(ctx -> System.out.println("Websocket connection closed"));
-            })
-        .start(8080);
-    }
 
     public void onConnect(WsConnectContext ctx) {
         System.out.println("Connected!");
@@ -51,7 +43,9 @@ public class WebSocketHandler {
             case CONNECT:
                 //what do we pass in for the 2nd thing here? We pass in the connection, but i have no clue what the syntax is for that?
                 addConnection(message.getGameID(), ctx);
-                loadGame(message.getGameID(), ctx);
+                SQLGameDAO gameDAO = new SQLGameDAO();
+                ChessGame game = gameDAO.findGame(message.getGameID()).getGame();
+                loadGame(game, ctx);
                 //im thinking somehow we just pass in the username of the user who joined
                 broadcastNotification(message.getGameID(), message.getAuthToken());
                 break;
@@ -85,12 +79,12 @@ public class WebSocketHandler {
         }
     }
 
-    void loadGame(int gameID, WsContext client){
+    void loadGame(ChessGame game, WsContext client){
         //we want the connection to the specific person
         //i'm just gonna have them do redraw board preetty simple, its built out and ready
         //for us. We although need to direct them to WHICH game though? 
         var serializer = new Gson();
-        var message = Map.of(gameID, new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME));
+        var message = new LoadGameMessage(ServerMessageType.LOAD_GAME, game);
         var json = serializer.toJson(message);
         client.send(json);
     }
@@ -100,7 +94,7 @@ public class WebSocketHandler {
         var serializer = new Gson();
         SQLAuthDAO authDAO = new SQLAuthDAO();
         String username = authDAO.getUsername(authToken);
-        var message = Map.of(new ServerMessage(ServerMessage.ServerMessageType.LOAD_GAME), username + " joined the game");
+        var message = new NotificationsMessage(ServerMessage.ServerMessageType.NOTIFICATION, username + " joined the game");
         var json = serializer.toJson(message);
         for(var client : set){
             client.send(json);

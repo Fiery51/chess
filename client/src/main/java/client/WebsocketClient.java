@@ -1,9 +1,12 @@
 package client;
 
+import java.io.PrintStream;
 import java.net.URI;
 
 import com.google.gson.Gson;
 
+import chess.ChessBoard;
+import chess.ChessGame;
 import jakarta.websocket.ContainerProvider;
 import jakarta.websocket.Endpoint;
 import jakarta.websocket.EndpointConfig;
@@ -11,6 +14,8 @@ import jakarta.websocket.MessageHandler;
 import jakarta.websocket.Session;
 import jakarta.websocket.WebSocketContainer;
 import websocket.commands.UserGameCommand;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.ServerMessage;
 
 public class WebsocketClient extends Endpoint{
     public Session session;
@@ -26,7 +31,16 @@ public class WebsocketClient extends Endpoint{
 
         this.session.addMessageHandler(new MessageHandler.Whole<String>() {
             public void onMessage(String message) {
-                System.out.println(message);
+                var serializer = new Gson();
+                var msg = serializer.fromJson(message, ServerMessage.class);
+                var command = msg.getServerMessageType(); 
+                switch (command) {
+                    case LOAD_GAME:
+                        ChessGame game = serializer.fromJson(message, LoadGameMessage.class).getGame();
+                        ChessBoard board = game.getBoard();
+                        GameUI.redrawChessBoard(board);
+                        break;
+                }
             }
         });
     }

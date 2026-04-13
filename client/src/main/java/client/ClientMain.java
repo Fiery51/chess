@@ -296,12 +296,12 @@ public class ClientMain {
         if(result == 200){
             if(color.equals("WHITE")){
                 GameUI gameUI = new GameUI(Integer.parseInt(id), authToken);
-                gameUI.playGame(out, "WHITE", drawChessBoardWhite());
+                gameUI.playGame(out, "WHITE");
             }
             else{
                 drawChessBoardBlack(out);
                 GameUI gameUI = new GameUI(Integer.parseInt(id), authToken);
-                gameUI.playGame(out, "BLACK", drawChessBoardWhite());
+                gameUI.playGame(out, "BLACK");
             }
         }
         //codesLoggedIn(out, result);
@@ -326,7 +326,7 @@ public class ClientMain {
         if(result == 200){
             //drawChessBoardWhite();
             GameUI gameUI = new GameUI(Integer.parseInt(id), authToken);
-            gameUI.playGame(out, "WHITE", drawChessBoardWhite());
+            gameUI.playGame(out, "WHITE");
         }
         codesLoggedIn(out, result);
     }
