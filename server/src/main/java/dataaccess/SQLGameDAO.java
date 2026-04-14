@@ -129,4 +129,18 @@ public class SQLGameDAO implements GameDAO {
             throw new DataAccessException("Error: ", e);
         }
     }
+
+    public void updateGame(int gameID, ChessGame game) throws DataAccessException{
+        var serializer = new Gson();
+        String gameString = serializer.toJson(game);
+        try(var conn = DatabaseManager.getConnection()){
+            try(var preparedStatement = conn.prepareStatement("UPDATE game SET game = ? WHERE gameID = ?")){
+                preparedStatement.setString(1, gameString);
+                preparedStatement.setInt(2, gameID);
+                preparedStatement.executeUpdate();
+            }
+        }   catch (Exception e){
+            throw new DataAccessException("Error ", e);
+        }
+    }
 }

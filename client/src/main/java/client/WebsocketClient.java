@@ -39,6 +39,7 @@ public class WebsocketClient extends Endpoint{
                     case LOAD_GAME:
                         ChessGame game = serializer.fromJson(message, LoadGameMessage.class).getGame();
                         ChessBoard board = game.getBoard();
+                        GameUI.updateGame(game);
                         GameUI.redrawChessBoard(board);
                         break;
                     case NOTIFICATION:

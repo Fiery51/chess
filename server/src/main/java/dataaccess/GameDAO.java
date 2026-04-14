@@ -2,6 +2,7 @@ package dataaccess;
 
 import java.util.ArrayList;
 
+import chess.ChessGame;
 import model.GameData;
 
 public interface GameDAO {
@@ -16,4 +17,5 @@ public interface GameDAO {
     void clearData() throws DataAccessException;
 
     int size() throws DataAccessException;
+    void updateGame(int gameID, ChessGame game) throws DataAccessException;
 }

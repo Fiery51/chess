@@ -5,7 +5,7 @@ import java.util.Collection;
 
 public class KnightCalculator {
     ArrayList<ChessMove> moves = new ArrayList<ChessMove>();
-    Collection<ChessMove> returnAllMoves(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color){
+    public Collection<ChessMove> returnAllMoves(ChessBoard board, ChessPosition myPosition, ChessGame.TeamColor color){
 
         //top right
         addTopRight(board, myPosition, color);

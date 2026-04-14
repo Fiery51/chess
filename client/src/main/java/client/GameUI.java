@@ -7,11 +7,17 @@ import java.util.ArrayList;
 
 import javax.print.PrintService;
 
+import com.google.gson.Gson;
+
 import chess.ChessBoard;
 import chess.ChessGame;
+import chess.ChessMove;
 import chess.ChessPiece;
 import chess.ChessPosition;
 import chess.KingCalculator;
+import chess.KnightCalculator;
+import websocket.commands.MakeMoveCommand;
+import websocket.commands.UserGameCommand;
 
 import static ui.EscapeSequences.*;
 
@@ -22,6 +28,7 @@ public class GameUI {
     static WebsocketClient connection;
     static PrintStream out;
     static String teamColor;
+    static ChessGame game;
     public GameUI(int id, String authToken){
         //lets create the web socket connection here im thinking?
         gameID = id;
@@ -32,6 +39,7 @@ public class GameUI {
         //lets just redraw it here
         this.teamColor = teamColor;
         this.out = out;
+        this.game = game;
         connection = new WebsocketClient(authToken, gameID);
         runGame();
     }
@@ -179,7 +187,7 @@ public class GameUI {
 
     }
 
-    private static void makeMove(PrintStream out, String teamColor){
+    private static void makeMove(PrintStream out, String teamColor, ChessGame game){
         ChessGame.TeamColor color;
         if(teamColor.equals("WHITE")){
             color = ChessGame.TeamColor.WHITE;
@@ -193,6 +201,9 @@ public class GameUI {
         int endRank;
         int endFile;
         boolean validInput = false;
+        ChessPosition startPosition = null;
+        ChessPosition endPosition;
+        ChessMove move = null;
         while(!validInput){
             try {
                 startRank = Integer.parseInt(console.readLine("What row would you like to move? (input a num): "));
@@ -200,6 +211,7 @@ public class GameUI {
                 if(theBoard.getPiece(new ChessPosition(startFile, startRank)) != null &&
                     theBoard.getPiece(new ChessPosition(startFile, startRank)).getTeamColor() == color){
                         validInput = true;
+                        startPosition = new ChessPosition(startFile, startRank);
                     }
             } catch (Exception e) {
                 System.out.println("Please input a valid start position");
@@ -212,20 +224,23 @@ public class GameUI {
                 endRank = Integer.parseInt(console.readLine("What row would you like to move to? (input a num): "));
                 endFile = Integer.parseInt(console.readLine("What col would you like to move to? (input a num): "));
                 ChessPiece piece = theBoard.getPiece(new ChessPosition(startFile, startRank));
-                ChessPosition endPosition = new ChessPosition(endFile, endRank);
-                //if its in the list of valid end posistions for that specific chess piece
-                if(piece.getPieceType() == ChessPiece.PieceType.KING){
-                    var calculator = new KingCalculator();
-                    var validMoves = calculator.returnAllMoves(theBoard, new ChessPosition(startFile, startRank), color);
-                    if(validMoves.contains(endPosition)){
-                        validInput = true;
-                    }
+                endPosition = new ChessPosition(endFile, endRank);
+                move = new ChessMove(startPosition, endPosition, null);
+
+                var validMoves = game.validMoves(startPosition);
+                if(validMoves.contains(move)){
+                    validInput = true;
                 }
+
             } catch (Exception e) {
                 System.out.println("Please input a valid start position");
                 validInput = false;
             }
         }
+        var serializer = new Gson();
+        MakeMoveCommand data = new MakeMoveCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID, move);
+        var json = serializer.toJson(data);
+        connection.session.getAsyncRemote().sendText(json);
 
         
 
@@ -275,7 +290,7 @@ public class GameUI {
                 leave(out);
                 break;
             case "make move":
-                makeMove(out, command);
+                makeMove(out, teamColor, game);
                 break;
             case "resign":
                 resign(out);
@@ -293,6 +308,12 @@ public class GameUI {
     public static void displayNotification(String msg){
         System.out.println();
         System.out.println("Notification: " + msg);
+    }
+
+    public static void updateGame(ChessGame theGame){
+        game = theGame;
+        theBoard = game.getBoard();
+        redrawChessBoard(theBoard);
     }
 
     private static String[][] drawBackgroundWhite(){
