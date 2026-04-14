@@ -15,6 +15,7 @@ import jakarta.websocket.Session;
 import jakarta.websocket.WebSocketContainer;
 import websocket.commands.UserGameCommand;
 import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationsMessage;
 import websocket.messages.ServerMessage;
 
 public class WebsocketClient extends Endpoint{
@@ -39,6 +40,10 @@ public class WebsocketClient extends Endpoint{
                         ChessGame game = serializer.fromJson(message, LoadGameMessage.class).getGame();
                         ChessBoard board = game.getBoard();
                         GameUI.redrawChessBoard(board);
+                        break;
+                    case NOTIFICATION:
+                        String theNotification = serializer.fromJson(message, NotificationsMessage.class).getMessage();
+                        GameUI.displayNotification(theNotification);
                         break;
                 }
             }

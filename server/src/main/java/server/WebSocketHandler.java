@@ -8,7 +8,6 @@ import java.util.Set;
 import com.google.gson.Gson;
 
 import chess.ChessGame;
-import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
 import dataaccess.SQLAuthDAO;
 import dataaccess.SQLGameDAO;
@@ -17,6 +16,7 @@ import io.javalin.websocket.WsCloseContext;
 import io.javalin.websocket.WsConnectContext;
 import io.javalin.websocket.WsContext;
 import io.javalin.websocket.WsMessageContext;
+import model.GameData;
 import websocket.commands.UserGameCommand;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationsMessage;
@@ -26,12 +26,18 @@ import websocket.messages.ServerMessage.ServerMessageType;
 public class WebSocketHandler {
     //Game id's, then we have a set of strings that are the authtokens of everyone who is connected to the current game?
     Map<Integer, Set<WsContext>> connectionMap = new HashMap<>();
+    Map<String, Integer> gameMap = new HashMap<>();
 
     public void onConnect(WsConnectContext ctx) {
         System.out.println("Connected!");
     }
 
     public void onClose(WsCloseContext ctx) {
+        Integer gameID = gameMap.get(ctx.sessionId());
+        if(gameMap.get(ctx.sessionId()) == null){
+            return;
+        }
+        removeConnection(gameID, ctx.sessionId());
         System.out.println("Closed!");
     }
 
@@ -47,7 +53,7 @@ public class WebSocketHandler {
                 ChessGame game = gameDAO.findGame(message.getGameID()).getGame();
                 loadGame(game, ctx);
                 //im thinking somehow we just pass in the username of the user who joined
-                broadcastNotification(message.getGameID(), message.getAuthToken());
+                broadcastNotification(ctx, message.getGameID(), message.getAuthToken());
                 break;
             case MAKE_MOVE:
 
@@ -65,15 +71,29 @@ public class WebSocketHandler {
             connectionMap.put(gameID, set);
         }
         set.add(connection);
+        gameMap.put(connection.sessionId(), gameID);
     }
 
-    public void removeConnection(int gameID, WsContext connection){
+    public void removeConnection(int gameID, String sessionId){
         Set<WsContext> set = connectionMap.get(gameID);
-        set.remove(connection);
+        if(set == null){
+            System.out.println("How did you get here");
+            gameMap.remove(sessionId);
+            return;
+        }
+        set.removeIf(c -> c.sessionId().equals(sessionId));
+        gameMap.remove(sessionId);
+        if (set.isEmpty()) {
+        connectionMap.remove(gameID);
+    }
     }
 
     void redrawChessBoardBroadcast(int gameID, String json){
         Set<WsContext> set = connectionMap.get(gameID);
+        if(set == null){
+            System.out.println("How did we get here");
+            return;
+        }
         for(var client : set){
             client.send(json);
         }
@@ -89,14 +109,34 @@ public class WebSocketHandler {
         client.send(json);
     }
 
-    void broadcastNotification(int gameID, String authToken) throws DataAccessException{
+    void broadcastNotification(WsMessageContext ctx, int gameID, String authToken) throws DataAccessException{
         Set<WsContext> set = connectionMap.get(gameID);
         var serializer = new Gson();
+        var recievedMessage = serializer.fromJson(ctx.message(), UserGameCommand.class);
         SQLAuthDAO authDAO = new SQLAuthDAO();
         String username = authDAO.getUsername(authToken);
-        var message = new NotificationsMessage(ServerMessage.ServerMessageType.NOTIFICATION, username + " joined the game");
+        SQLGameDAO gameDAO = new SQLGameDAO();
+        GameData gameData = gameDAO.findGame(recievedMessage.getGameID());
+        String color;
+        if(gameData.getWhiteUsername().equals(username)){
+            color = "white";
+        }
+        else if(gameData.getBlackUsername().equals(username)){
+            color = "black";
+        }
+        else{
+            color = "an observer";
+        }
+
+
+
+
+        var message = new NotificationsMessage(ServerMessage.ServerMessageType.NOTIFICATION, username + " joined the game as " + color);
         var json = serializer.toJson(message);
         for(var client : set){
+            if(client.sessionId().equals(ctx.sessionId())){
+                continue;
+            }
             client.send(json);
         }
     }

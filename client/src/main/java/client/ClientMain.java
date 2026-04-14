@@ -299,7 +299,7 @@ public class ClientMain {
                 gameUI.playGame(out, "WHITE");
             }
             else{
-                drawChessBoardBlack(out);
+                //drawChessBoardBlack(out);
                 GameUI gameUI = new GameUI(Integer.parseInt(id), authToken);
                 gameUI.playGame(out, "BLACK");
             }

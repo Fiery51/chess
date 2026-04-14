@@ -3,6 +3,7 @@ package client;
 import java.io.Console;
 import java.io.PrintStream;
 import java.net.StandardProtocolFamily;
+import java.util.ArrayList;
 
 import javax.print.PrintService;
 
@@ -29,9 +30,10 @@ public class GameUI {
 
     public void playGame(PrintStream out, String teamColor) throws Exception{
         //lets just redraw it here
-        connection = new WebsocketClient(authToken, gameID);
         this.teamColor = teamColor;
         this.out = out;
+        connection = new WebsocketClient(authToken, gameID);
+        runGame();
     }
 
     public static void help(PrintStream out){
@@ -61,10 +63,16 @@ public class GameUI {
         out.print("highlight");
         out.print(SET_TEXT_COLOR_LIGHT_GREY);
         out.println(" - to highlight all legal moves on the board");
+
+        out.print(SET_TEXT_COLOR_BLUE);
+        out.print("help");
+        out.print(SET_TEXT_COLOR_LIGHT_GREY);
+        out.println(" - to explain all the commands");
+
     }
 
     public static void redrawChessBoard(ChessBoard theBoard){
-        this.theBoard = theBoard;
+        GameUI.theBoard = theBoard;
         String[][] chessBoard;
         if(teamColor.equals("WHITE")){
             chessBoard = drawBackgroundWhite();
@@ -134,7 +142,12 @@ public class GameUI {
                     piece = "   ";
                     color = "";
                 }
-                chessBoard[9 - i][9 - j] += color + piece;
+                if(teamColor.equals("WHITE")){
+                    chessBoard[9 - i][9 - j] += color + piece;
+                }
+                else{
+                    chessBoard[i][9 - j] += color + piece;
+                }
             }
             
         }
@@ -168,7 +181,7 @@ public class GameUI {
 
     private static void makeMove(PrintStream out, String teamColor){
         ChessGame.TeamColor color;
-        if(teamColor == "WHITE"){
+        if(teamColor.equals("WHITE")){
             color = ChessGame.TeamColor.WHITE;
         }
         else{
@@ -224,6 +237,62 @@ public class GameUI {
 
     private static void highlightMoves(PrintStream out){
         
+    }
+
+    private static void runGame(){
+        Console console = System.console();
+        ArrayList<String> s = new ArrayList<>();
+        s.add("help");
+        s.add("leave");
+        s.add("make move");
+        s.add("resign");
+        s.add("highlight");
+        s.add("redraw");
+        while(true){
+            String command = console.readLine("[GAME] >>> ");
+            while(!validInput(command, s)){
+                command = console.readLine("[Game] >>> ");
+            }
+            try {
+                moveNext(command, out, 0);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    static boolean validInput(String input, ArrayList<String> s){
+        return s.contains(input);
+    }
+
+    static void moveNext(String command, PrintStream out, int loggedIn) throws Exception{
+        switch (command) {
+            case "help":
+                help(out);
+                break;
+            case "leave":
+                leave(out);
+                break;
+            case "make move":
+                makeMove(out, command);
+                break;
+            case "resign":
+                resign(out);
+                break;
+            case "highlight":
+                highlightMoves(out);
+                break;
+            case "redraw":
+                redrawChessBoard(theBoard);
+                break;
+            
+        }
+    }
+
+    public static void displayNotification(String msg){
+        System.out.println();
+        System.out.println("Notification: " + msg);
     }
 
     private static String[][] drawBackgroundWhite(){
