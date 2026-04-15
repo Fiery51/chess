@@ -89,31 +89,10 @@ public class GameUI {
         }
         //when redrawing the chessboard lets use the connection, and grab the current state of the chessboard, and well, redraw it
         //Actually lets just make an http request to list games, lets just filter through and grab our current game we joined
-        //var result = new ServerFacade(8080).listGames(authToken);
+
         ChessBoard board = theBoard; 
         //first clear the terminal
         out.print(ERASE_SCREEN);
-        //out.print(result.statusCode());
-        //next lets grab the current chessboard
-        //if(result.statusCode() == 400){
-        //    out.print(ERASE_SCREEN);
-        //    out.println("Bad request");
-        //    //loggedIn(out);
-        //    
-        //}
-        //if(result.statusCode() == 401){
-        //    out.print(ERASE_SCREEN);
-        //    out.println("Invalid Credentials");
-        //}
-        //if(result.statusCode() == 500){
-        //    out.print(ERASE_SCREEN);
-        //    out.println("Server Problem");
-        //}
-        //if(result.statusCode() == 200){
-        //    var games = result.games().entrySet();
-        //    board = result.gameBoards().get(gameID).getBoard();
-        //    theBoard = board;
-        //}
         String color;
         String piece = "   ";
         for(int i=1; i<=8; i++){
@@ -180,6 +159,90 @@ public class GameUI {
         //just do a matrix += i believe should work
         //display the correct matrix
 
+    }
+
+    public static void redrawChessBoard(ChessBoard theBoard, ArrayList<ChessPosition> highlight){
+        GameUI.theBoard = theBoard;
+        String[][] chessBoard;
+        if(teamColor.equals("WHITE")){
+            chessBoard = drawBackgroundWhite();
+        }
+        else{
+            chessBoard = drawBackgroundBlack();
+        }
+        //when redrawing the chessboard lets use the connection, and grab the current state of the chessboard, and well, redraw it
+        //Actually lets just make an http request to list games, lets just filter through and grab our current game we joined
+
+        ChessBoard board = theBoard; 
+        //first clear the terminal
+        out.print(ERASE_SCREEN);
+        String color;
+        String piece = "   ";
+
+        for (var square : highlight) {
+            var row = square.getRow();
+            var col = square.getColumn();
+            if(teamColor.equals("WHITE")){
+                chessBoard[9 - row][col] = SET_BG_COLOR_GREEN;
+            }
+            if(teamColor.equals("BLACK")){
+                chessBoard[row][9 - col] = SET_BG_COLOR_GREEN;
+            }
+        }
+
+        for(int i=1; i<=8; i++){
+            for(int j=1; j<=8; j++){
+                if(board.getPiece(new ChessPosition(i, j)) != null){
+                    if(board.getPiece(new ChessPosition(i, j)).getTeamColor() == ChessGame.TeamColor.WHITE){
+                        color = SET_TEXT_COLOR_RED;
+                    }
+                    else{
+                        color = SET_TEXT_COLOR_BLUE;
+                    }
+
+                    if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.KING){
+                        piece = " K ";
+                    }
+                    if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.QUEEN){
+                        piece = " Q ";
+                    }
+                    if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.BISHOP){
+                        piece = " B ";
+                    }
+                    if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.KNIGHT){
+                        piece = " N ";
+                    }
+                    if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.ROOK){
+                        piece = " R ";
+                    }
+                    if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.PAWN){
+                        piece = " P ";
+                    }
+                }
+                else{
+                    piece = "   ";
+                    color = "";
+                }
+                if(teamColor.equals("WHITE")){
+                    chessBoard[9 - i][j] += color + piece;
+                }
+                else{
+                    chessBoard[i][9 - j] += color + piece;
+                }
+            }
+        }
+        for(int i = 0; i<10; i++){
+            out.println(chessBoard[i][0] + 
+            chessBoard[i][1] + 
+            chessBoard[i][2] + 
+            chessBoard[i][3] + 
+            chessBoard[i][4] +
+            chessBoard[i][5] +
+            chessBoard[i][6] +
+            chessBoard[i][7] +
+            chessBoard[i][8] +
+            chessBoard[i][9]);
+        }
     }
 
     private static void leave(PrintStream out){
@@ -291,11 +354,50 @@ public class GameUI {
     }
 
     private static void resign(PrintStream out){
-
+        var serializer = new Gson();
+        UserGameCommand data = new UserGameCommand(UserGameCommand.CommandType.RESIGN, authToken, gameID);
+        var json = serializer.toJson(data);
+        if(connection == null || connection.session == null || !connection.session.isOpen()){
+            System.out.println("Discconected, restart the client again, spent 2 hours trying to debug this. Keep the client open smh");
+            return;
+        }
+        connection.session.getAsyncRemote().sendText(json);
     }
 
     private static void highlightMoves(PrintStream out){
+        int startRank = 0;
+        int startFile = 0;
+        boolean validInput = false;
+        ChessPosition startPosition = null;
+        Console console = System.console();
         
+        while(!validInput){
+            try {
+                startRank = Integer.parseInt(console.readLine("What row would you like to view? (input a num): "));
+                startFile = Integer.parseInt(console.readLine("What col would you like to view? (input a num): "));
+                validInput = true;
+            } catch (Exception e) {
+                System.out.println("Please input a valid input");
+            }
+        }
+        
+        if(theBoard.getPiece(new ChessPosition(startFile, startRank)) != null){
+                validInput = true;
+                startPosition = new ChessPosition(startFile, startRank);
+            }
+        else{
+            System.out.println("Invalid position");
+            return;
+        }
+
+        ArrayList<ChessMove> validMoves = (ArrayList<ChessMove>) game.validMoves(startPosition);
+        ArrayList<ChessPosition> validPositions = new ArrayList<>();
+        for (var moves : validMoves) {
+            validPositions.add(moves.getEndPosition());
+        }
+        redrawChessBoard(theBoard, validPositions);
+
+
     }
 
     private static void runGame(){
