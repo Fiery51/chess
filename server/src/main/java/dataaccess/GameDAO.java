@@ -18,4 +18,6 @@ public interface GameDAO {
 
     int size() throws DataAccessException;
     void updateGame(int gameID, ChessGame game) throws DataAccessException;
+
+    void removePlayer(String username, int gameID, String color) throws DataAccessException;
 }

@@ -96,5 +96,9 @@ public class MemoryGameDAO implements GameDAO{
         System.out.println("im not implementing it in here");
     }
 
+    public void removePlayer(String username, int gameID, String color){
+        System.out.println("yeah im also not implementing this either");
+    }
+
     
 }

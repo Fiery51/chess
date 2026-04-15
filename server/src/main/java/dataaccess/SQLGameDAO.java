@@ -143,4 +143,23 @@ public class SQLGameDAO implements GameDAO {
             throw new DataAccessException("Error ", e);
         }
     }
+
+    public void removePlayer(String username, int gameID, String color) throws DataAccessException{
+        String sql;
+        if(color.equals("WHITE")){
+            sql = "UPDATE game SET whiteUsername = NULL WHERE gameID = ?";
+        }
+        else{
+            sql = "UPDATE game SET blackUsername = NULL WHERE gameID = ?";
+        }
+
+        try (var conn = DatabaseManager.getConnection()) {
+            try(var preparedStatement = conn.prepareStatement(sql)){
+                preparedStatement.setInt(1, gameID);
+            preparedStatement.executeUpdate();
+            }
+        } catch (Exception e) {
+            throw new DataAccessException("Error: ", e);
+        }
+    }
 }

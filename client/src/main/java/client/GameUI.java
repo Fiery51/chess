@@ -26,6 +26,7 @@ public class GameUI {
     static PrintStream out;
     static String teamColor;
     static ChessGame game;
+    static Boolean leaveGame;
     public GameUI(int id, String authToken){
         //lets create the web socket connection here im thinking?
         gameID = id;
@@ -37,6 +38,7 @@ public class GameUI {
         this.teamColor = teamColor;
         this.out = out;
         this.game = game;
+        leaveGame = false;
         connection = new WebsocketClient(authToken, gameID);
         runGame();
     }
@@ -181,7 +183,15 @@ public class GameUI {
     }
 
     private static void leave(PrintStream out){
-
+        var serializer = new Gson();
+        UserGameCommand data = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, gameID);
+        var json = serializer.toJson(data);
+        if(connection == null || connection.session == null || !connection.session.isOpen()){
+            System.out.println("Discconected, restart the client again, spent 2 hours trying to debug this. Keep the client open smh");
+            return;
+        }
+        connection.session.getAsyncRemote().sendText(json);
+        leaveGame = true;
     }
 
     private static void makeMove(PrintStream out, String teamColor, ChessGame game){
@@ -297,7 +307,7 @@ public class GameUI {
         s.add("resign");
         s.add("highlight");
         s.add("redraw");
-        while(true){
+        while(!leaveGame){
             String command = console.readLine("[GAME] >>> ");
             while(!validInput(command, s)){
                 command = console.readLine("[Game] >>> ");

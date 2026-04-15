@@ -17,11 +17,13 @@ public class ChessGame {
     TeamColor currentTeamTurn;
     ChessBoard currentChessBoard; 
     ChessPosition theStartPosition; 
+    Boolean gameOver;
     //public ChessPosition kingPosition = new ChessPosition(0, 0);  
 
     public ChessGame() {
         //White always goes first, therefor when the custructor is called, that means its being created i assume? So like white goes first. 
         //CHECK THIS IF YOU GET ERRORS I GUESS????????????????????????????????????????????
+        gameOver = false;
         currentTeamTurn = TeamColor.WHITE;
         ChessBoard newBoard = new ChessBoard();
         newBoard.resetBoard();
@@ -413,6 +415,14 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return currentChessBoard; 
+    }
+
+    public Boolean getGameOver(){
+        return gameOver;
+    }
+
+    public void endGame(){
+        gameOver = true;
     }
 
     @Override

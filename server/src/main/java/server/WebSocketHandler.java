@@ -75,9 +75,9 @@ public class WebSocketHandler {
                         error(ctx, "Unauthorized Access");
                         return;
                     }
+                    String username = authDAO.getUsername(message.getAuthToken());
                     GameData gameData = gameDAO.findGame(message.getGameID());
                     game = gameData.getGame();
-                    String username = authDAO.getUsername(message.getAuthToken());
                     if(username.equals(gameData.getBlackUsername())){
                         color = "BLACK";
                         teamColor = ChessGame.TeamColor.BLACK;
@@ -99,6 +99,10 @@ public class WebSocketHandler {
                         return;
                     }
                     if(game.isInCheckmate(teamColor) || game.isInStalemate(teamColor)){
+                        error(ctx, "Game over already");
+                        return;
+                    }
+                    if(game.getGameOver()){
                         error(ctx, "Game over already");
                         return;
                     }
@@ -136,11 +140,37 @@ public class WebSocketHandler {
                     break;
 
                 case LEAVE:
+                    if(!authDAO.validateAuth(message.getAuthToken())){
+                        error(ctx, "Unauthorized Access");
+                        return;
+                    }
+                    String username2 = authDAO.getUsername(message.getAuthToken());
+                    GameData gameData2 = gameDAO.findGame(message.getGameID());
+                    message = serializer.fromJson(ctx.message(), UserGameCommand.class);
+                    game = gameData2.getGame();
+                    message = serializer.fromJson(ctx.message(), UserGameCommand.class);
+                    if(username2.equals(gameData2.getWhiteUsername())){
+                        color = "WHITE";
+                    }
+                    if(username2.equals(gameData2.getBlackUsername())){
+                        color = "BLACK";
+                    }
 
+                    if(color != null){
+                        gameDAO.removePlayer(username2, message.getGameID(), color);
+                    }
+                    
+                    broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "LEAVE", message, "");
+                    removeConnection(message.getGameID(), ctx.sessionId());
                     break;
 
                 case RESIGN:
-
+                    message = serializer.fromJson(ctx.message(), UserGameCommand.class);
+                    GameData gameData3 = gameDAO.findGame(message.getGameID());
+                    game = gameData3.getGame();
+                    game.endGame();
+                    gameDAO.updateGame(message.getGameID(), game);
+                    broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "RESIGN", message, "");
                     break;
             }
             System.out.println(message);
@@ -214,6 +244,7 @@ public class WebSocketHandler {
         singleClient.send(json);
     }
 
+
     void broadcastNotification(WsMessageContext ctx, int gameID, String authToken, String type, UserGameCommand theMessage, String msg) throws DataAccessException{
         Set<WsContext> set = connectionMap.get(gameID);
         var serializer = new Gson();
@@ -276,6 +307,25 @@ public class WebSocketHandler {
 
         if(type.equals("CHECKMATE")){
             var message = new NotificationsMessage(ServerMessage.ServerMessageType.NOTIFICATION, msg);
+            var json = serializer.toJson(message);
+            for(var client : set){
+                client.send(json);
+            }
+        }
+
+        if(type.equals("LEAVE")){
+            var message = new NotificationsMessage(ServerMessage.ServerMessageType.NOTIFICATION, username + " left the game");
+            var json = serializer.toJson(message);
+            for(var client : set){
+                if(client.sessionId().equals(ctx.sessionId())){
+                    continue;
+                }
+                client.send(json);
+            }
+        }
+
+        if(type.equals("RESIGN")){
+            var message = new NotificationsMessage(ServerMessage.ServerMessageType.NOTIFICATION, username + " resigned. Game over!");
             var json = serializer.toJson(message);
             for(var client : set){
                 client.send(json);

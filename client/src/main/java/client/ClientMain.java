@@ -297,11 +297,13 @@ public class ClientMain {
             if(color.equals("WHITE")){
                 GameUI gameUI = new GameUI(Integer.parseInt(id), authToken);
                 gameUI.playGame(out, "WHITE");
+                loggedIn(out);
             }
             else{
                 //drawChessBoardBlack(out);
                 GameUI gameUI = new GameUI(Integer.parseInt(id), authToken);
                 gameUI.playGame(out, "BLACK");
+                loggedIn(out);
             }
         }
         //codesLoggedIn(out, result);
