@@ -307,7 +307,7 @@ public class ChessGame {
         //First ensure we're in check (use the current king position)
         if(isInCheck(teamColor)){
             kingCheck(kingMoves, teamColor);
-            return allTeamMoves.isEmpty();
+            return allTeamMoves.isEmpty() && kingMoves.isEmpty() && isInCheck(teamColor);
         }
 
 
@@ -336,7 +336,7 @@ public class ChessGame {
         //First ensure we're in check (use the current king position)
         if(!isInCheck(teamColor)){
             kingCheck(kingMoves, teamColor);
-            return allTeamMoves.isEmpty();
+            return allTeamMoves.isEmpty() && kingMoves.isEmpty() && !isInCheck(teamColor);
         }
 
 

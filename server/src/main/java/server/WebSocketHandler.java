@@ -55,7 +55,8 @@ public class WebSocketHandler {
         SQLAuthDAO authDAO = new SQLAuthDAO();
         var message = serializer.fromJson(ctx.message(), UserGameCommand.class);
         UserGameCommand.CommandType commandType = message.getCommandType(); 
-        String color;
+        String color = null;
+        ChessGame.TeamColor teamColor = null;
         ChessGame game;
         try{
             switch (commandType) {
@@ -66,7 +67,7 @@ public class WebSocketHandler {
                     game = gameDAO.findGame(message.getGameID()).getGame();
                     loadGame(game, ctx, message.getGameID());
                     //im thinking somehow we just pass in the username of the user who joined
-                    broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "JOIN", message);
+                    broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "JOIN", message, "");
                     break;
                 case MAKE_MOVE:
                     var makeMoveMessage = serializer.fromJson(ctx.message(), MakeMoveCommand.class);
@@ -79,6 +80,7 @@ public class WebSocketHandler {
                     String username = authDAO.getUsername(message.getAuthToken());
                     if(username.equals(gameData.getBlackUsername())){
                         color = "BLACK";
+                        teamColor = ChessGame.TeamColor.BLACK;
                         if(game.getTeamTurn() != TeamColor.BLACK){
                             error(ctx, "Unauthorized Access");
                             return;
@@ -86,6 +88,7 @@ public class WebSocketHandler {
                     }
                     else if(username.equals(gameData.getWhiteUsername())){
                         color = "WHITE";
+                        teamColor = ChessGame.TeamColor.WHITE;
                         if(game.getTeamTurn() != TeamColor.WHITE){
                             error(ctx, "Unauthorized Access");
                             return;
@@ -95,11 +98,49 @@ public class WebSocketHandler {
                         error(ctx, "Unauthorized Access");
                         return;
                     }
+                    if(game.isInCheckmate(teamColor) || game.isInStalemate(teamColor)){
+                        error(ctx, "Game over already");
+                        return;
+                    }
                     game.makeMove(makeMoveMessage.getMove());
                     gameDAO.updateGame(message.getGameID(), game);
+                    if(color.equals("WHITE")){
+                        if(game.isInStalemate(ChessGame.TeamColor.BLACK)){
+                            broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "STALEMATE", makeMoveMessage, "Game end: Stalemate");
+                        }
+                        else if(game.isInCheckmate(game.getTeamTurn())){
+                            String theMessage = gameData.getBlackUsername() + " is in checkmate. Game over. ";
+                            broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "CHECKMATE", makeMoveMessage, theMessage);
+                        }
+                        else if(game.isInCheck(game.getTeamTurn())){
+                            String theMessage = gameData.getBlackUsername() + " is in check";
+                            broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "CHECK", makeMoveMessage, theMessage);
+                        }
+                    }
+                    else{
+                        if(game.isInStalemate(ChessGame.TeamColor.WHITE)){
+                            broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "STALEMATE", makeMoveMessage, "Game end: Stalemate");
+                        }
+                        else if(game.isInCheckmate(game.getTeamTurn())){
+                            String theMessage = gameData.getWhiteUsername() + " is in checkmate. Game over. ";
+                            broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "CHECKMATE", makeMoveMessage, theMessage);
+                        }
+                        else if(game.isInCheck(game.getTeamTurn())){
+                            String theMessage = gameData.getWhiteUsername() + " is in check";
+                            broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "CHECK", makeMoveMessage, theMessage);
+                        }
+                    }
 
                     loadGame(game, ctx, message.getGameID());
-                    broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "MOVE", makeMoveMessage);
+                    broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "MOVE", makeMoveMessage, "");
+                    break;
+
+                case LEAVE:
+
+                    break;
+
+                case RESIGN:
+
                     break;
             }
             System.out.println(message);
@@ -107,7 +148,7 @@ public class WebSocketHandler {
         } 
         
         catch(InvalidMoveException e){
-            error(ctx, "invalid move");
+            error(ctx, "Invalid Move");
         }
 
         catch(DataAccessException e){
@@ -173,7 +214,7 @@ public class WebSocketHandler {
         singleClient.send(json);
     }
 
-    void broadcastNotification(WsMessageContext ctx, int gameID, String authToken, String type, UserGameCommand theMessage) throws DataAccessException{
+    void broadcastNotification(WsMessageContext ctx, int gameID, String authToken, String type, UserGameCommand theMessage, String msg) throws DataAccessException{
         Set<WsContext> set = connectionMap.get(gameID);
         var serializer = new Gson();
         var recievedMessage = serializer.fromJson(ctx.message(), UserGameCommand.class);
@@ -214,6 +255,30 @@ public class WebSocketHandler {
                     continue;
                 }
                 client.send(json2);
+            }
+        }
+
+        if(type.equals("STALEMATE")){
+            var message = new NotificationsMessage(ServerMessage.ServerMessageType.NOTIFICATION, msg);
+            var json = serializer.toJson(message);
+            for(var client : set){
+                client.send(json);
+            }
+        }
+
+        if(type.equals("CHECK")){
+            var message = new NotificationsMessage(ServerMessage.ServerMessageType.NOTIFICATION, msg);
+            var json = serializer.toJson(message);
+            for(var client : set){
+                client.send(json);
+            }
+        }
+
+        if(type.equals("CHECKMATE")){
+            var message = new NotificationsMessage(ServerMessage.ServerMessageType.NOTIFICATION, msg);
+            var json = serializer.toJson(message);
+            for(var client : set){
+                client.send(json);
             }
         }
     }

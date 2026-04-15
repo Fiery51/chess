@@ -270,7 +270,7 @@ public class GameUI {
         var serializer = new Gson();
         MakeMoveCommand data = new MakeMoveCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID, move);
         var json = serializer.toJson(data);
-        if(connection == null || connection.session == null || connection.session.isOpen()){
+        if(connection == null || connection.session == null || !connection.session.isOpen()){
             System.out.println("Discconected, restart the client again, spent 2 hours trying to debug this. Keep the client open smh");
             return;
         }
@@ -550,22 +550,22 @@ public class GameUI {
 
         for(int i = 1; i<=8; i++){
             if(i % 2 == 1){
-                chessBoardTerminal[4][i] = SET_BG_COLOR_BLACK + "   ";
-                chessBoardTerminal[6][i] = SET_BG_COLOR_BLACK + "   ";
+                chessBoardTerminal[4][i] = SET_BG_COLOR_BLACK;
+                chessBoardTerminal[6][i] = SET_BG_COLOR_BLACK;
             }
             else{
-                chessBoardTerminal[4][i] = SET_BG_COLOR_WHITE + "   ";
-                chessBoardTerminal[6][i] = SET_BG_COLOR_WHITE + "   ";
+                chessBoardTerminal[4][i] = SET_BG_COLOR_WHITE;
+                chessBoardTerminal[6][i] = SET_BG_COLOR_WHITE;
             }
         }
         for(int i = 1; i<=8; i++){
             if(i % 2 == 1){
-                chessBoardTerminal[5][i] = SET_BG_COLOR_WHITE + "   ";
-                chessBoardTerminal[3][i] = SET_BG_COLOR_WHITE + "   ";
+                chessBoardTerminal[5][i] = SET_BG_COLOR_WHITE;
+                chessBoardTerminal[3][i] = SET_BG_COLOR_WHITE;
             }
             else{
-                chessBoardTerminal[5][i] = SET_BG_COLOR_BLACK + "   ";
-                chessBoardTerminal[3][i] = SET_BG_COLOR_BLACK + "   ";
+                chessBoardTerminal[5][i] = SET_BG_COLOR_BLACK;
+                chessBoardTerminal[3][i] = SET_BG_COLOR_BLACK;
             }
         }
 
