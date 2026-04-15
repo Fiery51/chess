@@ -8,8 +8,7 @@ import com.google.gson.JsonSyntaxException;
 
 import dataaccess.AuthDAO;
 import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryUserDAO;
+
 import dataaccess.UserDAO;
 import io.javalin.http.ConflictResponse;
 import io.javalin.http.Context;

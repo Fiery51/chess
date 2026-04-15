@@ -1,11 +1,10 @@
 package client;
 
-import java.io.PrintStream;
+
 import java.net.URI;
 
 import com.google.gson.Gson;
 
-import chess.ChessBoard;
 import chess.ChessGame;
 import jakarta.websocket.ContainerProvider;
 import jakarta.websocket.Endpoint;

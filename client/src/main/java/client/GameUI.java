@@ -2,10 +2,9 @@ package client;
 
 import java.io.Console;
 import java.io.PrintStream;
-import java.net.StandardProtocolFamily;
+
 import java.util.ArrayList;
 
-import javax.print.PrintService;
 
 import com.google.gson.Gson;
 
@@ -14,8 +13,6 @@ import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPiece;
 import chess.ChessPosition;
-import chess.KingCalculator;
-import chess.KnightCalculator;
 import websocket.commands.MakeMoveCommand;
 import websocket.commands.UserGameCommand;
 
@@ -198,49 +195,83 @@ public class GameUI {
         Console console = System.console();
         int startRank = 0;
         int startFile = 0;
-        int endRank;
-        int endFile;
+        int endRank = 0;
+        int endFile = 0;
         boolean validInput = false;
         ChessPosition startPosition = null;
         ChessPosition endPosition;
         ChessMove move = null;
+        
+
         while(!validInput){
             try {
                 startRank = Integer.parseInt(console.readLine("What row would you like to move? (input a num): "));
                 startFile = Integer.parseInt(console.readLine("What col would you like to move? (input a num): "));
-                if(theBoard.getPiece(new ChessPosition(startFile, startRank)) != null &&
-                    theBoard.getPiece(new ChessPosition(startFile, startRank)).getTeamColor() == color){
-                        validInput = true;
-                        startPosition = new ChessPosition(startFile, startRank);
-                    }
+                validInput = true;
             } catch (Exception e) {
-                System.out.println("Please input a valid start position");
-                validInput = false;
+                System.out.println("Please input a valid input");
             }
         }
+        
+        if(theBoard.getPiece(new ChessPosition(startFile, startRank)) != null &&
+            theBoard.getPiece(new ChessPosition(startFile, startRank)).getTeamColor() == color){
+                validInput = true;
+                startPosition = new ChessPosition(startFile, startRank);
+            }
+        else{
+            System.out.println("Invalid start position");
+            return;
+        }
         validInput = false;
-        while(!validInput){
+
+        while (!validInput) {
             try {
                 endRank = Integer.parseInt(console.readLine("What row would you like to move to? (input a num): "));
                 endFile = Integer.parseInt(console.readLine("What col would you like to move to? (input a num): "));
-                endPosition = new ChessPosition(endFile, endRank);
-                move = new ChessMove(startPosition, endPosition, null);
-
-                var validMoves = game.validMoves(startPosition);
-                if(validMoves.contains(move)){
-                    validInput = true;
-                }
-
+                validInput = true;
             } catch (Exception e) {
-                System.out.println("Please input a valid start position");
-                validInput = false;
+                System.out.println("Please input a valid input");
             }
         }
+        endPosition = new ChessPosition(endFile, endRank);
+        ChessPiece.PieceType promotionPieceType = null;
+        if(theBoard.getPiece(startPosition).getPieceType() == ChessPiece.PieceType.PAWN
+            && (endPosition.getRow() == 8 || endPosition.getRow() == 1)){
+            Boolean valid = false;
+            while(!valid){
+                String promotionPiece = console.readLine("What would you like to promote your piece to (B) (N) (R) (Q): ");
+                switch (promotionPiece) {
+                    case "B":
+                        promotionPieceType = ChessPiece.PieceType.BISHOP;
+                        valid = true;
+                        break;
+                    case "N":
+                        promotionPieceType = ChessPiece.PieceType.KNIGHT;
+                        valid = true;
+                        break;
+                    case "R":
+                        promotionPieceType = ChessPiece.PieceType.ROOK;
+                        valid = true;
+                        break;
+                    case "Q":
+                        promotionPieceType = ChessPiece.PieceType.QUEEN;
+                        valid = true;
+                        break;
+                    default:
+                        System.out.println("Please input a valid promotion piece");
+                        break;
+                }
+            }
+        }
+        move = new ChessMove(startPosition, endPosition, promotionPieceType);
+
+
+        
         var serializer = new Gson();
         MakeMoveCommand data = new MakeMoveCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID, move);
         var json = serializer.toJson(data);
-        if(connection == null || connection.session == null){
-            System.out.println("Discconected, restart the client again smh. spent like 2 hours on this stop playing chess cmon");
+        if(connection == null || connection.session == null || connection.session.isOpen()){
+            System.out.println("Discconected, restart the client again, spent 2 hours trying to debug this. Keep the client open smh");
             return;
         }
         connection.session.getAsyncRemote().sendText(json);

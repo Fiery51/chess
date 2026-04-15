@@ -2,10 +2,10 @@ package client;
 
 import chess.*;
 import java.io.PrintStream;
-import java.net.ServerSocket;
+
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Map;
+
 
 import static ui.EscapeSequences.*;
 import java.io.Console;
