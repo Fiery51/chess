@@ -8,7 +8,7 @@ import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
-import io.javalin.http.BadRequestResponse;
+
 import io.javalin.http.UnauthorizedResponse;
 import model.AuthData;
 import model.GameData;

@@ -1,9 +1,8 @@
 package service;
 
-import java.util.zip.DataFormatException;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +10,7 @@ import dataaccess.DataAccessException;
 import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
-import io.javalin.http.UnauthorizedResponse;
+
 import model.AuthData;
 import model.UserData;
 

@@ -12,7 +12,7 @@ import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
 import io.javalin.http.UnauthorizedResponse;
-import model.AuthData;
+
 import model.UserData;
 
 public class LogoutUserMemoryTest {
