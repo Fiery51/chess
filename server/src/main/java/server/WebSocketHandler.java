@@ -1,9 +1,11 @@
 package server;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 
@@ -35,6 +37,8 @@ public class WebSocketHandler {
 
     public void onConnect(WsConnectContext ctx) {
         System.out.println("Connected!");
+        ctx.session.setIdleTimeout(Duration.ofMinutes(30));
+        ctx.enableAutomaticPings(15, TimeUnit.SECONDS);
     }
 
     public void onClose(WsCloseContext ctx) {
@@ -112,6 +116,7 @@ public class WebSocketHandler {
         }
 
         catch(Exception e){
+            e.printStackTrace();
             error(ctx, "Yeah i have no clue what happened");
         }
 

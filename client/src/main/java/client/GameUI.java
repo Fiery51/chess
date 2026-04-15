@@ -137,7 +137,7 @@ public class GameUI {
                         piece = " B ";
                     }
                     if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.KNIGHT){
-                        piece = " K ";
+                        piece = " N ";
                     }
                     if(board.getPiece(new ChessPosition(i, j)).getPieceType() == ChessPiece.PieceType.ROOK){
                         piece = " R ";
@@ -151,7 +151,7 @@ public class GameUI {
                     color = "";
                 }
                 if(teamColor.equals("WHITE")){
-                    chessBoard[9 - i][9 - j] += color + piece;
+                    chessBoard[9 - i][j] += color + piece;
                 }
                 else{
                     chessBoard[i][9 - j] += color + piece;
@@ -239,6 +239,10 @@ public class GameUI {
         var serializer = new Gson();
         MakeMoveCommand data = new MakeMoveCommand(UserGameCommand.CommandType.MAKE_MOVE, authToken, gameID, move);
         var json = serializer.toJson(data);
+        if(connection == null || connection.session == null){
+            System.out.println("Discconected, restart the client again smh. spent like 2 hours on this stop playing chess cmon");
+            return;
+        }
         connection.session.getAsyncRemote().sendText(json);
 
         
