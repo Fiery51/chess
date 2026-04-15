@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import chess.ChessGame;
 import model.GameData;
 
 public class MemoryGameDAO implements GameDAO{
@@ -89,6 +90,10 @@ public class MemoryGameDAO implements GameDAO{
     @Override
     public String toString() {
         return "MemoryGameDAO [dataBase=" + dataBase + ", tracker=" + tracker + "]";
+    }
+
+    public void updateGame(int gameID, ChessGame game){
+        System.out.println("im not implementing it in here");
     }
 
     

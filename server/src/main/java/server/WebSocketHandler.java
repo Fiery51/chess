@@ -22,6 +22,7 @@ import io.javalin.websocket.WsMessageContext;
 import model.GameData;
 import websocket.commands.MakeMoveCommand;
 import websocket.commands.UserGameCommand;
+import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationsMessage;
 import websocket.messages.ServerMessage;
@@ -53,53 +54,67 @@ public class WebSocketHandler {
         UserGameCommand.CommandType commandType = message.getCommandType(); 
         String color;
         ChessGame game;
-        switch (commandType) {
-            case CONNECT:
-                message = serializer.fromJson(ctx.message(), UserGameCommand.class);
-                //what do we pass in for the 2nd thing here? We pass in the connection, but i have no clue what the syntax is for that?
-                addConnection(message.getGameID(), ctx);
-                game = gameDAO.findGame(message.getGameID()).getGame();
-                loadGame(game, ctx, message.getGameID());
-                //im thinking somehow we just pass in the username of the user who joined
-                broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "JOIN", message);
-                break;
-            case MAKE_MOVE:
-                var makeMoveMessage = serializer.fromJson(ctx.message(), MakeMoveCommand.class);
-                if(!authDAO.validateAuth(message.getAuthToken())){
-                    ctx.send(serializer.toJson("Unauthorized Access"));
-                    return;
-                }
-                GameData gameData = gameDAO.findGame(message.getGameID());
-                game = gameData.getGame();
-                String username = authDAO.getUsername(message.getAuthToken());
-                if(username.equals(gameData.getBlackUsername())){
-                    color = "BLACK";
-                    if(game.getTeamTurn() != TeamColor.BLACK){
-                        ctx.send(serializer.toJson("Unauthorized Access"));
+        try{
+            switch (commandType) {
+                case CONNECT:
+                    message = serializer.fromJson(ctx.message(), UserGameCommand.class);
+                    //what do we pass in for the 2nd thing here? We pass in the connection, but i have no clue what the syntax is for that?
+                    addConnection(message.getGameID(), ctx);
+                    game = gameDAO.findGame(message.getGameID()).getGame();
+                    loadGame(game, ctx, message.getGameID());
+                    //im thinking somehow we just pass in the username of the user who joined
+                    broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "JOIN", message);
+                    break;
+                case MAKE_MOVE:
+                    var makeMoveMessage = serializer.fromJson(ctx.message(), MakeMoveCommand.class);
+                    if(!authDAO.validateAuth(message.getAuthToken())){
+                        error(ctx, "Unauthorized Access");
                         return;
                     }
-                }
-                else if(username.equals(gameData.getWhiteUsername())){
-                    color = "WHITE";
-                    if(game.getTeamTurn() != TeamColor.WHITE){
-                        ctx.send(serializer.toJson("Unauthorized Access"));
+                    GameData gameData = gameDAO.findGame(message.getGameID());
+                    game = gameData.getGame();
+                    String username = authDAO.getUsername(message.getAuthToken());
+                    if(username.equals(gameData.getBlackUsername())){
+                        color = "BLACK";
+                        if(game.getTeamTurn() != TeamColor.BLACK){
+                            error(ctx, "Unauthorized Access");
+                            return;
+                        }
+                    }
+                    else if(username.equals(gameData.getWhiteUsername())){
+                        color = "WHITE";
+                        if(game.getTeamTurn() != TeamColor.WHITE){
+                            error(ctx, "Unauthorized Access");
+                            return;
+                        }
+                    }
+                    else{
+                        error(ctx, "Unauthorized Access");
                         return;
                     }
-                }
-                else{
-                    ctx.send(serializer.toJson("Unauthorized Access"));
-                    return;
-                }
-                game.makeMove(makeMoveMessage.getMove());
-                gameDAO.updateGame(message.getGameID(), game);
+                    game.makeMove(makeMoveMessage.getMove());
+                    gameDAO.updateGame(message.getGameID(), game);
 
-                loadGame(game, ctx, message.getGameID());
-                broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "MOVE", makeMoveMessage);
-                break;
-        }
-        System.out.println(message);
-        System.out.println("We got a message from da client! What? idk im too lazy to print it out man");
+                    loadGame(game, ctx, message.getGameID());
+                    broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "MOVE", makeMoveMessage);
+                    break;
+            }
+            System.out.println(message);
+            System.out.println("We got a message from da client! What? idk im too lazy to print it out man");
+        } 
         
+        catch(InvalidMoveException e){
+            error(ctx, "invalid move");
+        }
+
+        catch(DataAccessException e){
+            error(ctx, "Server problemo");
+        }
+
+        catch(Exception e){
+            error(ctx, "Yeah i have no clue what happened");
+        }
+
     }
 
     public void addConnection(int gameID, WsContext connection){
@@ -186,7 +201,7 @@ public class WebSocketHandler {
         }
 
         if(type.equals("MOVE")){
-            var newMessage = theMessage; 
+            var newMessage = (MakeMoveCommand) theMessage; 
             ChessMove move = newMessage.getMove();
             var message2 = new NotificationsMessage(ServerMessage.ServerMessageType.NOTIFICATION, username + " made the move: " + move.getStartPosition() + " to " + move.getEndPosition());
             var json2 = serializer.toJson(message2);
@@ -197,5 +212,12 @@ public class WebSocketHandler {
                 client.send(json2);
             }
         }
+    }
+
+    void error(WsContext ctx, String msg){
+        var serializer = new Gson();
+        var errorMessage = new ErrorMessage(ServerMessage.ServerMessageType.ERROR, msg);
+        var json = serializer.toJson(errorMessage);
+        ctx.send(json);
     }
 }

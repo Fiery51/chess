@@ -226,7 +226,7 @@ public class ClientMain {
         var result = new ServerFacade(8080).logoutRequest(authToken);
         if(result == 200){
             //custom 200 one for this
-            loggedOut(out);;
+            loggedOut(out);
             return;
         }
         codesLoggedIn(out, result);

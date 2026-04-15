@@ -14,6 +14,7 @@ import jakarta.websocket.MessageHandler;
 import jakarta.websocket.Session;
 import jakarta.websocket.WebSocketContainer;
 import websocket.commands.UserGameCommand;
+import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationsMessage;
 import websocket.messages.ServerMessage;
@@ -38,13 +39,15 @@ public class WebsocketClient extends Endpoint{
                 switch (command) {
                     case LOAD_GAME:
                         ChessGame game = serializer.fromJson(message, LoadGameMessage.class).getGame();
-                        ChessBoard board = game.getBoard();
                         GameUI.updateGame(game);
-                        GameUI.redrawChessBoard(board);
                         break;
                     case NOTIFICATION:
                         String theNotification = serializer.fromJson(message, NotificationsMessage.class).getMessage();
                         GameUI.displayNotification(theNotification);
+                        break;
+                    case ERROR:
+                        String theError = serializer.fromJson(message, ErrorMessage.class).getErrorMessage();
+                        GameUI.displayNotification("Error: " + theError);
                         break;
                 }
             }

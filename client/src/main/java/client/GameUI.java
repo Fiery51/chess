@@ -223,7 +223,6 @@ public class GameUI {
             try {
                 endRank = Integer.parseInt(console.readLine("What row would you like to move to? (input a num): "));
                 endFile = Integer.parseInt(console.readLine("What col would you like to move to? (input a num): "));
-                ChessPiece piece = theBoard.getPiece(new ChessPosition(startFile, startRank));
                 endPosition = new ChessPosition(endFile, endRank);
                 move = new ChessMove(startPosition, endPosition, null);
 
