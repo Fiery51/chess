@@ -62,6 +62,10 @@ public class WebSocketHandler {
             switch (commandType) {
                 case CONNECT:
                     message = serializer.fromJson(ctx.message(), UserGameCommand.class);
+                    if(!authDAO.validateAuth(message.getAuthToken())){
+                        error(ctx, "Unauthorized Access");
+                        return;
+                    }
                     //what do we pass in for the 2nd thing here? We pass in the connection, but i have no clue what the syntax is for that?
                     addConnection(message.getGameID(), ctx);
                     game = gameDAO.findGame(message.getGameID()).getGame();
@@ -135,7 +139,7 @@ public class WebSocketHandler {
                         }
                     }
 
-                    loadGame(game, ctx, message.getGameID());
+                    loadAllGames(game, ctx, message.getGameID());
                     broadcastNotification(ctx, message.getGameID(), message.getAuthToken(), "MOVE", makeMoveMessage, "");
                     break;
 
@@ -231,6 +235,20 @@ public class WebSocketHandler {
         //we want the connection to the specific person
         //i'm just gonna have them do redraw board preetty simple, its built out and ready
         //for us. We although need to direct them to WHICH game though? 
+        var serializer = new Gson();
+        var message = new LoadGameMessage(ServerMessageType.LOAD_GAME, game);
+        var json = serializer.toJson(message);
+        Set<WsContext> set = connectionMap.get(gameID);
+        //for(var client : set){
+        //    if(client.sessionId().equals(singleClient.sessionId())){
+        //        continue;
+        //    }
+        //    client.send(json);
+        //}
+        singleClient.send(json);
+    }
+
+    void loadAllGames(ChessGame game, WsContext singleClient, int gameID){
         var serializer = new Gson();
         var message = new LoadGameMessage(ServerMessageType.LOAD_GAME, game);
         var json = serializer.toJson(message);
