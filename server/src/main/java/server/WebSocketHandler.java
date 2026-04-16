@@ -172,11 +172,10 @@ public class WebSocketHandler {
                     message = serializer.fromJson(ctx.message(), UserGameCommand.class);
                     GameData gameData3 = gameDAO.findGame(message.getGameID());
                     game = gameData3.getGame();
-                    if((authDAO.getUsername(message.getAuthToken()) != gameData3.getWhiteUsername()) 
-                        || (authDAO.getUsername(message.getAuthToken()) != gameData3.getBlackUsername())){
-                            
+                    String username3 = authDAO.getUsername(message.getAuthToken());
+                    if(!username3.equals(gameData3.getWhiteUsername()) && !username3.equals(gameData3.getBlackUsername()) ){
                         error(ctx, "Unauthorized Action");
-                        return;
+                        break;
                     }
                     if(game.getGameOver()){
                         error(ctx, "Game already over");
